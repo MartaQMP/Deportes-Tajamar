@@ -1,1 +1,123 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    /* PALETA DE COLORES */
+    --primary-red: #E30613;
+    --primary-red-hover: #C40510;
+    --primary-red-active: #A5040D;
+    --tech-black: #1A1A1A;
+    --tech-gray-dark: #2D2D2D;
+    --tech-gray-light: #F8F9FA;
+    --text-main: #333333;
+    --text-secondary: #6C757D;
+    --white: #FFFFFF;
+ 
+    /* COLORES SEMÁNTICOS (UI) */
+    --success: #28A745;
+    --error: #DC3545;
+    --warning: #FFC107;
+ 
+    /* TIPOGRAFÍA */
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Inter', sans-serif;
+ 
+    /* MEDIDAS Y BORDES */
+    --radius: 6px;
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+ 
+/* RESET BÁSICO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+ 
+body {
+    font-family: var(--font-body);
+    background-color: var(--tech-gray-light);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+ 
+/* TIPOGRAFÍA */
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--tech-black);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+ 
+a {
+    text-decoration: none;
+    color: var(--primary-red);
+    transition: var(--transition);
+}
+ 
+/* COMPONENTES: BOTONES */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    border-radius: var(--radius);
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
+}
+ 
+.btn-primary {
+    background-color: var(--primary-red);
+    color: var(--white);
+}
+ 
+.btn-primary:hover {
+    background-color: var(--primary-red-hover);
+    transform: translateY(-1px);
+}
+ 
+.btn-primary:active {
+    background-color: var(--primary-red-active);
+}
+ 
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--primary-red);
+    color: var(--primary-red);
+}
+ 
+.btn-outline:hover {
+    background-color: var(--primary-red);
+    color: var(--white);
+}
+ 
+/* COMPONENTES: TARJETAS (CARDS) */
+.card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: var(--transition);
+}
+ 
+.card:hover {
+    box-shadow: var(--shadow-md);
+}
+ 
+/* CONTENEDOR GENERAL */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+ 
+/* UTILIDADES */
+.text-center { text-align: center; }
+.bg-dark { background-color: var(--tech-black); color: var(--white); }
+.mt-2 { margin-top: 2rem; }
