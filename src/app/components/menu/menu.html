@@ -1,0 +1,74 @@
+<header class="menu-header">
+	<nav class="navbar navbar-expand-lg navbar-light menu-navbar" aria-label="Menú principal">
+		<div class="container-fluid menu-container">
+			<!-- Izquierda: Logo -->
+			<a class="navbar-brand menu-brand" routerLink="/principal" aria-label="Ir a inicio">
+				<img
+					class="menu-logo"
+					src="assets/logo-tajamar.png"
+					alt="Logo Deportes Tajamar"
+					loading="eager"
+				/>
+			</a>
+
+			<!-- Mobile toggle -->
+			<button
+				class="navbar-toggler menu-toggler"
+				type="button"
+				data-bs-toggle="collapse"
+				data-bs-target="#mainMenu"
+				aria-controls="mainMenu"
+				aria-expanded="false"
+				aria-label="Abrir menú"
+			>
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="mainMenu">
+				<!-- Centro: Home -->
+				<ul class="navbar-nav mx-auto menu-center">
+					<li class="nav-item">
+						<a
+							class="nav-link menu-link"
+							routerLink="/principal"
+							routerLinkActive="active"
+							[routerLinkActiveOptions]="{ exact: true }"
+						>
+							Home
+						</a>
+					</li>
+				</ul>
+
+				<!-- Derecha: Perfil -->
+				<ul class="navbar-nav ms-auto menu-right">
+					<li class="nav-item dropdown">
+						<a
+							class="nav-link dropdown-toggle menu-link menu-profile"
+							href="#"
+							role="button"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							<span class="menu-avatar" aria-hidden="true">P</span>
+							<span class="menu-profile-text">Perfil</span>
+						</a>
+
+						<ul class="dropdown-menu dropdown-menu-end menu-dropdown">
+							<li>
+								<a class="dropdown-item menu-dropdown-item" routerLink="/principal" title="Pendiente: página de perfil">
+									Ver perfil
+								</a>
+							</li>
+							<li><hr class="dropdown-divider menu-divider" /></li>
+							<li>
+								<a class="dropdown-item menu-dropdown-item menu-logout" routerLink="/">
+									Cerrar sesión
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</header>

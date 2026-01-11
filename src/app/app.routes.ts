@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { Principal } from './components/principal/principal';
 import { InicioSesion } from './components/inicio-sesion/inicio-sesion';
+import { Menu } from './components/menu/menu';
 
 export const routes: Routes = [
   { path: '', component: InicioSesion },
@@ -14,5 +15,6 @@ export const routes: Routes = [
       { path: 'home', component: Home },
     ],*/
   },
+  {path: "menu", component: Menu},
   { path: '**', redirectTo: '' },
 ];
