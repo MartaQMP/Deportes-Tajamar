@@ -1,0 +1,17 @@
+.content{
+    width: 80%;
+}
+.main{
+    width: 100%;
+}
+.card-header{
+    
+    border-radius: 15px 15px 0 0;
+}
+.card-body{
+    border-radius: 0px 5px 15px 15px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+.card-body:hover{
+   box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.2);
+}
