@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { Principal } from './components/principal/principal';
 import { InicioSesion } from './components/inicio-sesion/inicio-sesion';
+import { Home } from './components/home/home';
+import { Menu } from './components/menu/menu';
 
 export const routes: Routes = [
   // { path: '', component: InicioSesion },
