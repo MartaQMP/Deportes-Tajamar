@@ -1,0 +1,93 @@
+<div class="content mx-auto my-4">
+    <hr class="my-4">   
+    <h1 class="h-1">Bienvenido, {{nombre}}</h1>
+    <div class="main">
+        <div class="row">
+            <div class="col-sm evento-abierto">
+                    <div class="card" style="border: none !important; background: transparent !important; box-shadow: none !important;">
+    
+                        <div class="card-header">
+                            <h5 style="margin-bottom: 0;">Eventos abiertos</h5>
+                        </div>
+
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <p>A well-known quote, contained in a blockquote element.</p>
+                                <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                            </blockquote>
+                        </div>
+                        
+                    </div>
+            </div>
+            <div class="col-sm apuntar-actividad">
+                   <div class="card" style="border: none !important; background: transparent !important; box-shadow: none !important;">
+    
+                        <div class="card-header">
+                            <h5 style="margin-bottom: 0;">Actividades disponibles</h5>
+                        </div>
+
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <p>A well-known quote, contained in a blockquote element.</p>
+                                <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                            </blockquote>
+                        </div>
+                        
+                    </div>
+            </div>
+
+
+
+        </div>
+    </div>
+    <hr class="my-4">
+    <h1 class="my-2">Calendario de Actividades</h1>
+
+
+    <!-- Calendario de actividades -->
+
+    <div class="calendar-container">
+  
+  <!-- <div class="row text-center">
+    <div class="col-md-4">
+      <button class="btn btn-primary" (click)="setView(CalendarView.Month)">Mes</button>
+    </div>
+    <div class="col-md-4">
+      <button class="btn btn-primary" (click)="setView(CalendarView.Week)">Semana</button>
+    </div>
+    <div class="col-md-4">
+      <button class="btn btn-primary" (click)="setView(CalendarView.Day)">Día</button>
+    </div>
+  </div> -->
+  
+  <br>
+
+  <div [ngSwitch]="view">
+    
+    <mwl-calendar-month-view
+      *ngSwitchCase="CalendarView.Month"
+      [viewDate]="viewDate"
+      [events]="events"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+    >
+    </mwl-calendar-month-view>
+
+    <!-- <mwl-calendar-week-view
+      *ngSwitchCase="CalendarView.Week"
+      [viewDate]="viewDate"
+      [events]="events"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+    >
+    </mwl-calendar-week-view>
+
+    <mwl-calendar-day-view
+      *ngSwitchCase="CalendarView.Day"
+      [viewDate]="viewDate"
+      [events]="events"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+    >
+    </mwl-calendar-day-view> -->
+    
+  </div>
+</div>
+</div>
