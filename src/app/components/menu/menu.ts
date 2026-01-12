@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -8,5 +8,10 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './menu.css',
 })
 export class Menu {
+  constructor(private _router: Router) {}
 
+  cerrarSesion(): void {
+    localStorage.removeItem('token');
+    this._router.navigate(['/inicio-sesion']);
+  }
 }
