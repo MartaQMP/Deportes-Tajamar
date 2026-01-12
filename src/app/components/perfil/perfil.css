@@ -1,0 +1,417 @@
+/* ══════════════════════════════════════════════════════════════
+   PERFIL DE USUARIO - Layout de 2 Paneles
+   Diseño profesional, equilibrado y visualmente completo
+   ══════════════════════════════════════════════════════════════ */
+
+/* ─── CONTENEDOR PRINCIPAL ─── */
+.perfil-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+/* ─── CABECERA DEL PERFIL ─── */
+.perfil-header {
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
+  border-radius: 16px 16px 0 0;
+  padding: 1.75rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Patrón decorativo sutil */
+.perfil-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar-wrapper {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.avatar-wrapper i {
+  font-size: 2.2rem;
+  color: var(--primary-red);
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.perfil-nombre {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--white);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.perfil-curso {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.perfil-curso i {
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+.perfil-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
+}
+
+.perfil-estado.activo {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  backdrop-filter: blur(4px);
+}
+
+.perfil-estado.activo i {
+  color: #7dff9a;
+  font-size: 0.5rem;
+}
+
+.perfil-estado.inactivo {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.perfil-estado.inactivo i {
+  color: #ff8a8a;
+  font-size: 0.5rem;
+}
+
+/* ─── CONTENIDO: 2 PANELES ─── */
+.perfil-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--white);
+  border-radius: 0 0 16px 16px;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-top: none;
+  overflow: hidden;
+}
+
+/* ─── PANELES BASE ─── */
+.panel {
+  padding: 2rem;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--light-red);
+}
+
+.panel-header i {
+  color: var(--primary-red);
+  font-size: 1.3rem;
+}
+
+.panel-header h2 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--tech-black);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.panel-body {
+  height: 100%;
+}
+
+/* ─── PANEL DATOS ─── */
+.panel-datos {
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.datos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.dato-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--tech-gray-light);
+  border-radius: 10px;
+  transition: var(--transition);
+}
+
+.dato-item:hover {
+  background: var(--light-red);
+  transform: translateX(4px);
+}
+
+.dato-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.dato-icon i {
+  font-size: 1.1rem;
+  color: var(--primary-red);
+}
+
+.dato-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.dato-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.dato-value {
+  font-size: 0.95rem;
+  color: var(--tech-black);
+  font-weight: 600;
+  word-break: break-word;
+}
+
+/* ─── PANEL DEPORTE ─── */
+.panel-deporte {
+  background: linear-gradient(180deg, rgba(248, 249, 250, 0.3) 0%, var(--white) 100%);
+}
+
+.panel-deporte .panel-header {
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+/* ─── DEPORTE DESTACADO ─── */
+.deporte-destacado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  background: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+}
+
+.deporte-destacado.inscrito {
+  border-top: 4px solid var(--success);
+}
+
+.deporte-destacado.no-inscrito {
+  border-top: 4px solid var(--text-secondary);
+}
+
+.deporte-icono {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  box-shadow: 0 6px 20px rgba(242, 33, 47, 0.25);
+}
+
+.deporte-icono i {
+  font-size: 2rem;
+  color: var(--white);
+}
+
+.deporte-icono.vacio {
+  background: var(--tech-gray-light);
+  box-shadow: none;
+}
+
+.deporte-icono.vacio i {
+  color: var(--text-secondary);
+}
+
+.deporte-nombre {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--tech-black);
+  margin: 0 0 0.5rem 0;
+}
+
+.deporte-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  background: rgba(40, 167, 69, 0.1);
+  color: var(--success);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.deporte-estado i {
+  font-size: 0.85rem;
+}
+
+.deporte-detalles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.detalle-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--tech-gray-light);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.detalle-item i {
+  color: var(--primary-red);
+  font-size: 0.95rem;
+}
+
+.deporte-mensaje {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0 0 1.25rem 0;
+}
+
+.btn-inscribirse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 767.98px) {
+  .perfil-container {
+    padding: 0 1rem;
+    margin: 1rem auto;
+  }
+
+  .perfil-header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .perfil-nombre {
+    font-size: 1.3rem;
+  }
+
+  .perfil-curso {
+    justify-content: center;
+  }
+
+  .perfil-content {
+    grid-template-columns: 1fr;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .panel-datos {
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  .panel {
+    padding: 1.5rem;
+  }
+
+  .dato-item {
+    padding: 0.85rem;
+  }
+
+  .deporte-destacado {
+    padding: 1.5rem 1rem;
+  }
+
+  .deporte-icono {
+    width: 60px;
+    height: 60px;
+  }
+
+  .deporte-icono i {
+    font-size: 1.6rem;
+  }
+}

@@ -1,0 +1,158 @@
+<!--
+  ══════════════════════════════════════════════════════════════
+  COMPONENTE DE PERFIL DE USUARIO
+  ══════════════════════════════════════════════════════════════
+  TODO: Integración con API
+  - Reemplazar datos ficticios con: this.userService.getUserProfile().subscribe(...)
+  - Campos esperados: nombre, apellido, curso, estado, deporteInscrito
+  - El correo se genera automáticamente: nombre.apellido@tajamar265.com
+  ══════════════════════════════════════════════════════════════
+-->
+
+<div class="perfil-container">
+  <!-- ─── CABECERA DEL PERFIL ─── -->
+  <div class="perfil-header">
+    <div class="header-content">
+      <div class="avatar-wrapper">
+        <!-- TODO: Reemplazar con imagen dinámica si existe -->
+        <i class="bi bi-person-circle"></i>
+      </div>
+      <div class="header-info">
+        <!-- TODO: Reemplazar con {{ usuario.nombre }} {{ usuario.apellido }} -->
+        <h1 class="perfil-nombre">Carlos García</h1>
+        <!-- TODO: Reemplazar con {{ usuario.curso }} -->
+        <p class="perfil-curso">
+          <i class="bi bi-mortarboard"></i>
+          Master en Desarrollo de Software
+        </p>
+      </div>
+    </div>
+    <!-- TODO: Mostrar estado dinámico con clase condicional [ngClass] -->
+    <span class="perfil-estado activo">
+      <i class="bi bi-circle-fill"></i>
+      Activo
+    </span>
+  </div>
+
+  <!-- ─── CONTENIDO PRINCIPAL: 2 PANELES ─── -->
+  <div class="perfil-content">
+    
+    <!-- PANEL IZQUIERDO: Datos del Usuario -->
+    <div class="panel panel-datos">
+      <div class="panel-header">
+        <i class="bi bi-person-vcard"></i>
+        <h2>Información Personal</h2>
+      </div>
+      <div class="panel-body">
+        <div class="datos-lista">
+          <!-- TODO: Reemplazar con {{ usuario.nombre }} -->
+          <div class="dato-item">
+            <div class="dato-icon">
+              <i class="bi bi-person"></i>
+            </div>
+            <div class="dato-content">
+              <span class="dato-label">Nombre</span>
+              <span class="dato-value">Carlos</span>
+            </div>
+          </div>
+
+          <!-- TODO: Reemplazar con {{ usuario.apellido }} -->
+          <div class="dato-item">
+            <div class="dato-icon">
+              <i class="bi bi-person-badge"></i>
+            </div>
+            <div class="dato-content">
+              <span class="dato-label">Apellido</span>
+              <span class="dato-value">García</span>
+            </div>
+          </div>
+
+          <!-- TODO: Generar dinámicamente: nombre.apellido@tajamar265.com -->
+          <div class="dato-item">
+            <div class="dato-icon">
+              <i class="bi bi-envelope"></i>
+            </div>
+            <div class="dato-content">
+              <span class="dato-label">Correo Electrónico</span>
+              <span class="dato-value">carlos.garcia@tajamar265.com</span>
+            </div>
+          </div>
+
+          <!-- TODO: Reemplazar con {{ usuario.curso }} -->
+          <div class="dato-item">
+            <div class="dato-icon">
+              <i class="bi bi-book"></i>
+            </div>
+            <div class="dato-content">
+              <span class="dato-label">Curso</span>
+              <span class="dato-value">Master en Desarrollo de Software</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANEL DERECHO: Deporte Inscrito -->
+    <div class="panel panel-deporte">
+      <div class="panel-header">
+        <i class="bi bi-trophy"></i>
+        <h2>Mi Deporte</h2>
+      </div>
+      <div class="panel-body">
+        <!--
+          TODO: Lógica condicional desde la API
+          *ngIf="usuario.deporteInscrito; else sinDeporte"
+        -->
+
+        <!-- Vista cuando ESTÁ inscrito en un deporte -->
+        <!-- TODO: Usar *ngIf="usuario.deporteInscrito" -->
+        <div class="deporte-destacado inscrito">
+          <div class="deporte-icono">
+            <!-- TODO: Icono dinámico según el deporte -->
+            <i class="bi bi-dribbble"></i>
+          </div>
+          <!-- TODO: Reemplazar con {{ usuario.deporteInscrito.nombre }} -->
+          <h3 class="deporte-nombre">Baloncesto</h3>
+          <span class="deporte-estado">
+            <i class="bi bi-check-circle-fill"></i>
+            Inscrito
+          </span>
+          <div class="deporte-detalles">
+            <div class="detalle-item">
+              <i class="bi bi-calendar3"></i>
+              <!-- TODO: Reemplazar con datos de la API -->
+              <span>Martes y Jueves</span>
+            </div>
+            <div class="detalle-item">
+              <i class="bi bi-clock"></i>
+              <!-- TODO: Reemplazar con {{ usuario.deporteInscrito.horario }} -->
+              <span>18:00 - 19:30</span>
+            </div>
+            <div class="detalle-item">
+              <i class="bi bi-geo-alt"></i>
+              <!-- TODO: Reemplazar con {{ usuario.deporteInscrito.ubicacion }} -->
+              <span>Pabellón Tajamar</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vista cuando NO está inscrito -->
+        <!-- TODO: Usar *ngIf="!usuario.deporteInscrito" o #sinDeporte -->
+        <!--
+        <div class="deporte-destacado no-inscrito">
+          <div class="deporte-icono vacio">
+            <i class="bi bi-x-circle"></i>
+          </div>
+          <h3 class="deporte-nombre">Sin deporte asignado</h3>
+          <p class="deporte-mensaje">Aún no te has inscrito en ningún deporte</p>
+          <button class="btn btn-primary btn-inscribirse">
+            <i class="bi bi-plus-circle"></i>
+            Explorar Deportes
+          </button>
+        </div>
+        -->
+      </div>
+    </div>
+
+  </div>
+</div>
