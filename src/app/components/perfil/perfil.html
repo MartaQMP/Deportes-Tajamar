@@ -1,43 +1,33 @@
-<!--
-  ══════════════════════════════════════════════════════════════
-  COMPONENTE DE PERFIL DE USUARIO
-  ══════════════════════════════════════════════════════════════
-  TODO: Integración con API
-  - Reemplazar datos ficticios con: this.userService.getUserProfile().subscribe(...)
-  - Campos esperados: nombre, apellido, curso, estado, deporteInscrito
-  - El correo se genera automáticamente: nombre.apellido@tajamar265.com
-  ══════════════════════════════════════════════════════════════
--->
-
+@if (usuarioLogeado && usuario) {
 <div class="perfil-container">
   <!-- ─── CABECERA DEL PERFIL ─── -->
   <div class="perfil-header">
     <div class="header-content">
       <div class="avatar-wrapper">
-        <!-- TODO: Reemplazar con imagen dinámica si existe -->
-        <i class="bi bi-person-circle"></i>
+        @if (usuario.imagen) {
+          <img [src]="usuario.imagen" alt="Avatar de {{ usuario.nombre }}" class="avatar-img">
+        } @else {
+          <i class="bi bi-person-circle"></i>
+        }
       </div>
       <div class="header-info">
-        <!-- TODO: Reemplazar con {{ usuario.nombre }} {{ usuario.apellido }} -->
-        <h1 class="perfil-nombre">Carlos García</h1>
-        <!-- TODO: Reemplazar con {{ usuario.curso }} -->
+        <h1 class="perfil-nombre">{{ usuario.nombre }} {{ usuario.apellidos }}</h1>
         <p class="perfil-curso">
           <i class="bi bi-mortarboard"></i>
-          Master en Desarrollo de Software
+          {{ usuario.curso }}
         </p>
       </div>
     </div>
-    <!-- TODO: Mostrar estado dinámico con clase condicional [ngClass] -->
-    <span class="perfil-estado activo">
+    <span class="perfil-estado" [class.activo]="usuario.estadoUsuario" [class.inactivo]="!usuario.estadoUsuario">
       <i class="bi bi-circle-fill"></i>
-      Activo
+      {{ usuario.estadoUsuario ? 'Activo' : 'Inactivo' }}
     </span>
   </div>
 
   <!-- ─── CONTENIDO PRINCIPAL: 2 PANELES ─── -->
   <div class="perfil-content">
     
-    <!-- PANEL IZQUIERDO: Datos del Usuario -->
+    <!-- PANEL IZQUIERDO: Datos Personales -->
     <div class="panel panel-datos">
       <div class="panel-header">
         <i class="bi bi-person-vcard"></i>
@@ -45,114 +35,94 @@
       </div>
       <div class="panel-body">
         <div class="datos-lista">
-          <!-- TODO: Reemplazar con {{ usuario.nombre }} -->
           <div class="dato-item">
             <div class="dato-icon">
               <i class="bi bi-person"></i>
             </div>
             <div class="dato-content">
               <span class="dato-label">Nombre</span>
-              <span class="dato-value">Carlos</span>
+              <span class="dato-value">{{ usuario.nombre }}</span>
             </div>
           </div>
 
-          <!-- TODO: Reemplazar con {{ usuario.apellido }} -->
           <div class="dato-item">
             <div class="dato-icon">
               <i class="bi bi-person-badge"></i>
             </div>
             <div class="dato-content">
-              <span class="dato-label">Apellido</span>
-              <span class="dato-value">García</span>
+              <span class="dato-label">Apellidos</span>
+              <span class="dato-value">{{ usuario.apellidos }}</span>
             </div>
           </div>
 
-          <!-- TODO: Generar dinámicamente: nombre.apellido@tajamar265.com -->
           <div class="dato-item">
             <div class="dato-icon">
               <i class="bi bi-envelope"></i>
             </div>
             <div class="dato-content">
               <span class="dato-label">Correo Electrónico</span>
-              <span class="dato-value">carlos.garcia@tajamar265.com</span>
+              <span class="dato-value">{{ usuario.email }}</span>
             </div>
           </div>
 
-          <!-- TODO: Reemplazar con {{ usuario.curso }} -->
           <div class="dato-item">
             <div class="dato-icon">
               <i class="bi bi-book"></i>
             </div>
             <div class="dato-content">
               <span class="dato-label">Curso</span>
-              <span class="dato-value">Master en Desarrollo de Software</span>
+              <span class="dato-value">{{ usuario.curso }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- PANEL DERECHO: Deporte Inscrito -->
+    <!-- PANEL DERECHO: Información Académica -->
     <div class="panel panel-deporte">
       <div class="panel-header">
-        <i class="bi bi-trophy"></i>
-        <h2>Mi Deporte</h2>
+        <i class="bi bi-shield-check"></i>
+        <h2>Información de Cuenta</h2>
       </div>
       <div class="panel-body">
-        <!--
-          TODO: Lógica condicional desde la API
-          *ngIf="usuario.deporteInscrito; else sinDeporte"
-        -->
-
-        <!-- Vista cuando ESTÁ inscrito en un deporte -->
-        <!-- TODO: Usar *ngIf="usuario.deporteInscrito" -->
-        <div class="deporte-destacado inscrito">
-          <div class="deporte-icono">
-            <!-- TODO: Icono dinámico según el deporte -->
-            <i class="bi bi-dribbble"></i>
+        <div class="deporte-destacado" [class.inscrito]="usuario.estadoUsuario" [class.no-inscrito]="!usuario.estadoUsuario">
+          <div class="deporte-icono" [class.vacio]="!usuario.estadoUsuario">
+            @if (usuario.estadoUsuario) {
+              <i class="bi bi-person-check"></i>
+            } @else {
+              <i class="bi bi-person-x"></i>
+            }
           </div>
-          <!-- TODO: Reemplazar con {{ usuario.deporteInscrito.nombre }} -->
-          <h3 class="deporte-nombre">Baloncesto</h3>
+          <h3 class="deporte-nombre">{{ usuario.role }}</h3>
           <span class="deporte-estado">
             <i class="bi bi-check-circle-fill"></i>
-            Inscrito
+            Cuenta verificada
           </span>
           <div class="deporte-detalles">
             <div class="detalle-item">
-              <i class="bi bi-calendar3"></i>
-              <!-- TODO: Reemplazar con datos de la API -->
-              <span>Martes y Jueves</span>
+              <i class="bi bi-hash"></i>
+              <span>ID Usuario: {{ usuario.idUsuario }}</span>
             </div>
             <div class="detalle-item">
-              <i class="bi bi-clock"></i>
-              <!-- TODO: Reemplazar con {{ usuario.deporteInscrito.horario }} -->
-              <span>18:00 - 19:30</span>
+              <i class="bi bi-mortarboard"></i>
+              <span>{{ usuario.curso }}</span>
             </div>
             <div class="detalle-item">
-              <i class="bi bi-geo-alt"></i>
-              <!-- TODO: Reemplazar con {{ usuario.deporteInscrito.ubicacion }} -->
-              <span>Pabellón Tajamar</span>
+              <i class="bi bi-toggle-on"></i>
+              <span>Estado: {{ usuario.estadoUsuario ? 'Activo' : 'Inactivo' }}</span>
             </div>
           </div>
         </div>
-
-        <!-- Vista cuando NO está inscrito -->
-        <!-- TODO: Usar *ngIf="!usuario.deporteInscrito" o #sinDeporte -->
-        <!--
-        <div class="deporte-destacado no-inscrito">
-          <div class="deporte-icono vacio">
-            <i class="bi bi-x-circle"></i>
-          </div>
-          <h3 class="deporte-nombre">Sin deporte asignado</h3>
-          <p class="deporte-mensaje">Aún no te has inscrito en ningún deporte</p>
-          <button class="btn btn-primary btn-inscribirse">
-            <i class="bi bi-plus-circle"></i>
-            Explorar Deportes
-          </button>
-        </div>
-        -->
       </div>
     </div>
 
   </div>
 </div>
+} @else {
+<div class="perfil-container">
+  <div class="loading-state">
+    <i class="bi bi-hourglass-split"></i>
+    <p>Cargando perfil...</p>
+  </div>
+</div>
+}

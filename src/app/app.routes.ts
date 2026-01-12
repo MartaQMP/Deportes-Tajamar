@@ -20,6 +20,7 @@ export const routes: Routes = [
   },
   //Pongo las las rutas de menu y perfil para irlas viendo mientras las diseño
   //Ya el miercoles organizamos el router.
+  {path: "login", component: InicioSesion},//Añado esta ruta para poder probar la seccion perfil
   {path: 'perfil', component: Perfil},
   {path: "menu", component: Menu},
   { path: '**', redirectTo: '' },
