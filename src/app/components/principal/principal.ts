@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '../../../../node_modules/@angular/router';
+import { RouterOutlet } from '@angular/router';
+import { Menu } from '../menu/menu';
+import { Home } from '../home/home';
 
 @Component({
   selector: 'app-principal',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Menu, Home],
   templateUrl: './principal.html',
   styleUrl: './principal.css',
 })

@@ -1,37 +1,51 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { 
-  CalendarEvent, 
-  CalendarView, 
-  CalendarModule // <--- Solo deja este, borra los tachados
+import { Component, OnInit } from '@angular/core';
+import {
+  CalendarEvent,
+  CalendarView,
+  CalendarModule
 } from 'angular-calendar';
 import { startOfDay, endOfDay } from 'date-fns';
+import PerfilService from '../../services/perfil.service';
+import { Router } from '@angular/router';
+import usuarioLogeado from '../../models/usuarioLogeado';
+import { EventosService } from '../../services/eventos.service';
+import Evento from '../../models/evento';
+import { Subject } from 'rxjs'; 
+import ActividadEvento from '../../models/actividades';
+import { ActividadesService } from '../../services/actividades.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    CommonModule,   // Necesario para el ngSwitch del HTML
-    CalendarModule  // Este trae los componentes <mwl-calendar-month-view>, etc.
+    CommonModule,
+    CalendarModule
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {
-  // ... (El resto de tu código se queda igual)
-  public nombre: string = "Alberto";
+export class Home implements OnInit {
+
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
+  
+  refresh: Subject<void> = new Subject<void>(); 
 
-  events: CalendarEvent[] = [{
-    start: startOfDay(new Date()),
-    end: endOfDay(new Date()),
-    title: 'Evento importante',
-    color: { primary: "#ad2121", secondary: "#FAE3E3" },
-    draggable: false,
-    resizable: { beforeStart: false, afterEnd: false }
-  }];
+  events: CalendarEvent[] = []; 
+
+  public usuario!: usuarioLogeado;
+  public usuarioLogeado: boolean = false;
+  public eventos: Evento[] = [];
+  public actividades: ActividadEvento[]=[];
+
+  constructor(
+    private _perfil: PerfilService, 
+    private _eventos: EventosService, 
+    private _actividades: ActividadesService,
+    private _router: Router
+  ) { }
 
   setView(view: CalendarView) {
     this.view = view;
@@ -39,5 +53,56 @@ export class Home {
 
   handleEvent(action: string, event: CalendarEvent): void {
     console.log(action, event);
+  }
+
+  ngOnInit(): void {
+
+    //Login con el token para recoger el nombre de usuario
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      this._router.navigate(['/login']);
+      return; 
+    }
+
+    this._perfil.getDatosUsuario(token).subscribe((response) => {
+      this.usuarioLogeado = true;
+      this.usuario = response;
+    });
+
+    //Llamada al api eventos para recoger los eventos abiertos e incluirlos en el calendario
+
+    this._eventos.buscarEventosAbiertos().subscribe({
+      next: (response) => {
+        this.eventos = response;
+
+        const nuevosEventos: CalendarEvent[] = this.eventos.map(eventoApi => {
+          return {
+            start: new Date(eventoApi.fechaEvento),
+            title: 'Evento Disponible', 
+            color: { primary: '#ad2121', secondary: '#FAE3E3' },
+            meta: eventoApi 
+          };
+        });
+
+        this.events = nuevosEventos;
+
+        this.refresh.next(); 
+      },
+      error: (err) => {
+        console.error("Error cargando eventos", err);
+      }
+    });
+
+    
+  }
+  
+  //Llamada al api Actividades por evento para recoger las actividades disponibles por cada evento
+  MostrarActividades(e:Evento){
+    console.log(e);
+    this._actividades.buscarActividadesPorEventos(e.idEvento.toString()).subscribe((response)=>{
+      this.actividades = response;
+    })
   }
 }

@@ -4,7 +4,9 @@ import { environment } from "../../environments/environment.development";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root' // <--- ESTA LÍNEA ES LA MAGIA
+})
 
 export default class PerfilService {
     constructor(private _http: HttpClient) { }

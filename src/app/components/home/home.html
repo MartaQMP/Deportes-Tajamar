@@ -1,6 +1,6 @@
 <div class="content mx-auto my-4">
     <hr class="my-4">   
-    <h1 class="h-1">Bienvenido, {{nombre}}</h1>
+    <h1 class="h-1">Bienvenido, {{usuario.nombre}}</h1>
     <div class="main">
         <div class="row">
             <div class="col-sm evento-abierto">
@@ -12,8 +12,14 @@
 
                         <div class="card-body">
                             <blockquote class="blockquote mb-0">
-                                <p>A well-known quote, contained in a blockquote element.</p>
-                                <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                              @if(eventos.length <=0){
+                                <p>No hay eventos abiertos en estos momentos...</p>
+                              }
+                              @else{
+                                @for(e of eventos; track e){
+                                  <p style="font-size: 0.7em" (click)="MostrarActividades(e)">{{ e.fechaEvento | date: 'dd/MM/yyyy, EEEE' }} </p>
+                                }
+                              }
                             </blockquote>
                         </div>
                         
@@ -28,8 +34,13 @@
 
                         <div class="card-body">
                             <blockquote class="blockquote mb-0">
-                                <p>A well-known quote, contained in a blockquote element.</p>
-                                <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source Title</cite></footer>
+                              @if(actividades.length <=0){ 
+                                <p>Selecciona el evento para ver las actividades!</p>
+                              }@else{
+                                @for(a of actividades; track a){
+                                  <p>{{a.nombreActividad}}</p>
+                                }
+                              }
                             </blockquote>
                         </div>
                         
@@ -41,24 +52,24 @@
         </div>
     </div>
     <hr class="my-4">
-    <h1 class="my-2">Calendario de Actividades</h1>
+    <h1 class="my-2 text-center">Calendario de Actividades</h1>
 
 
     <!-- Calendario de actividades -->
 
-    <div class="calendar-container">
+<div class="calendar-container my-4">
   
-  <!-- <div class="row text-center">
-    <div class="col-md-4">
+  <div class="row text-center">
+    <div class="col-md-6">
       <button class="btn btn-primary" (click)="setView(CalendarView.Month)">Mes</button>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
       <button class="btn btn-primary" (click)="setView(CalendarView.Week)">Semana</button>
     </div>
-    <div class="col-md-4">
+    <!-- <div class="col-md-4">
       <button class="btn btn-primary" (click)="setView(CalendarView.Day)">Día</button>
-    </div>
-  </div> -->
+    </div> -->
+  </div>
   
   <br>
 
@@ -72,7 +83,8 @@
     >
     </mwl-calendar-month-view>
 
-    <!-- <mwl-calendar-week-view
+
+    <mwl-calendar-week-view
       *ngSwitchCase="CalendarView.Week"
       [viewDate]="viewDate"
       [events]="events"
@@ -80,7 +92,7 @@
     >
     </mwl-calendar-week-view>
 
-    <mwl-calendar-day-view
+    <!-- <mwl-calendar-day-view
       *ngSwitchCase="CalendarView.Day"
       [viewDate]="viewDate"
       [events]="events"
