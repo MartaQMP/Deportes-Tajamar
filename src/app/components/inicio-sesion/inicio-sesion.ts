@@ -36,8 +36,7 @@ export class InicioSesion {
         /*AÑADIR RUTA SI INICIAS SESION*/
         localStorage.clear();
         localStorage.setItem('token', response.response);
-        this._route.navigate(['/principal']);
-        console.log('holi');
+        this._route.navigate(['/principal/']);
       },
       error: (error) => {
         Swal.fire({

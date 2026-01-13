@@ -3,34 +3,48 @@
     <a class="navbar-brand brand-accent" href="#">
       <img src="/assets/logo-tajamar.png" alt="Deportes Tajamar" class="brand-logo" />
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-2 app-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">
+          <a [routerLink]="['/principal/']" class="nav-link active" aria-current="page">
             <i class="bi bi-house-door-fill me-1"></i>Home
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">
+          <a [routerLink]="['/principal/']" class="nav-link">
             <i class="bi bi-calendar-event me-1"></i>Eventos
           </a>
         </li>
       </ul>
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item dropdown d-flex align-items-center">
-          <a class="nav-link profile-trigger" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a
+            class="nav-link profile-trigger"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
             <i class="bi bi-person-circle fs-4"></i>
             <span class="ms-2">Perfil</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Ver perfil</a></li>
-            <li><a class="dropdown-item" href="#" (click)="cerrarSesion()">Cerrar sesión</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/principal/perfil']">Ver perfil</a></li>
+            <li><a class="dropdown-item" (click)="cerrarSesion()">Cerrar sesión</a></li>
           </ul>
         </li>
       </ul>
     </div>
   </div>
 </nav>
+<router-outlet></router-outlet>
