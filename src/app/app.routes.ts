@@ -16,7 +16,6 @@ export const routes: Routes = [
 
     children: [
       {path: 'home', component: Home },
-      {path: "login", component: InicioSesion},//Añado esta ruta para poder probar la seccion perfil
       {path: 'perfil', component: Perfil},
     ],
   },
