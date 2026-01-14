@@ -14,6 +14,8 @@ import Evento from '../../models/evento';
 import { Subject } from 'rxjs'; 
 import ActividadEvento from '../../models/actividades';
 import { ActividadesService } from '../../services/actividades.service';
+import { InscripcionService } from '../../services/inscripcion.service';
+import Inscripciones from '../../models/inscripciones';
 
 @Component({
   selector: 'app-home',
@@ -39,12 +41,15 @@ export class Home implements OnInit {
   public usuarioLogeado: boolean = false;
   public eventos: Evento[] = [];
   public actividades: ActividadEvento[]=[];
+  public personasInscritas: number[]=[];
+  public contador: number=0;
 
   constructor(
     private _perfil: PerfilService, 
     private _eventos: EventosService, 
     private _actividades: ActividadesService,
-    private _router: Router
+    private _router: Router,
+    private _inscripciones: InscripcionService
   ) { }
 
   setView(view: CalendarView) {
@@ -103,6 +108,13 @@ export class Home implements OnInit {
     console.log(e);
     this._actividades.buscarActividadesPorEventos(e.idEvento.toString()).subscribe((response)=>{
       this.actividades = response;
+      //Ver las inscripciones a esa actividad en ese evento
+      this.actividades.forEach((a, index) =>{
+        this._inscripciones.verInscripciones(e.idEvento, a.idActividad).subscribe(response=>{
+          this.personasInscritas[index] = response.length;
+        })
+        this.personasInscritas.reverse()
+      })
     })
   }
 }

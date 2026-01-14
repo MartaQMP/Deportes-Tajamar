@@ -1,105 +1,103 @@
-<div class="content mx-auto my-4">
-    <hr class="my-4">   
-    <h1 class="h-1">Bienvenido, {{usuario.nombre}}</h1>
-    <div class="main">
-        <div class="row">
-            <div class="col-sm evento-abierto">
-                    <div class="card" style="border: none !important; background: transparent !important; box-shadow: none !important;">
-    
-                        <div class="card-header">
-                            <h5 style="margin-bottom: 0;">Eventos abiertos</h5>
-                        </div>
-
-                        <div class="card-body">
-                            <blockquote class="blockquote mb-0">
-                              @if(eventos.length <=0){
-                                <p>No hay eventos abiertos en estos momentos...</p>
-                              }
-                              @else{
-                                @for(e of eventos; track e){
-                                  <p style="font-size: 0.7em" (click)="MostrarActividades(e)">{{ e.fechaEvento | date: 'dd/MM/yyyy, EEEE' }} </p>
-                                }
-                              }
-                            </blockquote>
-                        </div>
-                        
-                    </div>
-            </div>
-            <div class="col-sm apuntar-actividad">
-                   <div class="card" style="border: none !important; background: transparent !important; box-shadow: none !important;">
-    
-                        <div class="card-header">
-                            <h5 style="margin-bottom: 0;">Actividades disponibles</h5>
-                        </div>
-
-                        <div class="card-body">
-                            <blockquote class="blockquote mb-0">
-                              @if(actividades.length <=0){ 
-                                <p>Selecciona el evento para ver las actividades!</p>
-                              }@else{
-                                @for(a of actividades; track a){
-                                  <p>{{a.nombreActividad}}</p>
-                                }
-                              }
-                            </blockquote>
-                        </div>
-                        
-                    </div>
-            </div>
+<div class="dashboard-wrapper">
 
 
+  <h1 class="welcome">Bienvenido, {{usuario.nombre}}</h1>
 
+
+  <div class="dashboard-grid">
+
+    <section class="panel-section">
+      <div class="section-header">
+        <h3><i class="fas fa-calendar-check" style="margin-right: 8px;"></i> Próximos Eventos</h3>
+        @if(eventos.length > 0) {
+        <span class="badge-count">{{eventos.length}} Activos</span>
+        }
+      </div>
+
+      <div class="scroll-container">
+        @if(eventos.length <= 0){ <div class="empty-state">
+          <div class="empty-icon">📅</div>
+          <p>No hay eventos programados</p>
+          <small>Revisa más tarde para nuevas fechas</small>
+      </div>
+      } @else {
+      <div class="timeline-list">
+        @for(e of eventos; track e){
+        <div class="event-card" (click)="MostrarActividades(e)">
+          <div class="event-date-box">
+            <span class="day">{{ e.fechaEvento | date: 'dd' }}</span>
+            <span class="month">{{ e.fechaEvento | date: 'MMM' }}</span>
+          </div>
+          <div class="event-info">
+            <h4>{{ e.fechaEvento | date: 'EEEE' }}, Evento #{{ e.idEvento }}</h4>
+
+            <span class="tap-hint">Ver actividades <i class="fas fa-arrow-right"></i></span>
+          </div>
         </div>
-    </div>
-    <hr class="my-4">
-    <h1 class="my-2 text-center">Calendario de Actividades</h1>
-
-
-    <!-- Calendario de actividades -->
-
-<div class="calendar-container my-4">
-  
-  <div class="row text-center">
-    <div class="col-md-6">
-      <button class="btn btn-primary" (click)="setView(CalendarView.Month)">Mes</button>
-    </div>
-    <div class="col-md-6">
-      <button class="btn btn-primary" (click)="setView(CalendarView.Week)">Semana</button>
-    </div>
-    <!-- <div class="col-md-4">
-      <button class="btn btn-primary" (click)="setView(CalendarView.Day)">Día</button>
-    </div> -->
+        }
+      </div>
+      }
   </div>
-  
-  <br>
+  </section>
 
-  <div [ngSwitch]="view">
-    
-    <mwl-calendar-month-view
-      *ngSwitchCase="CalendarView.Month"
-      [viewDate]="viewDate"
-      [events]="events"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-    >
+  <section class="panel-section activities-panel">
+    <div class="section-header">
+      <h3><i class="fas fa-dumbbell" style="margin-right: 8px;"></i> Actividades Disponibles</h3>
+    </div>
+
+    <div class="scroll-container">
+      @if(actividades.length <= 0){ <div class="empty-state dashed">
+        <p>Selecciona un evento a la izquierda para ver qué puedes hacer.</p>
+    </div>
+    } @else {
+    <div class="activities-grid">
+      @for(a of actividades; track $index){
+      <div class="activity-chip">
+        <div class="chip-icon-wrapper">
+          <i class="fas fa-running">👉🏻</i>
+        </div>
+
+        <span class="chip-text">{{a.nombreActividad}}</span>
+
+        <div class="chip-actions">
+          <div class="inscritos-badge" title="Personas inscritas">
+            <i class="fas fa-user-friends"></i>
+            <span>{{personasInscritas[$index]}}</span> 
+          </div>
+
+          <button class="btn-add">
+            <i class="fas fa-plus">⇒</i>
+          </button>
+        </div>
+        
+      </div>
+      
+      }
+    </div>
+    }
+</div>
+</section>
+</div>
+
+<div class="calendar-section">
+  <div class="calendar-header-row">
+    <h2>Calendario Global</h2>
+    <div class="calendar-controls">
+      <button class="btn-view" [class.active]="view === CalendarView.Month"
+        (click)="setView(CalendarView.Month)">Mes</button>
+      <button class="btn-view" [class.active]="view === CalendarView.Week"
+        (click)="setView(CalendarView.Week)">Semana</button>
+    </div>
+  </div>
+
+  <div class="calendar-card" [ngSwitch]="view">
+    <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
+      (eventClicked)="handleEvent('Clicked', $event.event)">
     </mwl-calendar-month-view>
-
-
-    <mwl-calendar-week-view
-      *ngSwitchCase="CalendarView.Week"
-      [viewDate]="viewDate"
-      [events]="events"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-    >
+    <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
+      (eventClicked)="handleEvent('Clicked', $event.event)">
     </mwl-calendar-week-view>
-
-    <!-- <mwl-calendar-day-view
-      *ngSwitchCase="CalendarView.Day"
-      [viewDate]="viewDate"
-      [events]="events"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-    >
-    </mwl-calendar-day-view> -->
-    
   </div>
 </div>
+
 </div>
