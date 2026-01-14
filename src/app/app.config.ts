@@ -1,16 +1,20 @@
 import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,
-  provideZoneChangeDetection,importProvidersFrom
+  provideZoneChangeDetection,importProvidersFrom,
+  LOCALE_ID
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import { LoginService } from './services/login';
 // Imports del calendario
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
+registerLocaleData(localeEs, 'es');
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,5 +29,7 @@ export const appConfig: ApplicationConfig = {
         useFactory: adapterFactory,
       })
     ),
+    provideRouter(routes),
+    { provide: LOCALE_ID, useValue: 'es' }
   ],
 };
