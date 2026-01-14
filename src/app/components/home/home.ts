@@ -80,7 +80,7 @@ export class Home implements OnInit {
         const nuevosEventos: CalendarEvent[] = this.eventos.map(eventoApi => {
           return {
             start: new Date(eventoApi.fechaEvento),
-            title: 'Evento Disponible', 
+            title: 'Evento #'+eventoApi.idEvento, 
             color: { primary: '#ad2121', secondary: '#FAE3E3' },
             meta: eventoApi 
           };
