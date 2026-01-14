@@ -55,7 +55,7 @@
     <h1 class="my-2 text-center">Calendario de Actividades</h1>
 
 
-    <!-- Calendario de actividades -->
+  <!-- Calendario de actividades -->
 
 <div class="calendar-container my-4">
   
@@ -73,15 +73,14 @@
   
   <br>
 
-  <div [ngSwitch]="view">
-    
-    <mwl-calendar-month-view
-      *ngSwitchCase="CalendarView.Month"
-      [viewDate]="viewDate"
-      [events]="events"
-      (eventClicked)="handleEvent('Clicked', $event.event)"
-    >
-    </mwl-calendar-month-view>
+    <div [ngSwitch]="view">
+      <mwl-calendar-month-view
+        *ngSwitchCase="CalendarView.Month"
+        [viewDate]="viewDate"
+        [events]="events"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+      >
+      </mwl-calendar-month-view>
 
 
     <mwl-calendar-week-view
@@ -99,7 +98,6 @@
       (eventClicked)="handleEvent('Clicked', $event.event)"
     >
     </mwl-calendar-day-view> -->
-    
+    </div>
   </div>
-</div>
 </div>

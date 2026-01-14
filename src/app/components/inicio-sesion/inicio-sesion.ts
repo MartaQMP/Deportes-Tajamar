@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LoginService } from '../../services/login';
 import { FormsModule } from '@angular/forms';
 import { Login } from '../../models/login';
@@ -11,13 +11,19 @@ import { Router } from '@angular/router';
   templateUrl: './inicio-sesion.html',
   styleUrl: './inicio-sesion.css',
 })
-export class InicioSesion {
+export class InicioSesion implements OnInit {
   dominio: string = '@tajamar365.com';
   contraseniaOculta: boolean = false;
   @ViewChild('username') username!: ElementRef;
   @ViewChild('password') password!: ElementRef;
 
   constructor(private _service: LoginService, private _route: Router) {}
+
+  //No funciona la API con esto al menos entramos a la Home
+  //Quitar cuando funcione la API
+  ngOnInit(): void {
+    this._route.navigate(['/deportes/']);
+  }
 
   cambiarEstadoContrasenia(): void {
     this.contraseniaOculta = !this.contraseniaOculta;
@@ -32,12 +38,9 @@ export class InicioSesion {
     this._service.crearToken(login).subscribe({
       next: (response) => {
         console.log(response.response);
-        /*MIRAR SI HAY QUE GUARDAR EL TOKEN EN ALGUN LADO O NO ES NECESARIO*/
-        /*AÑADIR RUTA SI INICIAS SESION*/
         localStorage.clear();
         localStorage.setItem('token', response.response);
-        this._route.navigate(['/principal/home']);
-        console.log('holi');
+        this._route.navigate(['/deportes/']);
       },
       error: (error) => {
         Swal.fire({
