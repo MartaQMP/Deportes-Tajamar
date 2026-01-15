@@ -1,16 +1,16 @@
-/* ══════════════════════════════════════════════════════════════
-   CURSOS - Diseño moderno con tarjetas y estilo unificado
-   ══════════════════════════════════════════════════════════════ */
+/* 
+   CURSOS - Diseño horizontal con acordeon y tabla Bootstrap
+    */
 
-/* ─── CONTENEDOR PRINCIPAL ─── */
+/*  CONTENEDOR PRINCIPAL  */
 .cursos-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1.5rem;
   font-family: var(--font-heading);
 }
 
-/* ─── HEADER DEL PANEL ─── */
+/*  HEADER DEL PANEL  */
 .cursos-header {
   background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
   border-radius: 16px 16px 0 0;
@@ -100,24 +100,24 @@
   font-size: 1rem;
 }
 
-/* ─── CONTENIDO PRINCIPAL ─── */
+/*  CONTENIDO PRINCIPAL  */
 .cursos-content {
   background: var(--white);
   border-radius: 0 0 16px 16px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.04);
   border-top: none;
-  padding: 2rem;
-  min-height: 400px;
+  padding: 1.5rem;
+  min-height: 300px;
 }
 
-/* ─── ESTADO DE CARGA ─── */
+/*  ESTADO DE CARGA  */
 .loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
+  min-height: 250px;
   gap: 1rem;
 }
 
@@ -139,133 +139,122 @@
   100% { transform: rotate(360deg); }
 }
 
-/* ─── GRID DE CURSOS (3 columnas fijas) ─── */
-.cursos-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-/* ─── TARJETA DE CURSO ─── */
-.curso-card {
-  background: var(--white);
-  border-radius: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
-  transition: var(--transition);
+/*  ACORDE�N DE CURSOS  */
+.cursos-accordion {
   display: flex;
   flex-direction: column;
+  gap: 1rem;
 }
 
-.curso-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(242, 33, 47, 0.12);
+.curso-accordion-item {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px !important;
+  overflow: hidden;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.curso-accordion-item:hover {
+  box-shadow: 0 4px 20px rgba(242, 33, 47, 0.1);
   border-color: rgba(242, 33, 47, 0.15);
 }
 
-/* ─── ESTADO DEL CURSO ─── */
-.curso-status {
+/*  FILA HORIZONTAL DEL CURSO  */
+.curso-row {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: var(--white);
+  transition: var(--transition);
 }
 
-.curso-status.activo {
-  background: linear-gradient(90deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.05) 100%);
-  color: var(--success);
+.curso-row:hover {
+  background: var(--tech-gray-light);
 }
 
-.curso-status.activo i {
-  font-size: 0.5rem;
-  color: var(--success);
-}
-
-.curso-status.inactivo {
-  background: linear-gradient(90deg, rgba(108, 117, 125, 0.1) 0%, rgba(108, 117, 125, 0.05) 100%);
-  color: var(--text-secondary);
-}
-
-.curso-status.inactivo i {
-  font-size: 0.5rem;
-}
-
-/* ─── CUERPO DE LA TARJETA ─── */
-.curso-body {
-  padding: 1.5rem;
-  text-align: center;
-  flex-grow: 1;
-}
-
+/* Icono del Curso */
 .curso-icon-wrapper {
-  width: 65px;
-  height: 65px;
-  margin: 0 auto 1rem;
-  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
   background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 20px rgba(242, 33, 47, 0.25);
-  transition: var(--transition);
-}
-
-.curso-card:hover .curso-icon-wrapper {
-  transform: scale(1.05) rotate(3deg);
+  box-shadow: 0 4px 12px rgba(242, 33, 47, 0.25);
+  flex-shrink: 0;
 }
 
 .curso-icon-wrapper i {
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   color: var(--white);
+}
+
+/* Info del Curso */
+.curso-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 200px;
+  flex: 1;
 }
 
 .curso-nombre {
   font-family: var(--font-heading);
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--tech-black);
   margin: 0;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
-/* ─── SECCIÓN DE FECHAS ─── */
+.curso-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  width: fit-content;
+}
+
+.curso-status-badge.activo {
+  color: var(--success);
+}
+
+.curso-status-badge.activo i {
+  font-size: 0.45rem;
+}
+
+.curso-status-badge.inactivo {
+  color: var(--text-secondary);
+}
+
+.curso-status-badge.inactivo i {
+  font-size: 0.45rem;
+}
+
+/* Fechas del Curso */
 .curso-fechas {
   display: flex;
   align-items: center;
-  padding: 1rem 1.25rem;
-  background: var(--tech-gray-light);
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  gap: 2rem;
 }
 
 .fecha-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  flex: 1;
+  gap: 0.6rem;
 }
 
-.fecha-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-}
-
-.fecha-icon i {
+.fecha-item > i {
   font-size: 1rem;
   color: var(--primary-red);
 }
 
-.fecha-icon.fin i {
+.fecha-item > i.fecha-fin {
   color: var(--success);
 }
 
@@ -289,235 +278,242 @@
   font-weight: 600;
 }
 
-.fecha-divider {
-  width: 1px;
-  height: 35px;
-  background: rgba(0, 0, 0, 0.08);
-  margin: 0 0.75rem;
-}
-
-/* ─── FOOTER DE LA TARJETA ─── */
-.curso-footer {
-  padding: 1rem 1.25rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-.btn-curso-action {
-  width: 100%;
+/* Bot�n Ver Alumnos */
+.btn-ver-alumnos {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 1.25rem;
   background: var(--light-red);
   color: var(--primary-red);
   border: none;
   border-radius: 10px;
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
-.btn-curso-action:hover {
+.btn-ver-alumnos:hover {
   background: var(--primary-red);
   color: var(--white);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(242, 33, 47, 0.3);
 }
 
-.btn-curso-action i {
-  font-size: 1rem;
-  transition: var(--transition);
-}
-
-.btn-curso-action:hover i {
-  transform: scale(1.1);
-}
-
-.btn-curso-action.active {
+.btn-ver-alumnos.active {
   background: var(--primary-red);
   color: var(--white);
 }
 
-/* ─── PANEL DESPLEGABLE DE ALUMNOS ─── */
-.alumnos-panel {
-  max-height: 0;
-  overflow: hidden;
+.btn-ver-alumnos i {
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+/*  PANEL COLAPSABLE  */
+.alumnos-collapse {
+  transition: all 0.35s ease;
+}
+
+.alumnos-panel-content {
+  padding: 1.25rem 1.5rem 1.5rem;
   background: var(--tech-gray-light);
-  border-radius: 0 0 14px 14px;
-  margin-top: -14px;
-  padding-top: 14px;
-  transition: max-height 0.4s ease, padding 0.3s ease, opacity 0.3s ease;
-  opacity: 0;
+  border-top: 2px solid var(--light-red);
 }
 
-.alumnos-panel.expanded {
-  max-height: 400px;
-  padding: 1.25rem;
-  padding-top: calc(14px + 1.25rem);
-  opacity: 1;
-}
-
-.alumnos-header {
+/* Header de la tabla */
+.alumnos-table-header {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  margin-bottom: 1rem;
   padding-bottom: 0.75rem;
-  margin-bottom: 0.75rem;
-  border-bottom: 2px solid var(--light-red);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.alumnos-header i {
+.alumnos-table-header i {
   color: var(--primary-red);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
-.alumnos-header span {
+.alumnos-table-header span {
   font-family: var(--font-heading);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--tech-black);
   text-transform: uppercase;
   letter-spacing: 0.3px;
 }
 
-.alumnos-list {
+.alumnos-table-header .alumnos-count {
+  margin-left: auto;
+}
+
+/* Estado de carga de la tabla */
+.table-loading {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  max-height: 280px;
-  overflow-y: auto;
-}
-
-.alumnos-list::-webkit-scrollbar {
-  width: 5px;
-}
-
-.alumnos-list::-webkit-scrollbar-thumb {
-  background-color: rgba(242, 33, 47, 0.3);
-  border-radius: 4px;
-}
-
-.alumno-item {
-  display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.65rem 0.85rem;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  gap: 1rem;
+}
+
+.table-loading p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/*  TABLA DE ALUMNOS  */
+.alumnos-table {
   background: var(--white);
-  border-radius: 8px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  margin-bottom: 0;
+}
+
+.alumnos-table thead {
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
+}
+
+.alumnos-table thead th {
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 0.9rem 1rem;
+  border: none;
+}
+
+.alumnos-table tbody tr {
   transition: var(--transition);
 }
 
-.alumno-item:hover {
+.alumnos-table tbody tr:hover {
   background: var(--light-red);
-  transform: translateX(4px);
+}
+
+.alumnos-table tbody td {
+  padding: 0.85rem 1rem;
+  vertical-align: middle;
+  border-color: rgba(0, 0, 0, 0.04);
+  font-size: 0.9rem;
+}
+
+/* Celda de Alumno con Avatar */
+.alumno-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .alumno-avatar {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .alumno-avatar i {
-  font-size: 0.9rem;
+  font-size: 1rem;
   color: var(--white);
 }
 
 .alumno-avatar img {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
   object-fit: cover;
 }
 
-.alumno-info {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-width: 0;
-}
-
 .alumno-nombre {
-  font-size: 0.85rem;
   font-weight: 600;
   color: var(--tech-black);
 }
 
 .alumno-email {
-  font-size: 0.75rem;
   color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 0.85rem;
 }
 
-.alumno-estado {
-  width: 10px;
-  height: 10px;
-  display: flex;
+/* Badge de Rol */
+.role-badge {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  background: var(--tech-gray-light);
+  color: var(--text-main);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Badge de Estado */
+.estado-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
-.alumno-estado i {
-  font-size: 0.5rem;
-}
-
-.alumno-estado.activo i {
+.estado-badge.activo {
+  background: rgba(40, 167, 69, 0.1);
   color: var(--success);
 }
 
-.alumno-estado.inactivo i {
+.estado-badge.activo i {
+  font-size: 0.45rem;
+}
+
+.estado-badge.inactivo {
+  background: rgba(108, 117, 125, 0.1);
   color: var(--text-secondary);
 }
 
-.alumnos-count {
-  margin-left: auto;
-  background: var(--light-red);
-  color: var(--primary-red);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.25rem 0.6rem;
-  border-radius: 12px;
+.estado-badge.inactivo i {
+  font-size: 0.45rem;
 }
 
-.spinning {
-  animation: spin 1s linear infinite;
-}
-
-.alumno-placeholder {
+/*  ESTADO VAC�O DE ALUMNOS  */
+.empty-alumnos {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem;
+  padding: 2.5rem 1rem;
   text-align: center;
+  background: var(--white);
+  border-radius: 10px;
+}
+
+.empty-alumnos i {
+  font-size: 2.5rem;
   color: var(--text-secondary);
-}
-
-.alumno-placeholder i {
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
   opacity: 0.4;
-  color: var(--primary-red);
+  margin-bottom: 0.75rem;
 }
 
-.alumno-placeholder p {
+.empty-alumnos p {
   margin: 0;
-  font-size: 0.85rem;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
-/* ─── ESTADO VACÍO ─── */
+/*  ESTADO VAC�O GENERAL  */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -525,41 +521,62 @@
   justify-content: center;
   text-align: center;
   padding: 3rem 2rem;
-  min-height: 300px;
+  min-height: 250px;
 }
 
 .empty-state .empty-icon {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   background: var(--tech-gray-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .empty-state .empty-icon i {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   color: var(--text-secondary);
   opacity: 0.5;
 }
 
 .empty-state h3 {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--tech-black);
   margin: 0 0 0.5rem 0;
 }
 
 .empty-state p {
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--text-secondary);
   margin: 0;
 }
 
-/* ─── RESPONSIVE ─── */
+/*  RESPONSIVE  */
+@media (max-width: 991.98px) {
+  .curso-row {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .curso-info {
+    min-width: 150px;
+  }
+
+  .curso-fechas {
+    gap: 1.5rem;
+  }
+
+  .btn-ver-alumnos {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+}
+
 @media (max-width: 767.98px) {
   .cursos-container {
     margin: 1rem auto;
@@ -591,33 +608,45 @@
     font-size: 1.25rem;
   }
 
-  .cursos-grid {
-    grid-template-columns: 1fr;
+  .curso-row {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 1rem;
-  }
-
-  .alumnos-panel.expanded {
-    max-height: 300px;
-  }
-
-  .cursos-content {
     padding: 1.25rem;
   }
 
+  .curso-icon-wrapper {
+    width: 45px;
+    height: 45px;
+  }
+
+  .curso-info {
+    width: 100%;
+  }
+
   .curso-fechas {
-    flex-direction: column;
-    gap: 0.75rem;
+    width: 100%;
+    justify-content: space-between;
   }
 
-  .fecha-divider {
-    width: 80%;
-    height: 1px;
-    margin: 0;
-  }
-
-  .fecha-item {
+  .btn-ver-alumnos {
     width: 100%;
     justify-content: center;
+  }
+
+  .alumnos-table thead th {
+    font-size: 0.7rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .alumnos-table tbody td {
+    font-size: 0.8rem;
+    padding: 0.7rem 0.5rem;
+  }
+
+  .alumno-avatar {
+    width: 30px;
+    height: 30px;
   }
 }
 
@@ -628,5 +657,17 @@
 
   .curso-nombre {
     font-size: 1rem;
+  }
+
+  .curso-fechas {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  /* Ocultar columnas menos importantes en m�vil */
+  .alumnos-table .alumno-email,
+  .alumnos-table thead th:nth-child(2) {
+    display: none;
   }
 }

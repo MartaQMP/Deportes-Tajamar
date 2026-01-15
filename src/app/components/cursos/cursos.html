@@ -24,92 +24,123 @@
       <p>Cargando cursos...</p>
     </div>
 
-    <!-- Grid de Cursos (3 en línea fija) -->
-    <div class="cursos-grid" *ngIf="cursos.length > 0">
-      <div class="curso-card" *ngFor="let curso of cursos">
-        <!-- Indicador de Estado -->
-        <div class="curso-status" [ngClass]="{'activo': curso.activo, 'inactivo': !curso.activo}">
-          <i class="bi" [ngClass]="curso.activo ? 'bi-circle-fill' : 'bi-circle'"></i>
-          <span>{{ curso.activo ? 'Activo' : 'Inactivo' }}</span>
-        </div>
-
-        <!-- Contenido de la Tarjeta -->
-        <div class="curso-body">
+    <!-- Lista de Cursos con Acordeón -->
+    <div class="accordion cursos-accordion" id="acordeonCursos" *ngIf="cursos.length > 0">
+      <div class="accordion-item curso-accordion-item" *ngFor="let curso of cursos; let i = index">
+        
+        <!-- Cabecera del Curso (Fila Horizontal) -->
+        <div class="curso-row">
+          <!-- Icono del Curso -->
           <div class="curso-icon-wrapper">
             <i class="bi bi-book-half"></i>
           </div>
-          <h3 class="curso-nombre">{{ curso.nombre }}</h3>
-        </div>
 
-        <!-- Fechas del Curso -->
-        <div class="curso-fechas">
-          <div class="fecha-item">
-            <div class="fecha-icon">
+          <!-- Nombre del Curso -->
+          <div class="curso-info">
+            <h3 class="curso-nombre">{{ curso.nombre }}</h3>
+            <div class="curso-status-badge" [ngClass]="{'activo': curso.activo, 'inactivo': !curso.activo}">
+              <i class="bi bi-circle-fill"></i>
+              <span>{{ curso.activo ? 'Activo' : 'Inactivo' }}</span>
+            </div>
+          </div>
+
+          <!-- Fechas -->
+          <div class="curso-fechas">
+            <div class="fecha-item">
               <i class="bi bi-calendar-event"></i>
+              <div class="fecha-content">
+                <span class="fecha-label">Inicio</span>
+                <span class="fecha-value">{{ curso.fechaInicio | date:'dd MMM yyyy' }}</span>
+              </div>
             </div>
-            <div class="fecha-content">
-              <span class="fecha-label">Inicio</span>
-              <span class="fecha-value">{{ curso.fechaInicio | date:'dd MMM yyyy' }}</span>
-            </div>
-          </div>
-          <div class="fecha-divider"></div>
-          <div class="fecha-item">
-            <div class="fecha-icon fin">
-              <i class="bi bi-calendar-check"></i>
-            </div>
-            <div class="fecha-content">
-              <span class="fecha-label">Fin</span>
-              <span class="fecha-value">{{ curso.fechaFin | date:'dd MMM yyyy' }}</span>
+            <div class="fecha-item">
+              <i class="bi bi-calendar-check fecha-fin"></i>
+              <div class="fecha-content">
+                <span class="fecha-label">Fin</span>
+                <span class="fecha-value">{{ curso.fechaFin | date:'dd MMM yyyy' }}</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Footer de la Tarjeta -->
-        <div class="curso-footer">
-          <button class="btn-curso-action" 
-                  (click)="verAlumnos(curso.idCurso)" 
-                  [class.active]="cursoExpandido === curso.idCurso">
+          <!-- Botón Ver Alumnos -->
+          <button class="btn-ver-alumnos" 
+                  type="button"
+                  (click)="verAlumnos(curso.idCurso)"
+                  [class.active]="cursoExpandido === curso.idCurso"
+                  [attr.aria-expanded]="cursoExpandido === curso.idCurso"
+                  [attr.aria-controls]="'collapse-' + curso.idCurso">
             <i class="bi" [ngClass]="cursoExpandido === curso.idCurso ? 'bi-chevron-up' : 'bi-people-fill'"></i>
-            <span>{{ cursoExpandido === curso.idCurso ? 'Ocultar alumnos' : 'Ver alumnos' }}</span>
+            <span>{{ cursoExpandido === curso.idCurso ? 'Ocultar' : 'Ver alumnos' }}</span>
           </button>
         </div>
 
-        <!-- Panel Desplegable de Alumnos -->
-        <div class="alumnos-panel" [class.expanded]="cursoExpandido === curso.idCurso">
-          <div class="alumnos-header">
-            <i class="bi bi-people-fill"></i>
-            <span>Alumnos inscritos en {{ curso.nombre }}</span>
-            <span class="alumnos-count" *ngIf="!cargandoAlumnos">{{ alumnosCurso.length }}</span>
-          </div>
-          <div class="alumnos-list">
+        <!-- Panel Colapsable con Tabla de Alumnos -->
+        <div class="collapse alumnos-collapse" 
+             [class.show]="cursoExpandido === curso.idCurso"
+             [id]="'collapse-' + curso.idCurso">
+          <div class="alumnos-panel-content">
+            
+            <!-- Header de la tabla -->
+            <div class="alumnos-table-header">
+              <i class="bi bi-people-fill"></i>
+              <span>Alumnos inscritos</span>
+              <span class="badge bg-danger alumnos-count" *ngIf="!cargandoAlumnos">{{ alumnosCurso.length }}</span>
+            </div>
+
             <!-- Estado de carga -->
-            <div class="alumno-placeholder" *ngIf="cargandoAlumnos">
-              <i class="bi bi-arrow-repeat spinning"></i>
+            <div class="table-loading" *ngIf="cargandoAlumnos">
+              <div class="spinner-border text-danger" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
               <p>Cargando alumnos...</p>
             </div>
 
-            <!-- Lista de alumnos -->
-            <div class="alumno-item" *ngFor="let alumno of alumnosCurso">
-              <div class="alumno-avatar">
-                <img *ngIf="alumno.imagen" [src]="alumno.imagen" alt="{{ alumno.usuario }}">
-                <i *ngIf="!alumno.imagen" class="bi bi-person-fill"></i>
-              </div>
-              <div class="alumno-info">
-                <span class="alumno-nombre">{{ alumno.usuario }}</span>
-                <span class="alumno-email">{{ alumno.email }}</span>
-              </div>
-              <div class="alumno-estado" [ngClass]="{'activo': alumno.estadoUsuario, 'inactivo': !alumno.estadoUsuario}">
-                <i class="bi bi-circle-fill"></i>
-              </div>
+            <!-- Tabla de Alumnos -->
+            <div class="table-responsive" *ngIf="!cargandoAlumnos && alumnosCurso.length > 0">
+              <table class="table table-hover alumnos-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Alumno</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Rol</th>
+                    <th scope="col" class="text-center">Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let alumno of alumnosCurso">
+                    <td>
+                      <div class="alumno-cell">
+                        <div class="alumno-avatar">
+                          <img *ngIf="alumno.imagen" [src]="alumno.imagen" alt="{{ alumno.usuario }}">
+                          <i *ngIf="!alumno.imagen" class="bi bi-person-fill"></i>
+                        </div>
+                        <span class="alumno-nombre">{{ alumno.usuario }}</span>
+                      </div>
+                    </td>
+                    <td class="alumno-email">{{ alumno.email }}</td>
+                    <td>
+                      <span class="role-badge">{{ alumno.role }}</span>
+                    </td>
+                    <td class="text-center">
+                      <span class="estado-badge" [ngClass]="{'activo': alumno.estadoUsuario, 'inactivo': !alumno.estadoUsuario}">
+                        <i class="bi bi-circle-fill"></i>
+                        {{ alumno.estadoUsuario ? 'Activo' : 'Inactivo' }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <!-- Sin alumnos -->
-            <div class="alumno-placeholder" *ngIf="!cargandoAlumnos && alumnosCurso.length === 0">
+            <div class="empty-alumnos" *ngIf="!cargandoAlumnos && alumnosCurso.length === 0">
               <i class="bi bi-person-x"></i>
               <p>No hay alumnos inscritos en este curso</p>
             </div>
+
           </div>
         </div>
+
       </div>
     </div>
 
