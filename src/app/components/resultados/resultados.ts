@@ -6,6 +6,7 @@ import Resultado from '../../models/resultado';
 import { CommonModule, DatePipe, TitleCasePipe } from '@angular/common';
 import { NombreEquipoPipe } from '../../pipes/nombre-equipo-pipe';
 import { AlumnosEquipoPipe } from '../../pipes/alumnos-equipo-pipe';
+import ActividadesEvento from '../../models/actividadesevento';
 
 @Component({
   selector: 'app-resultados',
@@ -16,7 +17,11 @@ import { AlumnosEquipoPipe } from '../../pipes/alumnos-equipo-pipe';
 export class Resultados implements OnInit {
   public actividades!: Actividad[];
   public eventos!: Evento[];
-  public resultados!: Resultado[];
+  public resultadosAMostrar!: Resultado[];
+  private tablaRelacion!: ActividadesEvento[];
+  private todosLosResultados!: Resultado[];
+  public idEventoSeleccionado: number = 0;
+  public idActividadSeleccionada: number = 0;
 
   constructor(private _service: ResultadosService) {}
 
@@ -30,7 +35,42 @@ export class Resultados implements OnInit {
     });
 
     this._service.getResultados().subscribe((response) => {
-      this.resultados = response;
+      this.resultadosAMostrar = response;
+      this.todosLosResultados = response;
+    });
+
+    this._service.getEventoActividades().subscribe((response) => {
+      this.tablaRelacion = response;
+    });
+  }
+
+  filtrarPorActividad(event: any): void {
+    this.idActividadSeleccionada = parseInt(event.target.value);
+    this.idEventoSeleccionado = 0;
+    this.aplicarFiltros('actividad');
+  }
+
+  filtrarPorEvento(event: any): void {
+    this.idEventoSeleccionado = parseInt(event.target.value);
+    this.idActividadSeleccionada = 0;
+    this.aplicarFiltros('evento');
+  }
+
+  aplicarFiltros(tipo: 'evento' | 'actividad'): void {
+    const idBusca = tipo === 'evento' ? this.idEventoSeleccionado : this.idActividadSeleccionada;
+
+    if (!idBusca) {
+      this.resultadosAMostrar = [...this.todosLosResultados];
+      return;
+    }
+
+    this.resultadosAMostrar = this.todosLosResultados.filter((res) => {
+      const relacion = this.tablaRelacion.find(
+        (rel) => rel.idEventoActividad === res.idEventoActividad
+      );
+      if (!relacion) return false;
+
+      return tipo === 'evento' ? relacion.idEvento === idBusca : relacion.idActividad === idBusca;
     });
   }
 }

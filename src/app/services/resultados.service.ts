@@ -38,4 +38,11 @@ export class ResultadosService {
     let request = 'api/equipos/' + idEquipo;
     return this._http.get<Equipo>(environment.url + request);
   }
+
+  getEventoActividades(): Observable<any> {
+    let request = "api/actividadesevento";
+    return this._http.get(environment.url + request);
+  }
+
+  
 }

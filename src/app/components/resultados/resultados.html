@@ -3,7 +3,7 @@
     <div class="filter-group">
       <label for="evento">Filtrar por evento:</label>
       <div class="select-wrapper">
-        <select id="evento" class="custom-select">
+        <select id="evento" class="custom-select" (change)="filtrarPorEvento($event)">
           <option value="" selected disabled>Selecciona una fecha</option>
           @for (evento of this.eventos; track $index) {
           <option value="{{ evento.idEvento }}">
@@ -31,7 +31,7 @@
 
   <section class="results-list">
     <div class="accordion" id="accordionExample">
-      @for (resultado of this.resultados; track $index) {
+      @for (resultado of this.resultadosAMostrar; track $index) {
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button
