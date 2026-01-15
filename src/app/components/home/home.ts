@@ -152,7 +152,6 @@ export class Home implements OnInit {
         (response=>{
           console.log(response);
           this.verInscripciones();
-          this.yaEstaInscrito(e.idEvento);
           this.actividades.forEach((a, index) =>{
           this._inscripciones.verInscripciones(e.idEvento, a.idActividad).subscribe(response=>{
             this.personasInscritas[index] = response.length;
