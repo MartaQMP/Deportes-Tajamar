@@ -42,8 +42,19 @@
             aria-expanded="true"
             aria-controls="collapseOne"
           >
-            {{ resultado.idEquipoLocal | nombreEquipo | async }} {{ resultado.puntosLocal }} -
-            {{ resultado.puntosVisitante }} {{ resultado.idEquipoVisitante | nombreEquipo | async }}
+            <div class="d-flex justify-content-between w-100 pe-4">
+              <span class="text-start" style="flex: 1">
+                {{ resultado.idEquipoLocal | nombreEquipo | async }}
+              </span>
+
+              <span class="fw-bold px-3">
+                {{ resultado.puntosLocal }} - {{ resultado.puntosVisitante }}
+              </span>
+
+              <span class="text-end" style="flex: 1">
+                {{ resultado.idEquipoVisitante | nombreEquipo | async }}
+              </span>
+            </div>
           </button>
         </h2>
         <div
