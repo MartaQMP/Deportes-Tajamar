@@ -3,6 +3,7 @@ import { InicioSesion } from './components/inicio-sesion/inicio-sesion';
 import { Home } from './components/home/home';
 import { Menu } from './components/menu/menu';
 import { Perfil } from './components/perfil/perfil';
+import { Cursos } from './components/cursos/cursos';
 
 export const routes: Routes = [
   { path: '', component: InicioSesion },
@@ -12,6 +13,7 @@ export const routes: Routes = [
     children: [
       { path: '', component: Home },
       { path: 'perfil', component: Perfil },
+      {path: 'cursos', component: Cursos},
       { path: '**', redirectTo: '' },
     ],
   },
