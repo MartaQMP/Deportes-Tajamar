@@ -1,20 +1,26 @@
 <div class="body-container">
   <div class="login-container">
     <div class="left-side">
-      <img style="width: 100%" src="../../../../assets/logo-tajamar.png" alt="Logo" />
+      <img style="width: 100%" src="../../../../assets/login-image.jpg" alt="Logo" />
     </div>
     <div class="right-side">
       <h2>Iniciar sesión</h2>
       <form #form="ngForm">
         <div class="input-group">
-          <label class="form-label">Correo educativo <span class="text-light">*</span></label>
+          <label class="form-label">
+            <i class="bi bi-asterisk required-icon"></i>
+            Correo educativo
+          </label>
           <div class="email-input-wrapper">
             <input class="form-control" type="text" name="username" #username required />
             <span class="dominio">{{ dominio }}</span>
           </div>
         </div>
         <div class="input-group">
-          <label class="form-label">Contraseña <span class="text-light">*</span></label>
+          <label class="form-label">
+            <i class="bi bi-asterisk required-icon"></i>
+            Contraseña
+          </label>
           <div class="password-input-wrapper">
             <input
               class="form-control"
@@ -58,7 +64,10 @@
             </button>
           </div>
         </div>
-        <button type="submit" class="btn-login" (click)="login()">Iniciar sesión</button>
+        <button type="submit" class="btn-login" (click)="login()">
+          <span class="btn-text">Iniciar sesión</span>
+          <i class="bi bi-arrow-clockwise spinner-icon"></i>
+        </button>
       </form>
     </div>
   </div>
