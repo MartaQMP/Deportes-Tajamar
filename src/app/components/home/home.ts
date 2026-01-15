@@ -7,7 +7,7 @@ import {
 } from 'angular-calendar';
 import { startOfDay, endOfDay } from 'date-fns';
 import PerfilService from '../../services/perfil.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import usuarioLogeado from '../../models/usuarioLogeado';
 import { EventosService } from '../../services/eventos.service';
 import Evento from '../../models/evento';
@@ -16,13 +16,17 @@ import ActividadEvento from '../../models/actividades';
 import { ActividadesService } from '../../services/actividades.service';
 import { InscripcionService } from '../../services/inscripcion.service';
 import Inscripciones from '../../models/inscripciones';
+import { FormsModule } from '@angular/forms';
+import UsuarioActividad from '../../models/usuarioActividad';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
     CommonModule,
-    CalendarModule
+    FormsModule,
+    CalendarModule,
+    RouterModule
   ],
   templateUrl: './home.html',
   styleUrl: './home.css',
@@ -43,6 +47,11 @@ export class Home implements OnInit {
   public actividades: ActividadEvento[]=[];
   public personasInscritas: number[]=[];
   public contador: number=0;
+  public capitan:boolean=false;
+  public idEventoSeleccionado!:number;
+  public validarBoton:boolean=true;
+  public eventoSeleccionado:boolean = false;
+  public usuarioActividades:UsuarioActividad[]=[];
 
   constructor(
     private _perfil: PerfilService, 
@@ -94,6 +103,8 @@ export class Home implements OnInit {
         this.events = nuevosEventos;
 
         this.refresh.next(); 
+
+       
       },
       error: (err) => {
         console.error("Error cargando eventos", err);
@@ -106,6 +117,8 @@ export class Home implements OnInit {
   //Llamada al api Actividades por evento para recoger las actividades disponibles por cada evento
   MostrarActividades(e:Evento){
     console.log(e);
+    this.eventoSeleccionado=true;
+    this.idEventoSeleccionado = e.idEvento;
     this._actividades.buscarActividadesPorEventos(e.idEvento.toString()).subscribe((response)=>{
       this.actividades = response;
       //Ver las inscripciones a esa actividad en ese evento
@@ -115,6 +128,38 @@ export class Home implements OnInit {
         })
         this.personasInscritas.reverse()
       })
+      
+      //ver si el usuario esta inscrito ya en alguna actividad de ese evento
+      this.verInscripciones()
+      
+
     })
   }
+  verInscripciones(){
+    this._actividades.verUsuarioApuntado().subscribe(response=>{
+      this.usuarioActividades=response;
+      console.log(this.usuarioActividades)
+    })
+  } 
+
+  yaEstaInscrito(idEvento: number): boolean {
+  
+  return this.usuarioActividades.some(actividad => actividad.idEvento === idEvento);
+}
+
+    Inscribirse(e:ActividadEvento){
+      this._inscripciones.inscribirActividadEvento(this.usuario.idUsuario, e.idEventoActividad, this.capitan).subscribe(
+        (response=>{
+          console.log(response);
+          this.verInscripciones();
+          this.yaEstaInscrito(e.idEvento);
+          this.actividades.forEach((a, index) =>{
+          this._inscripciones.verInscripciones(e.idEvento, a.idActividad).subscribe(response=>{
+            this.personasInscritas[index] = response.length;
+          })
+          this.personasInscritas.reverse()
+        })
+        })
+      )
+    }
 }
