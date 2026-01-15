@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { LoginService } from '../../services/login';
+import { LoginService } from '../../services/login.service';
 import { FormsModule } from '@angular/forms';
 import { Login } from '../../models/login';
 import Swal from 'sweetalert2';
@@ -21,7 +21,6 @@ export class InicioSesion {
 
   //No funciona la API con esto al menos entramos a la Home
   //Quitar cuando funcione la API
-
 
   cambiarEstadoContrasenia(): void {
     this.contraseniaOculta = !this.contraseniaOculta;
