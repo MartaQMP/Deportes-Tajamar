@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './inicio-sesion.html',
   styleUrl: './inicio-sesion.css',
 })
-export class InicioSesion implements OnInit {
+export class InicioSesion {
   dominio: string = '@tajamar365.com';
   contraseniaOculta: boolean = false;
   @ViewChild('username') username!: ElementRef;
@@ -21,9 +21,7 @@ export class InicioSesion implements OnInit {
 
   //No funciona la API con esto al menos entramos a la Home
   //Quitar cuando funcione la API
-  ngOnInit(): void {
-    this._route.navigate(['/deportes/']);
-  }
+
 
   cambiarEstadoContrasenia(): void {
     this.contraseniaOculta = !this.contraseniaOculta;
@@ -40,7 +38,7 @@ export class InicioSesion implements OnInit {
         console.log(response.response);
         localStorage.clear();
         localStorage.setItem('token', response.response);
-        this._route.navigate(['/deportes/']);
+        this._route.navigate(['/deportes']);
       },
       error: (error) => {
         Swal.fire({
