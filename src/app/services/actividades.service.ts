@@ -14,7 +14,7 @@ export class ActividadesService {
 
   url= environment.url;
   
-  buscarActividadesPorEventos(id:string) : Observable<any[]> {
+  buscarActividadesPorEventos(id:string) : Observable<ActividadEvento[]> {
     var request = "api/actividades/actividadesevento/"+id;
     let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
     return this._http.get<ActividadEvento[]>(this.url+request, {headers: header})

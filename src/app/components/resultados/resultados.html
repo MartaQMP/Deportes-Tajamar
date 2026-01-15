@@ -5,9 +5,11 @@
       <div class="select-wrapper">
         <select id="evento" class="custom-select">
           <option value="" selected disabled>Selecciona una fecha</option>
-          <option value="25-oct">25 de Octubre</option>
-          <option value="26-oct">26 de Octubre</option>
-          <option value="27-oct">27 de Octubre</option>
+          @for (evento of this.eventos; track $index) {
+          <option value="{{ evento.idEvento }}">
+            {{ evento.fechaEvento | date : "EEEE, d 'de' MMMM 'de' y" }}
+          </option>
+          }
         </select>
       </div>
     </div>
@@ -16,10 +18,10 @@
       <label for="deporte">Filtrar por deporte:</label>
       <div class="select-wrapper">
         <select id="deporte" class="custom-select">
-          <option value="" selected disabled>Selecciona un deporte</option>
-          <option value="futbol">Fútbol</option>
-          <option value="baloncesto">Baloncesto</option>
-          <option value="videojuegos">Videojuegos</option>
+          <option value="" selected disabled>Selecciona una actividad</option>
+          @for (actividad of this.actividades; track $index) {
+          <option value="{{ actividad.idActividad }}">{{ actividad.nombre }}</option>
+          }
         </select>
       </div>
     </div>
@@ -29,6 +31,7 @@
 
   <section class="results-list">
     <div class="accordion" id="accordionExample">
+      @for (resultado of this.resultados; track $index) {
       <div class="accordion-item">
         <h2 class="accordion-header">
           <button
@@ -39,7 +42,8 @@
             aria-expanded="true"
             aria-controls="collapseOne"
           >
-            Accordion Item #1
+            {{ resultado.idEquipoLocal | nombreEquipo | async }} {{ resultado.puntosLocal }} -
+            {{ resultado.puntosVisitante }} {{ resultado.idEquipoVisitante | nombreEquipo | async }}
           </button>
         </h2>
         <div
@@ -48,71 +52,25 @@
           data-bs-parent="#accordionExample"
         >
           <div class="accordion-body">
-            <strong>This is the first item’s accordion body.</strong> It is shown by default, until
-            the collapse plugin adds the appropriate classes that we use to style each element.
-            These classes control the overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or overriding our default
-            variables. It’s also worth noting that just about any HTML can go within the
-            <code>.accordion-body</code>, though the transition does limit overflow.
+            <div class="row">
+              <div class="col-md-6 border-end">
+                @for (alumno of (resultado.idEquipoLocal | alumnosEquipo | async); track
+                alumno.idAlumno) {
+                <p class="mb-1 text-start w-100">{{ alumno.usuario }}</p>
+                }
+              </div>
+
+              <div class="col-md-6">
+                @for (alumno of (resultado.idEquipoVisitante | alumnosEquipo | async); track
+                alumno.idAlumno) {
+                <p class="mb-1 text-end w-100">{{ alumno.usuario }}</p>
+                }
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseTwo"
-            aria-expanded="false"
-            aria-controls="collapseTwo"
-          >
-            Accordion Item #2
-          </button>
-        </h2>
-        <div
-          id="collapseTwo"
-          class="accordion-collapse collapse"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            <strong>This is the second item’s accordion body.</strong> It is hidden by default,
-            until the collapse plugin adds the appropriate classes that we use to style each
-            element. These classes control the overall appearance, as well as the showing and hiding
-            via CSS transitions. You can modify any of this with custom CSS or overriding our
-            default variables. It’s also worth noting that just about any HTML can go within the
-            <code>.accordion-body</code>, though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseThree"
-            aria-expanded="false"
-            aria-controls="collapseThree"
-          >
-            Accordion Item #3
-          </button>
-        </h2>
-        <div
-          id="collapseThree"
-          class="accordion-collapse collapse"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            <strong>This is the third item’s accordion body.</strong> It is hidden by default, until
-            the collapse plugin adds the appropriate classes that we use to style each element.
-            These classes control the overall appearance, as well as the showing and hiding via CSS
-            transitions. You can modify any of this with custom CSS or overriding our default
-            variables. It’s also worth noting that just about any HTML can go within the
-            <code>.accordion-body</code>, though the transition does limit overflow.
-          </div>
-        </div>
-      </div>
+      }
     </div>
   </section>
 </div>
