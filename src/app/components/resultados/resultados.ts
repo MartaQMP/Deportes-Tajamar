@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { ResultadosService } from '../../services/resultados.service';
 import Actividad from '../../models/actividad';
@@ -10,7 +11,7 @@ import ActividadesEvento from '../../models/actividadesevento';
 
 @Component({
   selector: 'app-resultados',
-  imports: [DatePipe, NombreEquipoPipe, CommonModule, AlumnosEquipoPipe],
+  imports: [FormsModule, DatePipe, NombreEquipoPipe, CommonModule, AlumnosEquipoPipe],
   templateUrl: './resultados.html',
   styleUrl: './resultados.css',
 })
@@ -44,16 +45,16 @@ export class Resultados implements OnInit {
     });
   }
 
-  filtrarPorActividad(event: any): void {
-    this.idActividadSeleccionada = parseInt(event.target.value);
-    this.idEventoSeleccionado = 0;
-    this.aplicarFiltros('actividad');
-  }
-
   filtrarPorEvento(event: any): void {
     this.idEventoSeleccionado = parseInt(event.target.value);
     this.idActividadSeleccionada = 0;
     this.aplicarFiltros('evento');
+  }
+
+  filtrarPorActividad(event: any): void {
+    this.idActividadSeleccionada = parseInt(event.target.value);
+    this.idEventoSeleccionado = 0;
+    this.aplicarFiltros('actividad');
   }
 
   aplicarFiltros(tipo: 'evento' | 'actividad'): void {
@@ -72,5 +73,11 @@ export class Resultados implements OnInit {
 
       return tipo === 'evento' ? relacion.idEvento === idBusca : relacion.idActividad === idBusca;
     });
+  }
+
+  limpiarFiltros(): void {
+    this.idEventoSeleccionado = 0;
+    this.idActividadSeleccionada = 0;
+    this.resultadosAMostrar = [...this.todosLosResultados];
   }
 }
