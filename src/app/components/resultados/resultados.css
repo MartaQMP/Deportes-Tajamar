@@ -1,0 +1,137 @@
+/* ─── CONTENEDOR PRINCIPAL ─── */
+.tajamar-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ─── SECCIÓN DE FILTROS (Estilo Imagen + Refinamiento) ─── */
+.filter-container {
+  background-color: var(--primary-red);
+  border-radius: 16px;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.filter-group label {
+  font-weight: 700;
+  color: var(--white); /* Verde oscuro para contraste */
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+/* Estilo del Select (Siguiendo el estilo 'dato-item') */
+.select-wrapper {
+  position: relative;
+}
+
+.custom-select {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: var(--white);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.custom-select:hover {
+  background-color: var(--tech-gray-light);
+}
+
+.select-wrapper::after {
+  content: '▼';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+/* ─── SEPARADOR ─── */
+.divider {
+  border: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin: 2.5rem 0;
+}
+
+/* ─── ACORDEÓN DE RESULTADOS (Override de Bootstrap) ─── */
+.results-list .accordion {
+  --bs-accordion-bg: var(--white);
+  --bs-accordion-border-color: rgba(0, 0, 0, 1);
+  --bs-accordion-border-radius: 12px;
+  --bs-accordion-inner-border-radius: 12px;
+  --bs-accordion-btn-focus-box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.accordion-item {
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+}
+
+.accordion-button {
+  padding: 1.25rem 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+  background-color: var(--white);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: var(--tech-gray-light);
+  color: var(--primary-red);
+  box-shadow: none;
+}
+
+/* Indicador lateral rojo al estar abierto (estilo Perfil) */
+.accordion-button:not(.collapsed)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  height: 70%;
+  width: 4px;
+  background-color: var(--primary-red);
+  border-radius: 0 4px 4px 0;
+}
+
+.accordion-body {
+  padding: 1.5rem;
+  background-color: var(--white);
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .filter-container {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
+}

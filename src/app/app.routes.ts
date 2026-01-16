@@ -4,6 +4,7 @@ import { Home } from './components/home/home';
 import { Menu } from './components/menu/menu';
 import { Perfil } from './components/perfil/perfil';
 import { Cursos } from './components/cursos/cursos';
+import { Resultados } from './components/resultados/resultados';
 
 export const routes: Routes = [
   { path: '', component: InicioSesion },
@@ -14,6 +15,7 @@ export const routes: Routes = [
       { path: '', component: Home },
       { path: 'perfil', component: Perfil },
       {path: 'cursos', component: Cursos},
+      { path: 'resultados', component: Resultados },
       { path: '**', redirectTo: '' },
     ],
   },
