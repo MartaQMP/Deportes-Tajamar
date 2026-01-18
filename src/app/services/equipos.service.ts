@@ -53,7 +53,7 @@ export class EquiposService {
   }
 
   aniadirMiembroEquipo(idUsuario: number, idEquipo: number): Observable<any> {
-    let request = 'api/miembrosequipos/create/' + idUsuario + '/' + idEquipo;
+    let request = 'api/miembroequipos/create/' + idUsuario + '/' + idEquipo;
     let header = new HttpHeaders().set('Content-Type', 'application/json');
     return this._http.post(environment.url + request, { headers: header });
   }

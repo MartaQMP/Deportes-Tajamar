@@ -96,10 +96,13 @@ export class Equipos implements OnInit {
       return;
     }
 
-    if (this.miembrosEquipo.length < 1) {
+    if (this.miembrosEquipo.length < this.jugadoresMinimos.nativeElement.innerText) {
       Swal.fire({
         title: 'Error',
-        text: 'El equipo debe tener al menos un miembro.',
+        text:
+          'El equipo debe tener al menos ' +
+          this.jugadoresMinimos.nativeElement.innerText +
+          ' miembros',
         icon: 'error',
       });
       return;
@@ -107,7 +110,7 @@ export class Equipos implements OnInit {
 
     const nuevoEquipo: Equipo = {
       idEquipo: 0,
-      idEventoActividad: 0,
+      idEventoActividad: 1,
       nombreEquipo: this.nombreEquipo.nativeElement.value,
       minimoJugadores: this.jugadoresMinimos.nativeElement.value,
       idColor: this.colorElegido.nativeElement.value,
@@ -124,7 +127,11 @@ export class Equipos implements OnInit {
 
       forkJoin(peticionesMiembros).subscribe({
         next: (respuestas) => {
-          alert('¡Equipo y miembros guardados con éxito!');
+          Swal.fire({
+            title: 'Equipo creado',
+            text: 'Equipo creado y miembros añadidos correctamente',
+            icon: 'success',
+          });
         },
       });
     });
