@@ -16,11 +16,11 @@ import ActividadesEvento from '../../models/actividadesevento';
   styleUrl: './resultados.css',
 })
 export class Resultados implements OnInit {
-  public actividades!: Actividad[];
-  public eventos!: Evento[];
-  public resultadosAMostrar!: Resultado[];
-  private tablaRelacion!: ActividadesEvento[];
-  private todosLosResultados!: Resultado[];
+  public actividades!: Array<Actividad>;
+  public eventos!: Array<Evento>;
+  public resultadosAMostrar!: Array<Resultado>;
+  private tablaRelacion!: Array<ActividadesEvento>;
+  private todosLosResultados!: Array<Resultado>;
   public idEventoSeleccionado: number = 0;
   public idActividadSeleccionada: number = 0;
 

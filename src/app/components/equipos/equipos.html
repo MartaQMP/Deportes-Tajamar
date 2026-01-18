@@ -1,0 +1,97 @@
+<div class="tajamar-container">
+  <div class="main-layout">
+    <aside class="panel info-equipo">
+      <div class="panel-header">
+        <i class="bi bi-info-circle-fill"></i>
+        <h2>Información del equipo</h2>
+      </div>
+      <form class="panel-body" #form="ngForm">
+        <div class="form-group">
+          <label class="form-label">Nombre del Equipo</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Nombre..."
+            name="nombreEquipo"
+            #nombreEquipo
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Color de Camiseta</label>
+          <select class="form-select" #colorElegido name="colorElegido" >
+            @for (color of colores; track $index) {
+            <option value="{{ color.idColor }}">{{ color.nombreColor }}</option>
+            }
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Miembros Mínimos</label>
+          <label class="fixed-number" #jugadoresMinimos name="jugadoresMinimos">5</label>
+        </div>
+        <button class="btn-primary-tajamar" (click)="guardarEquipo()">Guardar Equipo</button>
+      </form>
+    </aside>
+
+    <main class="members-column">
+      <div class="section-header">
+        <h3>Miembros Añadidos</h3>
+        <span class="badge-count">{{ miembrosEquipo.length }} añadidos</span>
+      </div>
+
+      <div class="members-grid">
+        @for (miembro of miembrosEquipo; track $index) {
+        <div class="member-card">
+          <div class="avatar-circle">
+            <i class="bi bi-person"></i>
+          </div>
+          <p class="m-name">{{ miembro.usuario }}</p>
+          <p class="m-course">{{ miembro.curso }}</p>
+          <button class="btn-expulsar" (click)="expulsarMiembro($index)">Expulsar</button>
+        </div>
+        } @empty {
+        <div>
+          <p>Haz clic en los alumnos de la derecha para formar tu equipo.</p>
+        </div>
+        }
+      </div>
+    </main>
+
+    <aside class="panel courses-column">
+      <div class="panel-header">
+        <i class="bi bi-mortarboard-fill"></i>
+        <h2>Cursos</h2>
+      </div>
+      <div class="accordion" id="coursesAccordion">
+        @for (curso of cursos; track $index) {
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#curso-' + curso.idCurso"
+            >
+              {{ curso.nombre }}
+            </button>
+          </h2>
+          <div
+            [id]="'curso-' + curso.idCurso"
+            class="accordion-collapse collapse"
+            data-bs-parent="#coursesAccordion"
+          >
+            <div class="accordion-body">
+              <ul class="student-list">
+                @for (usuario of getUsuariosPorCurso(curso.idCurso); track $index) {
+                <li (click)="agregarMiembro(usuario, curso.nombre)" class="clickable-student">
+                  <i class="bi bi-plus-circle-fill"></i> {{ usuario.usuario }}
+                </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </aside>
+  </div>
+</div>

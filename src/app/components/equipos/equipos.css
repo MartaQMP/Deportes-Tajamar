@@ -1,0 +1,165 @@
+.main-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.panel {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  height: fit-content;
+}
+
+.panel-header {
+  padding: 1rem 1.25rem;
+  background: var(--tech-gray-light);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel-header h2 {
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0;
+}
+
+.panel-header i {
+  color: var(--primary-red);
+}
+
+.panel-body {
+  padding: 1.5rem;
+}
+.form-group {
+  margin-bottom: 1.2rem;
+}
+.form-group label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.custom-input,
+.custom-select {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.fixed-number {
+  background: var(--tech-gray-light);
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-weight: 700;
+  text-align: center;
+  border: 1px dashed #ccc;
+}
+
+.btn-primary-tajamar {
+  width: 100%;
+  padding: 0.8rem;
+  background: var(--tech-black);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-primary-tajamar:hover {
+  background: var(--primary-red);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.badge-count {
+  background: var(--light-red);
+  color: var(--primary-red);
+  padding: 2%;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.member-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.empty-team-msg{
+  width: 100%;
+}
+
+.avatar-circle {
+  width: 50px;
+  height: 50px;
+  background: var(--tech-gray-light);
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.m-name {
+  font-weight: 700;
+  margin-bottom: 0;
+}
+.m-course {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.btn-expulsar {
+  background: var(--light-red);
+  color: var(--primary-red);
+  border: none;
+  padding: 5px 20px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.student-list {
+  list-style: none;
+  padding: 0;
+}
+.student-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.student-list li i {
+  color: var(--primary-red);
+  margin-right: 5px;
+}

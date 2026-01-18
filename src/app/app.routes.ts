@@ -1,3 +1,4 @@
+import { Equipos } from './components/equipos/equipos';
 import { Routes } from '@angular/router';
 import { InicioSesion } from './components/inicio-sesion/inicio-sesion';
 import { Home } from './components/home/home';
@@ -14,8 +15,9 @@ export const routes: Routes = [
     children: [
       { path: '', component: Home },
       { path: 'perfil', component: Perfil },
-      {path: 'cursos', component: Cursos},
+      { path: 'cursos', component: Cursos },
       { path: 'resultados', component: Resultados },
+      { path: 'crear-equipos', component: Equipos },
       { path: '**', redirectTo: '' },
     ],
   },
