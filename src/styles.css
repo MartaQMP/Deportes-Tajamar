@@ -131,3 +131,83 @@ a {
 .mt-2 {
   margin-top: 2rem;
 }
+
+
+
+/* BOTONES SWEETALERT CREAR */
+
+/* --- Estilo General del Modal (Limpio) --- */
+.swal-popup-discreto {
+  border-radius: 15px !important;     /* Bordes redondeados pero sutiles */
+  padding: 2rem !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente limpia */
+}
+
+.swal-title-discreto {
+  font-size: 1.5rem !important;
+  color: #333 !important;
+  font-weight: 600 !important;
+}
+
+/* --- Botón Confirmar (Estilo "Outline" o Discreto) --- */
+.btn-confirm-discreto {
+  background-color: transparent;
+  color: var(--success); /* Gris azulado oscuro */
+  border: 1px solid var(--success);
+  padding: 10px 25px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 6px; /* Radio pequeño, más formal */
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin: 0 8px;
+}
+
+.btn-confirm-discreto:hover {
+  background-color: var(--success);
+  color: #fff; /* Al hacer hover se "llena" */
+  box-shadow: 0 4px 6px rgba(44, 62, 80, 0.2);
+}
+
+/* --- Botón Cancelar (Texto sutil) --- */
+.btn-cancel-discreto {
+  background-color: transparent;
+  color: var(--primary-red); /* Gris medio */
+  border: 1px solid transparent; /* Invisible por defecto */
+  padding: 10px 25px;
+  border: 1px solid var(--primary-red);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0 8px;
+}
+
+.btn-cancel-discreto:hover {
+  color: var(--white); /* Rojo suave al pasar el mouse */
+  background-color: var(--primary-red-hover); /* Fondo rojizo muy pálido */
+}
+
+/* --- Input de Fecha (Minimalista) --- */
+.input-date-discreto {
+  width: 100% !important;
+  max-width: 80%;
+  margin: 20px auto !important;
+  height: 42px !important;
+  border: 1px solid #ddd !important; /* Borde gris suave */
+  border-radius: 6px !important;
+  background-color: #f9f9f9 !important; /* Fondo gris muy pálido */
+  color: #555;
+  font-size: 1rem !important;
+  padding: 0 15px !important;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05) !important; /* Sombra interna sutil */
+  transition: all 0.3s;
+}
+
+.input-date-discreto:focus {
+  background-color: #fff !important;
+  border-color: #2c3e50 !important; /* Se oscurece el borde al escribir */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1) !important; /* Pequeño resplandor */
+}

@@ -36,11 +36,12 @@
           </div>
         }
       </div>
-    
-      <a [routerLink]="['/deportes/crear-evento']" class="btn-create-discreto">
+    <div class = "contetn-boton">
+      <button (click)="abrirModalFecha()" class="btn-create-discreto">
         <i class="fas fa-plus"></i>
         Crear evento
-      </a>
+      </button>
+    </div>
     </section>
 
     <section class="panel-section activities-panel">
@@ -133,10 +134,12 @@
         }
 
       </div>
-      <a [routerLink]="['/deportes/crear-evento']" class="btn-create-discreto">
+      <div class = "contetn-boton">
+      <button (click)="abrirModalActividad()" class="btn-create-discreto">
         <i class="fas fa-plus"></i>
         Crear actividad
-      </a>
+      </button>
+      </div>
     </section>
     
   

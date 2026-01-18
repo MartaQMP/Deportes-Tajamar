@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import Evento from '../models/evento';
 import ActividadEvento from '../models/actividades';
 import UsuarioActividad from '../models/usuarioActividad';
+import Actividad from '../models/actividad';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,12 @@ export class ActividadesService {
     let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
     return this._http.get<UsuarioActividad[]>(this.url+request, {headers: header});
 
+  }
+
+  getActividades():Observable<any>{
+    var request="api/actividades";
+    let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
+    return this._http.get<Actividad[]>(this.url+request, {headers: header});
   }
 
 }

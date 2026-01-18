@@ -20,4 +20,10 @@ export class EventosService {
 
   }
 
+  crearEvento(fecha:Date) : Observable<any>{
+    var request = "api/Eventos/create/"+fecha;
+    let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
+    return this._http.post<boolean>(this.url+request, {haeders: header})
+  }
+
 }
