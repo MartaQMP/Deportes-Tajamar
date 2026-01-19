@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
 import Evento from '../models/evento';
 import ActividadEvento from '../models/actividades';
+import UsuarioActividad from '../models/usuarioActividad';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,13 @@ export class ActividadesService {
     var request = "api/actividades/actividadesevento/"+id;
     let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
     return this._http.get<ActividadEvento[]>(this.url+request, {headers: header})
+
+  }
+
+  verUsuarioApuntado():Observable<UsuarioActividad[]>{
+    var request="api/UsuariosDeportes/ActividadesUser";
+    let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
+    return this._http.get<UsuarioActividad[]>(this.url+request, {headers: header});
 
   }
 
