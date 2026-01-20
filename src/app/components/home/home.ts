@@ -45,6 +45,7 @@ export class Home implements OnInit {
   public eventoSeleccionado: boolean = false;
   public usuarioActividades: UsuarioActividad[] = [];
   public usuarioCapitan!: Alumno;
+  public token : any;
 
   constructor(
     private _perfil: PerfilService,
@@ -65,14 +66,14 @@ export class Home implements OnInit {
   ngOnInit(): void {
     //Login con el token para recoger el nombre de usuario
 
-    const token = localStorage.getItem('token');
+    this.token = localStorage.getItem('token')!;
 
-    if (!token) {
+    if (!this.token) {
       this._router.navigate(['/login']);
       return;
     }
 
-    this._perfil.getDatosUsuario(token).subscribe((response) => {
+    this._perfil.getDatosUsuario(this.token).subscribe((response) => {
       this.usuarioLogeado = true;
       this.usuario = response;
     });
@@ -104,7 +105,6 @@ export class Home implements OnInit {
 
   //Llamada al api Actividades por evento para recoger las actividades disponibles por cada evento
   MostrarActividades(e: Evento) {
-    console.log(e);
     this.eventoSeleccionado = true;
     this.idEventoSeleccionado = e.idEvento;
     this._actividades.buscarActividadesPorEventos(e.idEvento.toString()).subscribe((response) => {
@@ -134,7 +134,7 @@ export class Home implements OnInit {
 
   Inscribirse(e: ActividadEvento) {
     this._inscripciones
-      .inscribirActividadEvento(this.usuario.idUsuario, e.idEventoActividad, this.capitan)
+      .inscribirActividadEvento(e.idEventoActividad, this.capitan, this.token)
       .subscribe((response) => {
         this.verInscripciones();
         this.actividades.forEach((a, index) => {
@@ -181,6 +181,8 @@ export class Home implements OnInit {
                   idEventoActividad: eventoActividad.idEventoActividad,
                   idUsuario: this.usuarioCapitan.idUsuario,
                 };
+                console.log('Usuario: ' + this.usuarioCapitan.usuario);
+                console.log('EventoActividad: ' + eventoActividad.idEventoActividad);
                 this._inscripciones.crearCapitan(capitan).subscribe();
               }
             });

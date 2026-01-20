@@ -25,23 +25,15 @@ export class InscripcionService {
   }
 
   inscribirActividadEvento(
-    idUsuario: number,
     idEventoActividad: number,
     capitan: boolean,
+    token: string,
   ): Observable<any> {
-    var request = 'api/inscripciones/create';
-    var inscripcion = {
-      idInscripcion: 0,
-      idUsuario: idUsuario,
-      idEventoActividad: idEventoActividad,
-      quiereSerCapitan: capitan,
-      fechaInscripcion: new Date(),
-    };
-    let json = JSON.stringify(inscripcion);
-    console.log(json);
-    let header = new HttpHeaders().set('Content-type', 'application/json');
-    header.append('Authorization', 'Bearer ' + localStorage.getItem('token'));
-    return this._http.post(this.url + request, json, { headers: header });
+    var request = 'api/UsuariosDeportes/InscribirmeEvento/' + idEventoActividad + '/' + capitan;
+    const header = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this._http.post(this.url + request, {}, { headers: header });
   }
 
   getUsuariosInscritosEventoCurso(idEvento: number, idCurso: number): Observable<Array<Alumno>> {
