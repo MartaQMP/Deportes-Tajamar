@@ -5,6 +5,7 @@ import { Menu } from './components/menu/menu';
 import { Perfil } from './components/perfil/perfil';
 import { Cursos } from './components/cursos/cursos';
 import { Resultados } from './components/resultados/resultados';
+import { SolicitarMaterial } from './components/solicitar-material/solicitar-material';
 
 export const routes: Routes = [
   { path: '', component: InicioSesion },
@@ -14,8 +15,9 @@ export const routes: Routes = [
     children: [
       { path: '', component: Home },
       { path: 'perfil', component: Perfil },
-      {path: 'cursos', component: Cursos},
+      { path: 'cursos', component: Cursos },
       { path: 'resultados', component: Resultados },
+      { path: 'solicitar-material/:idEvento', component: SolicitarMaterial },
       { path: '**', redirectTo: '' },
     ],
   },

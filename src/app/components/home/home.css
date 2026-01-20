@@ -465,6 +465,46 @@
 }
 
 
+/* ─── BOTÓN SOLICITAR MATERIAL ─── */
+.btn-solicitar-material {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--white);
+  color: var(--primary-red);
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition);
+  border: 1.5px solid rgba(242, 33, 47, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+}
+
+.btn-solicitar-material i {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+.btn-solicitar-material:hover {
+  background: var(--light-red);
+  color: var(--primary-red);
+  border-color: var(--primary-red);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(242, 33, 47, 0.2);
+}
+
+.btn-solicitar-material:hover i {
+  transform: translateX(2px);
+}
+
+.btn-solicitar-material:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(242, 33, 47, 0.15);
+}
+
 /* ─── ESTADOS VACÍOS ─── */
 .empty-state {
   display: flex;
