@@ -17,6 +17,7 @@ export const routes: Routes = [
       { path: 'perfil', component: Perfil },
       { path: 'cursos', component: Cursos },
       { path: 'resultados', component: Resultados },
+      { path: 'crear-equipo/:ideventoactividad', component: Resultados },
       { path: 'solicitar-material/:idEvento', component: SolicitarMaterial },
       { path: '**', redirectTo: '' },
     ],
