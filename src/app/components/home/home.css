@@ -350,7 +350,7 @@
 
 .contetn-boton{
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 /* ─── BOTÓN DISCRETO (Estilo Secundario) ─── */
@@ -367,7 +367,7 @@
   border: 1px solid rgba(0, 0, 0, 0.08); /* Borde gris muy suave */
   color: var(--primary-red);          /* Texto gris, no llama la atención */
   
-  padding: 0.7rem 1.5rem;
+  padding: 0.7rem 1rem;
   border-radius: 50px;                   /* Pill shape */
   font-weight: 600;
   text-decoration: none;
@@ -404,6 +404,28 @@
 .btn-create-discreto:active {
   background-color: var(--light-red);
   transform: translateY(0);
+}
+ 
+.disabled{
+  color:grey;
+  border: grey 1px solid;
+}
+.disabled:active{
+   background-color: var(--light-red);
+}
+.disabled:hover{
+   color: grey;          
+  border-color: grey;
+  background-color: #fffbfb;   
+  transform: translateY(0px);
+  box-shadow: 0 4px 12px grey; 
+}
+.actividad{
+  width: 100%;
+  margin: 20px 0px 0px 0px;
+}
+.actividad:hover{
+background-color: var(--light-red);
 }
 
 

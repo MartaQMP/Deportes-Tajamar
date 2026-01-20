@@ -6,6 +6,7 @@ import Evento from '../models/evento';
 import ActividadEvento from '../models/actividades';
 import UsuarioActividad from '../models/usuarioActividad';
 import Actividad from '../models/actividad';
+import PrecioActividad from '../models/precioActividad';
 
 @Injectable({
   providedIn: 'root',
@@ -36,4 +37,37 @@ export class ActividadesService {
     return this._http.get<Actividad[]>(this.url+request, {headers: header});
   }
 
+  insertarPrecioActividad(idActividadEvento: number, precio:number):Observable<any>{
+    var request = "api/PrecioActividad/create";
+    var precioTotal={
+        "idPrecioActividad":0,
+        "idEventoActividad":idActividadEvento,
+        "precioTotal": precio,
+      }
+      let json=JSON.stringify(precioTotal);
+      console.log(json);
+      let header=new HttpHeaders().set("Content-type", "application/json");
+      header.append('Authorization', 'Bearer ' + localStorage.getItem("token"));
+      return this._http.post<boolean>(this.url+request, json, {headers: header})
+  }
+
+  getPrecioActividadPorEvento():Observable<any>{
+    var request = "api/precioActividad";
+    let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
+    return this._http.get<PrecioActividad[]>(this.url+request, {headers: header});
+  }
+
+  deleteActividadEvento(idActividadEvento:number):Observable<any>{
+    var request = "api/PrecioActividad/"+idActividadEvento;
+      let header=new HttpHeaders().set("Content-type", "application/json");
+       return this._http.delete<boolean>(this.url+request, {headers: header})
+
+  }
+
+  deleteActividadEventoPrecio(idPrecioActividad:number):Observable<any>{
+    var request = "api/PrecioActividad/"+idPrecioActividad;
+      let header=new HttpHeaders().set("Content-type", "application/json");
+       return this._http.delete<boolean>(this.url+request, {headers: header})
+
+  }
 }

@@ -102,11 +102,19 @@
                     <p><strong>Detalles:</strong> {{a.nombreActividad}}</p>
                     <p>Mínimo de jugadores: {{a.minimoJugadores}}</p>
                     
+                    @if(obtenerPrecioActividad(a.idEventoActividad) != 0){
+                      <p>Precio: {{ obtenerPrecioActividad(a.idEventoActividad) }} €</p>
+                    }
+                    @else{
+                      <p>Precio: No definido</p>
+                    }
+
                     @if(a.idProfesor == -1){
                       <p>Profesor: Por escoger</p>
                     } @else {
                       <p>Profesor: {{a.idProfesor}}</p>
                     }
+                    
 
                     @if(a.idActividad == 1){
                       <label class="custom-switch">
@@ -116,15 +124,29 @@
                       </label>
                     }
                     @if (yaEstaInscrito(a.idEvento)) {
-                      <button class="btn btn-sm btn-danger w-100 botonConfirmar mt-3" disabled>
+                      <button class="btn btn-sm w-100 botonConfirmar mt-3" disabled>
                         Ya te has inscrito a una actividad
                       </button>
                     } 
                     @else {
-                      <button class="btn btn-sm btn-success w-100 botonConfirmar mt-3" (click)="Inscribirse(a)">
+                      <button class="btn btn-sm  w-100 botonConfirmar mt-3" (click)="Inscribirse(a)">
                         Confirmar Inscripción
                       </button>
                     }
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center contetn-boton">
+  
+                      <button (click)="anadirPrecio(a)" class="btn btn-create-discreto actividad">
+                        <i class="fas fa-plus"></i> Añadir precio
+                      </button>
+
+                      <button  class="btn btn-create-discreto actividad" (click) = "eliminarActividadEvento(a)">
+                        <i class="fas fa-trash"></i> Eliminar actividad
+                      </button>
+
+                    </div>
+
+                    
                   </div>
                 </div>
 
@@ -134,12 +156,21 @@
         }
 
       </div>
+      @if(eventoSeleccionado){
       <div class = "contetn-boton">
       <button (click)="abrirModalActividad()" class="btn-create-discreto">
         <i class="fas fa-plus"></i>
-        Crear actividad
+        Añadir actividad
       </button>
       </div>
+    }@else{
+      <div class = "contetn-boton">
+      <button (click)="abrirModalActividad()" class="btn-create-discreto disabled" disabled>
+        <i class="fas fa-plus"></i>
+        Selecciona un evento
+      </button>
+      </div>
+    }
     </section>
     
   

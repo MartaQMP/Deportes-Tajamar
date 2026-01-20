@@ -20,6 +20,7 @@ import { FormsModule } from '@angular/forms';
 import UsuarioActividad from '../../models/usuarioActividad';
 import Swal from 'sweetalert2';
 import Actividad from '../../models/actividad';
+import PrecioActividad from '../../models/precioActividad';
 
 @Component({
   selector: 'app-home',
@@ -55,6 +56,8 @@ export class Home implements OnInit {
   public eventoSeleccionado:boolean = false;
   public usuarioActividades:UsuarioActividad[]=[];
   public actividadesGet:Actividad[]=[]
+  public precioActividad: PrecioActividad[]=[];
+  public precioTotalActividad!:PrecioActividad | undefined;
 
   constructor(
     private _perfil: PerfilService, 
@@ -134,7 +137,7 @@ export class Home implements OnInit {
       
       //ver si el usuario esta inscrito ya en alguna actividad de ese evento
       this.verInscripciones()
-      
+      this.verPrecioActividad()
 
     })
   }
@@ -153,49 +156,22 @@ export class Home implements OnInit {
 
   abrirModalActividad() {
 
-  //Mostrar fechas con formato
-  const fechaEvento = this.eventos.map(e => {
-
-  const fechaObj = new Date(e.fechaEvento);
-  let fechaFormateada = fechaObj.toLocaleDateString('es-ES', {
-    weekday: 'long',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'  
-  });
-  fechaFormateada = fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
-  })
-
 //Llamada al api para recoger los deportes disponibles
 
-
-  // 1. Llamada a la API
   this._actividades.getActividades().subscribe(response => {
-
-    // --- TODO ESTO SE EJECUTA SOLO CUANDO LLEGAN LOS DATOS ---
-
-    // 2. Creamos el HTML de las opciones usando la 'response' directa
     const actividadesHTML = response.map((a: { idActividad: any; nombre: any; }) => 
       `<option value="${a.idActividad}">${a.nombre}</option>`
     ).join('');
 
-    // (Asumo que 'fechaEvento' ya lo tienes calculado de antes, si no, calcúlalo aquí también)
-    // const fechaEvento = ... 
-
-    // 3. Lanzamos el SweetAlert AQUÍ DENTRO
     Swal.fire({
-      title: 'Crear evento',
+      title: 'Añadir a Evento #'+this.idEventoSeleccionado,
       html: `
-        <div style="text-align: left; margin-bottom: 5px; color: #555;">Evento:</div>
-        <select id="swal-fecha" class="input-date-discreto" style="margin: 0 0 15px 0 !important;">
-          ${fechaEvento} 
-        </select>
-
         <div style="text-align: left; margin-bottom: 5px; color: #555;">Deporte:</div>
         <select id="swal-deporte" class="input-date-discreto" style="margin: 0 !important;">
           <option value="" disabled selected>Selecciona una actividad...</option>
           ${actividadesHTML}
         </select>
+        
       `,
       showCancelButton: true,
       confirmButtonText: 'Crear',
@@ -208,16 +184,19 @@ export class Home implements OnInit {
         title: 'swal-title-discreto'
       },
       preConfirm: () => {
-        // Recuperamos los valores por sus IDs únicos
         return {
-          idEvento: (document.getElementById('swal-fecha') as HTMLSelectElement).value,
           idActividad: (document.getElementById('swal-deporte') as HTMLSelectElement).value
         };
       }
     }).then((result) => {
       if (result.isConfirmed) {
         console.log('Datos seleccionados:', result.value);
-        // Aquí llamas a la función para guardar en BBDD
+        this._eventos.crearActividad(this.idEventoSeleccionado, result.value.idActividad).subscribe(response=>{
+          console.log(response);
+          
+        }, error =>{
+          Swal.fire('Error', 'No se inserto la actividad', 'error');
+        });
       }
     });
 
@@ -243,11 +222,11 @@ export class Home implements OnInit {
     confirmButtonText: 'Crear',
     cancelButtonText: 'Cancelar',
     customClass: {
-        popup: 'swal-popup-discreto',       // Fondo y bordes del modal
-        confirmButton: 'btn-confirm-discreto', // Botón confirmar
-        cancelButton: 'btn-cancel-discreto',   // Botón cancelar
-        input: 'input-date-discreto',          // El input de fecha
-        title: 'swal-title-discreto'           // Título (opcional)
+        popup: 'swal-popup-discreto',      
+        confirmButton: 'btn-confirm-discreto', 
+        cancelButton: 'btn-cancel-discreto',   
+        input: 'input-date-discreto',       
+        title: 'swal-title-discreto'          
       }
   }).then((result) => {
 
@@ -282,4 +261,98 @@ if(result.isConfirmed)
         })
       )
     }
+
+
+
+    anadirPrecio(a:ActividadEvento) {
+    Swal.fire({
+      title: 'Añadir Precio',
+      html: `
+        <div style="text-align: left; margin-bottom: 5px; color: #555;">
+          Indica el coste de la actividad:
+        </div>
+        
+        <input 
+          id="swal-input-precio" 
+          type="number" 
+          class="input-date-discreto"
+          placeholder="0.00" 
+          min="0" 
+          step="0.01" 
+          style="margin: 0 !important; width: 100%; box-sizing: border-box;"
+        >
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Guardar Precio',
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'swal-popup-discreto',
+        confirmButton: 'btn-confirm-discreto',
+        cancelButton: 'btn-cancel-discreto',
+        title: 'swal-title-discreto'
+      },
+      didOpen: () => {
+        // Opcional: Pone el foco en el input automáticamente al abrir
+        const input = Swal.getPopup()?.querySelector('#swal-input-precio') as HTMLInputElement;
+        if(input) input.focus();
+      },
+    preConfirm: () => {
+      const precioInput = document.getElementById('swal-input-precio') as HTMLInputElement;
+      const precioValor = precioInput.value;
+
+      if (!precioValor) {
+        Swal.showValidationMessage('Por favor, escribe un precio válido');
+        return false;
+      }
+      return parseFloat(precioValor);
+    }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const precioFinal = result.value;
+        console.log('Precio guardado:', precioFinal);
+        
+       this._actividades.insertarPrecioActividad(a.idEventoActividad, precioFinal).subscribe(response =>{
+        console.log(response);
+       }, error =>{
+           Swal.fire('Error', 'No se ha podido insertar el precio', 'error');
+       })
+      }
+    });
+  }
+
+  verPrecioActividad(){
+    console.log(this.actividades)
+    this._actividades.getPrecioActividadPorEvento().subscribe(response=>{
+      this.precioActividad = response
+      .filter((precio: { idEventoActividad: number; }) => {
+        return this.actividades.some(act => act.idEventoActividad === precio.idEventoActividad);
+      }).map((precio: { idEventoActividad: number; }) => {
+        this.actividades.find(
+          act => act.idEventoActividad === precio.idEventoActividad
+        );
+
+        return {
+          ...precio,             // Datos del precio
+        };
+      });
+
+    console.log('Listado filtrado y combinado:', this.precioActividad);
+  });
+  }
+
+  obtenerPrecioActividad(idEventoActividad: number): number {
+  
+  const encontrado = this.precioActividad.find(p => p.idEventoActividad === idEventoActividad);
+  this.precioTotalActividad = encontrado || undefined;
+  return encontrado ? encontrado.precioTotal : 0;
+}
+
+  eliminarActividadEvento(a:ActividadEvento){
+    
+    
+    // this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe(response=>{
+    //   console.log(response);
+    // })
+  }
 }
