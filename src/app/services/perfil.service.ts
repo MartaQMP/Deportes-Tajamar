@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "../../environments/environment.development";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
+import UsuarioActividad from "../models/usuarioActividad";
 
 @Injectable({
   providedIn: 'root' // <--- ESTA LÍNEA ES LA MAGIA
@@ -16,5 +17,11 @@ export default class PerfilService {
         let request = environment.url + "api/UsuariosDeportes/Perfil";
         let header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
         return this._http.get<usuarioLogeado>(request, { headers: header });
+    }
+
+    getActividadesUsuario(token: string): Observable<UsuarioActividad> {
+        let request = environment.url + "api/UsuariosDeportes/ActividadesUser";
+        let header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+        return this._http.get<UsuarioActividad>(request, {headers: header});
     }
 }
