@@ -1,1 +1,159 @@
-<p>solicitar-material works!</p>
+<!-- ══════════════════════════════════════════════════════════════
+     SOLICITAR MATERIAL - Vista de Materiales del Evento
+     ══════════════════════════════════════════════════════════════ -->
+
+<div class="materiales-page">
+  
+  <!-- ═══ HEADER ═══ -->
+  <div class="materiales-header">
+    <div class="header-content">
+      <div class="header-title">
+        <i class="bi bi-box-seam"></i>
+        <span>Materiales del Evento</span>
+      </div>
+      <div class="header-badge">
+        <i class="bi bi-circle-fill"></i>
+        {{ materialesEvento?.length || 0 }} Materiales
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CONTENIDO PRINCIPAL ═══ -->
+  <div class="materiales-main">
+    
+    <!-- Panel de Materiales -->
+    <div class="materiales-section">
+      
+      <!-- Section Header -->
+      <div class="section-header">
+        <div class="section-title">
+          <div class="title-icon">
+            <i class="bi bi-box-seam"></i>
+          </div>
+          <div class="title-text">
+            <h2>Materiales Solicitados</h2>
+            <p>Gestión y seguimiento de materiales</p>
+          </div>
+        </div>
+        
+        <div class="materiales-stats">
+          <div class="stat-badge pendientes">
+            <i class="bi bi-clock-history"></i>
+            {{ contarPendientes() }} Pendientes
+          </div>
+          <div class="stat-badge completados">
+            <i class="bi bi-check-circle"></i>
+            {{ contarCompletados() }} Completados
+          </div>
+        </div>
+      </div>
+
+      <!-- Contenido -->
+      <div class="materiales-content">
+        
+        <!-- Lista de Materiales -->
+        <div class="materiales-grid" *ngIf="materialesEvento && materialesEvento.length > 0">
+          <div class="material-card" *ngFor="let material of materialesEvento" [class.completado]="!material.pendiente">
+            
+            <!-- Icono del Material -->
+            <div class="material-icon" [class.completado]="!material.pendiente">
+              <i class="bi bi-box" [class.bi-check2-circle]="!material.pendiente"></i>
+            </div>
+
+            <!-- Información del Material -->
+            <div class="material-info">
+              <h3 class="material-nombre" [class.completado]="!material.pendiente">{{ material.nombreMaterial }}</h3>
+              
+              <div class="material-meta">
+                <span class="meta-tag">
+                  <i class="bi bi-calendar3"></i>
+                  {{ material.fechaSolicitud | date: 'dd/MM/yyyy' }}
+                </span>
+                <span class="meta-tag" *ngIf="material.idUsuarioAportacion">
+                  <i class="bi bi-person-check"></i>
+                  Aportado por usuario #{{ material.idUsuarioAportacion }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Indicador Visual de Estado -->
+            <div class="material-status-indicator">
+              <!-- Pendiente: Badge naranja con animación -->
+              <span class="status-label pendiente" *ngIf="material.pendiente">
+                <i class="bi bi-hourglass-split"></i>
+                <span>En espera</span>
+              </span>
+              
+              <!-- Completado: Check verde elegante -->
+              <span class="status-label completado" *ngIf="!material.pendiente">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Recibido</span>
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Estado Vacío -->
+        <div class="empty-materiales" *ngIf="!materialesEvento || materialesEvento.length === 0">
+          <div class="empty-icon">
+            <i class="bi bi-inbox"></i>
+          </div>
+          <h3>No hay materiales solicitados</h3>
+          <p>Aún no se han registrado materiales para este evento.</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Panel de Acciones Rápidas (Opcional) -->
+    <div class="acciones-section">
+      <div class="section-header">
+        <div class="section-title">
+          <div class="title-icon secondary">
+            <i class="bi bi-lightning-charge"></i>
+          </div>
+          <div class="title-text">
+            <h2>Acciones Rápidas</h2>
+            <p>Gestiona los materiales</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="acciones-content">
+        <button class="accion-card">
+          <div class="accion-icon">
+            <i class="bi bi-plus-circle-fill"></i>
+          </div>
+          <div class="accion-text">
+            <h4>Crear Material</h4>
+            <p>Añadir nuevo material</p>
+          </div>
+        </button>
+
+        <button class="accion-card">
+          <div class="accion-icon secondary">
+            <i class="bi bi-pencil-square"></i>
+          </div>
+          <div class="accion-text">
+            <h4>Actualizar Material</h4>
+            <p>Editar material existente</p>
+          </div>
+        </button>
+
+        <button class="accion-card">
+          <div class="accion-icon tertiary">
+            <i class="bi bi-trash3-fill"></i>
+          </div>
+          <div class="accion-text">
+            <h4>Eliminar Material</h4>
+            <p>Remover material del evento</p>
+          </div>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

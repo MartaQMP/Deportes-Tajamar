@@ -1,0 +1,641 @@
+/* ══════════════════════════════════════════════════════════════
+   SOLICITAR MATERIAL - Diseño Homogéneo con Perfil y Home
+   ══════════════════════════════════════════════════════════════ */
+
+/* ─── PÁGINA PRINCIPAL ─── */
+.materiales-page {
+  min-height: calc(100vh - 80px);
+  background: var(--tech-gray-light);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER DE MATERIALES
+   ═══════════════════════════════════════════════════════════════ */
+.materiales-header {
+  background: var(--white);
+  padding: 1.25rem 2rem;
+  border-bottom: 3px solid var(--primary-red);
+}
+
+.materiales-header .header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.materiales-header .header-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--tech-black);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.materiales-header .header-title i {
+  font-size: 1.3rem;
+  color: var(--primary-red);
+}
+
+.materiales-header .header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--light-red);
+  color: var(--primary-red);
+}
+
+.materiales-header .header-badge i {
+  font-size: 0.45rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTENIDO PRINCIPAL
+   ═══════════════════════════════════════════════════════════════ */
+.materiales-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECCIÓN DE MATERIALES
+   ═══════════════════════════════════════════════════════════════ */
+.materiales-section {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+/* ─── SECTION HEADER ─── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: var(--white);
+  border-bottom: 2px solid var(--light-red);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(242, 33, 47, 0.25);
+}
+
+.title-icon i {
+  font-size: 1.3rem;
+  color: var(--white);
+}
+
+.title-icon.secondary {
+  background: linear-gradient(135deg, var(--tech-black) 0%, #374151 100%);
+  box-shadow: 0 4px 12px rgba(26, 26, 26, 0.25);
+}
+
+.title-text h2 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--tech-black);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.title-text p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0.15rem 0 0 0;
+  font-weight: 500;
+}
+
+/* ─── STATS BADGES ─── */
+.materiales-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.stat-badge.pendientes {
+  background: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.stat-badge.pendientes i {
+  font-size: 0.7rem;
+}
+
+.stat-badge.completados {
+  background: rgba(40, 167, 69, 0.1);
+  color: var(--success);
+  border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.stat-badge.completados i {
+  font-size: 0.7rem;
+}
+
+/* ─── CONTENIDO DE MATERIALES ─── */
+.materiales-content {
+  padding: 1.25rem 1.5rem 1.5rem;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.materiales-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.materiales-content::-webkit-scrollbar-thumb {
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+/* ─── GRID DE MATERIALES ─── */
+.materiales-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* ─── MATERIAL CARD ─── */
+.material-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--tech-gray-light);
+  border-radius: 10px;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.material-card:hover {
+  background: var(--light-red);
+  transform: translateX(4px);
+  border-color: rgba(242, 33, 47, 0.1);
+}
+
+/* ─── ICONO DEL MATERIAL ─── */
+.material-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.material-icon i {
+  font-size: 1.3rem;
+  color: var(--primary-red);
+}
+
+/* ─── INFO DEL MATERIAL ─── */
+.material-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.material-nombre {
+  font-size: 0.95rem;
+  color: var(--tech-black);
+  font-weight: 600;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.material-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.meta-tag i {
+  font-size: 0.7rem;
+  color: var(--primary-red);
+}
+
+/* ─── ESTADO DEL MATERIAL ─── */
+.material-status-indicator {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.status-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: var(--transition);
+}
+
+/* Estado Pendiente - Naranja con animación sutil */
+.status-label.pendiente {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 152, 0, 0.1) 100%);
+  color: #ff9800;
+  border: 1px solid rgba(255, 152, 0, 0.25);
+  animation: pulse-pending 2s ease-in-out infinite;
+}
+
+.status-label.pendiente i {
+  font-size: 0.7rem;
+  animation: rotate-hourglass 3s ease-in-out infinite;
+}
+
+@keyframes pulse-pending {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(255, 152, 0, 0);
+  }
+}
+
+@keyframes rotate-hourglass {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+}
+
+/* Estado Completado - Gris elegante y sutil */
+.status-label.completado {
+  background: linear-gradient(135deg, rgba(108, 117, 125, 0.08) 0%, rgba(73, 80, 87, 0.05) 100%);
+  color: #6c757d;
+  border: 1px solid rgba(108, 117, 125, 0.15);
+}
+
+.status-label.completado i {
+  font-size: 0.8rem;
+}
+
+/* ─── ESTILOS PARA MATERIAL COMPLETADO (Tachado Elegante) ─── */
+
+/* Card completada: Fondo más suave y opacidad reducida */
+.material-card.completado {
+  background: rgba(248, 249, 250, 0.6);
+  opacity: 0.75;
+  border-left: 3px solid #dee2e6;
+}
+
+.material-card.completado:hover {
+  opacity: 0.9;
+  background: rgba(248, 249, 250, 0.9);
+}
+
+/* Icono completado: Gris sutil con check */
+.material-icon.completado {
+  background: rgba(108, 117, 125, 0.08);
+  border: 2px solid rgba(108, 117, 125, 0.12);
+}
+
+.material-icon.completado i {
+  color: #6c757d;
+}
+
+/* Nombre del material: Tachado elegante con línea decorativa gris */
+.material-nombre.completado {
+  position: relative;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.material-nombre.completado::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    #adb5bd 10%,
+    #adb5bd 90%,
+    transparent 100%
+  );
+  transform: translateY(-50%);
+  opacity: 0.5;
+}
+
+/* Meta tags en material completado */
+.material-card.completado .meta-tag {
+  opacity: 0.7;
+}
+
+.material-card.completado .meta-tag i {
+  color: #adb5bd;
+}
+
+/* ─── ESTADO VACÍO ─── */
+.empty-materiales {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.empty-materiales .empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--tech-gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.empty-materiales .empty-icon i {
+  font-size: 2rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.empty-materiales h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--tech-black);
+  margin: 0 0 0.35rem 0;
+}
+
+.empty-materiales p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECCIÓN DE ACCIONES
+   ═══════════════════════════════════════════════════════════════ */
+.acciones-section {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  height: fit-content;
+}
+
+.acciones-content {
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* ─── ACCIÓN CARD ─── */
+.accion-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--tech-gray-light);
+  border-radius: 10px;
+  transition: var(--transition);
+  border: 1px solid transparent;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.accion-card:hover {
+  background: var(--light-red);
+  transform: translateX(4px);
+  border-color: rgba(242, 33, 47, 0.1);
+}
+
+.accion-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--primary-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(242, 33, 47, 0.3);
+}
+
+.accion-icon i {
+  font-size: 1.1rem;
+  color: var(--white);
+}
+
+.accion-icon.secondary {
+  background: var(--tech-black);
+  box-shadow: 0 2px 6px rgba(26, 26, 26, 0.3);
+}
+
+.accion-icon.tertiary {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  box-shadow: 0 2px 6px rgba(220, 53, 69, 0.3);
+}
+
+.accion-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.accion-text h4 {
+  font-size: 0.9rem;
+  color: var(--tech-black);
+  font-weight: 600;
+  margin: 0;
+}
+
+.accion-text p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tablets */
+@media (max-width: 991.98px) {
+  .materiales-main {
+    grid-template-columns: 1fr;
+  }
+
+  .materiales-header .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .materiales-stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+  .materiales-main {
+    padding: 1rem;
+  }
+
+  .materiales-header {
+    padding: 1rem;
+  }
+
+  .materiales-header .header-title {
+    font-size: 1.1rem;
+  }
+
+  .section-header {
+    padding: 1rem;
+  }
+
+  .title-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .title-icon i {
+    font-size: 1.1rem;
+  }
+
+  .title-text h2 {
+    font-size: 0.9rem;
+  }
+
+  .title-text p {
+    font-size: 0.75rem;
+  }
+
+  .materiales-content {
+    padding: 1rem;
+  }
+
+  .material-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .material-status {
+    width: 100%;
+  }
+
+  .status-badge {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .materiales-stats {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .stat-badge {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .acciones-content {
+    padding: 1rem;
+  }
+
+  .accion-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Extra small */
+@media (max-width: 575.98px) {
+  .materiales-header .header-badge {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .material-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .material-icon i {
+    font-size: 1.1rem;
+  }
+
+  .material-nombre {
+    font-size: 0.9rem;
+  }
+
+  .meta-tag {
+    font-size: 0.7rem;
+  }
+}
