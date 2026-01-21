@@ -9,131 +9,81 @@ import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import Equipo from '../../models/equipo';
 import Swal from 'sweetalert2';
+import Evento from '../../models/evento';
+import { EventosService } from '../../services/eventos.service';
+import { ResultadosService } from '../../services/resultados.service';
+import { CommonModule, DatePipe } from '@angular/common';
+import { AlumnosEquipoPipe } from '../../pipes/alumnos-equipo-pipe';
 
 @Component({
   selector: 'app-equipos',
-  imports: [FormsModule],
+  imports: [FormsModule, DatePipe, AlumnosEquipoPipe, CommonModule],
   templateUrl: './equipos.html',
   styleUrl: './equipos.css',
 })
 export class Equipos implements OnInit {
-  @ViewChild('nombreEquipo') nombreEquipo!: ElementRef;
-  @ViewChild('colorElegido') colorElegido!: ElementRef;
-  @ViewChild('jugadoresMinimos') jugadoresMinimos!: ElementRef;
-  public cursos!: Array<Curso>;
+  // Array para el select superior
+  public inscripciones!: Array<any>;
+  public idEventoSeleccionado: number | null = null;
+  public equiposMostrados!: Array<Equipo>;
+  public cargandoEquipos: boolean = false;
   public colores!: Array<Color>;
-  public usuarios!: Array<Alumno>;
-  public usuarioLogueado!: usuarioLogeado;
-  public isUsuarioLogueado: boolean = false;
-  public idEvento: number = 1;
-  public idActividad: number = 1;
-  public miembrosEquipo: Array<Alumno> = [];
 
-  constructor(private _service: EquiposService, private _router: Router) {}
+  constructor(
+    private _serviceEquipos: EquiposService,
+    private _router: Router,
+  ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('token') == null) {
+    const token = localStorage.getItem('token');
+    if (!token) {
       this._router.navigate(['/login']);
-    } else {
-      const token = localStorage.getItem('token');
+      return;
+    }
 
-      if (token != null) {
-        this._service.getDatosUsuario(token).subscribe((response) => {
-          this.isUsuarioLogueado = true;
-          this.usuarioLogueado = response;
-        });
+    // 1. Cargamos las inscripciones del usuario
+    this._serviceEquipos.getInscripcionesUsuario(token).subscribe((response) => {
+      this.inscripciones = response;
 
-        this._service.getColores().subscribe((response) => {
-          this.colores = response;
-        });
-
-        this._service.getCursos().subscribe((response) => {
-          this.cursos = response;
-        });
-
-        /* AVERIGUAR idEvento E idActividad DEL CAPITAN */ this._service
-          .getAlumnosPorActividadEvento(this.idEvento, this.idActividad)
-          .subscribe((response) => {
-            this.usuarios = response;
-          });
+      // Opcional: Seleccionar el primero por defecto
+      if (this.inscripciones.length > 0) {
+        this.idEventoSeleccionado = this.inscripciones[0].idEvento;
+        this.cargarEquiposDelEvento(this.inscripciones[0].idEventoActividad);
       }
-    }
-  }
-  getUsuariosPorCurso(idCurso: number) {
-    if (!this.usuarios) {
-      return [];
-    }
-
-    return this.usuarios.filter((user) => user.idCurso === idCurso);
-  }
-
-  agregarMiembro(alumno: Alumno, nombreCurso: string) {
-    const existe = this.miembrosEquipo.find((m) => m.idUsuario === alumno.idUsuario);
-
-    if (!existe) {
-      const nuevoMiembro = { ...alumno, nombreCursoExhibicion: nombreCurso };
-      this.miembrosEquipo.push(nuevoMiembro);
-    } else {
-      Swal.fire({
-        title: 'Error',
-        text: 'Este alumno ya forma parte del equipo',
-        icon: 'error',
-      });
-    }
-  }
-
-  expulsarMiembro(index: number) {
-    this.miembrosEquipo.splice(index, 1);
-  }
-
-  guardarEquipo() {
-    if (!this.nombreEquipo.nativeElement.value || !this.colorElegido.nativeElement.value) {
-      Swal.fire({
-        title: 'Error',
-        text: 'El nombre y el color no pueden estar vacios',
-        icon: 'error',
-      });
-      return;
-    }
-
-    if (this.miembrosEquipo.length < this.jugadoresMinimos.nativeElement.innerText) {
-      Swal.fire({
-        title: 'Error',
-        text:
-          'El equipo debe tener al menos ' +
-          this.jugadoresMinimos.nativeElement.innerText +
-          ' miembros',
-        icon: 'error',
-      });
-      return;
-    }
-
-    const nuevoEquipo: Equipo = {
-      idEquipo: 0,
-      idEventoActividad: 1,
-      nombreEquipo: this.nombreEquipo.nativeElement.value,
-      minimoJugadores: this.jugadoresMinimos.nativeElement.value,
-      idColor: this.colorElegido.nativeElement.value,
-      idCurso: this.usuarioLogueado.idCurso,
-    };
-
-    this._service.crearEquipo(nuevoEquipo).subscribe((equipoCreado) => {
-      const idNuevoEquipo = equipoCreado.idEquipo;
-      console.log('Equipo creado con ID:', idNuevoEquipo);
-
-      const peticionesMiembros = this.miembrosEquipo.map((miembro) => {
-        return this._service.aniadirMiembroEquipo(idNuevoEquipo, miembro.idUsuario);
-      });
-
-      forkJoin(peticionesMiembros).subscribe({
-        next: (respuestas) => {
-          Swal.fire({
-            title: 'Equipo creado',
-            text: 'Equipo creado y miembros añadidos correctamente',
-            icon: 'success',
-          });
-        },
-      });
     });
+
+    this._serviceEquipos.getColores().subscribe((response) => {
+      this.colores = response;
+    });
+  }
+
+  // Se dispara cuando el usuario cambia el Select
+  onEventoChange() {
+    // Buscamos en nuestro array de inscripciones el objeto que coincide con el idEvento seleccionado
+    const inscripcionEncontrada = this.inscripciones.find(
+      (ins) => ins.idEvento == this.idEventoSeleccionado,
+    );
+
+    if (inscripcionEncontrada) {
+      this.cargarEquiposDelEvento(inscripcionEncontrada.idEventoActividad);
+    }
+  }
+
+  cargarEquiposDelEvento(idEvAct: number) {
+    this.cargandoEquipos = true;
+    this._serviceEquipos.getEquipos().subscribe((response) => {
+      this.equiposMostrados = response.filter(
+        (equipo: Equipo) => equipo.idEventoActividad === idEvAct,
+      );
+      this.cargandoEquipos = false;
+    });
+  }
+
+  apuntarme(idEquipo: number) {}
+
+  getNombreColor(idColor: number): string {
+    if (!this.colores) return 'Cargando...';
+    const colorEncontrado = this.colores.find((c) => c.idColor == idColor);
+    return colorEncontrado ? colorEncontrado.nombreColor : 'Sin color';
   }
 }

@@ -8,6 +8,7 @@ import Alumno from '../models/alumno';
 import usuarioLogeado from '../models/usuarioLogeado';
 import Capitan from '../models/capitan';
 import { he } from 'date-fns/locale';
+import Equipo from '../models/equipo';
 
 @Injectable({
   providedIn: 'root',
@@ -23,15 +24,6 @@ export class EquiposService {
   getCursos(): Observable<Array<Curso>> {
     let request = environment.url + 'api/GestionEvento/CursosActivos';
     return this._http.get<Array<Curso>>(request);
-  }
-
-  getAlumnosPorActividadEvento(idEvento: number, idActividad: number): Observable<Array<Alumno>> {
-    let request =
-      'api/inscripciones/inscripcionesusuarioseventoactividad/' +
-      idEvento +
-      '?idactividad=' +
-      idActividad;
-    return this._http.get<Array<Alumno>>(environment.url + request);
   }
 
   getDatosUsuario(token: string): Observable<usuarioLogeado> {
@@ -52,9 +44,21 @@ export class EquiposService {
     return this._http.post(environment.url + request, dataJson, { headers: header });
   }
 
-  aniadirMiembroEquipo(idUsuario: number, idEquipo: number): Observable<any> {
+  aniadirMiembroEquipo(token: string, idUsuario: number, idEquipo: number): Observable<any> {
     let request = 'api/miembroequipos/create/' + idUsuario + '/' + idEquipo;
     let header = new HttpHeaders().set('Content-Type', 'application/json');
+    header.append('Auth', token);
     return this._http.post(environment.url + request, { headers: header });
+  }
+
+  getInscripcionesUsuario(token: string): Observable<any> {
+    let request = 'api/usuariosdeportes/actividadesuser';
+    let header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this._http.get(environment.url + request, { headers: header });
+  }
+
+  getEquipos(): Observable<Array<Equipo>> {
+    let request = 'api/equipos';
+    return this._http.get<Array<Equipo>>(environment.url + request);
   }
 }

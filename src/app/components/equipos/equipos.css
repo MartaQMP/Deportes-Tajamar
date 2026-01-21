@@ -1,165 +1,162 @@
-.main-layout {
-  display: grid;
-  grid-template-columns: 300px 1fr 300px;
-  gap: 1.5rem;
-  padding: 1.5rem;
-  max-width: 1400px;
-  margin: 0 auto;
+.equipos-container {
+  width: 85%;
+  margin: auto;
+  margin-top: 2%;
 }
 
-.panel {
+/* FILTRO SUPERIOR ESTILO TAJAMAR */
+.filter-panel {
   background: var(--white);
-  border-radius: var(--radius);
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  height: fit-content;
+  padding: 1.25rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.panel-header {
-  padding: 1rem 1.25rem;
+.filter-label {
+  font-weight: 700;
+  color: var(--tech-black);
+  font-size: 0.95rem;
+}
+
+.custom-select-event {
+  border: 2px solid #eee;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: var(--primary-red);
+  outline: none;
+  transition: var(--transition);
+}
+
+.custom-select-event:focus {
+  border-color: var(--primary-red);
+}
+
+/* HEADER DEL PANEL (Igual que Cursos) */
+.equipos-main-header {
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
+  border-radius: 16px 16px 0 0;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  color: var(--white);
+}
+
+.header-icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-red);
+  font-size: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.equipos-main-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.color-text-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-style: italic;
+  text-transform: capitalize; /* Pone la primera letra en mayúscula */
+}
+
+/* GRID DE EQUIPOS AL 20-25% */
+.equipos-content {
+  background: var(--white);
+  border-radius: 0 0 16px 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.equipos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+/* CARD FIJA ESTILO TAJAMAR */
+.team-card-fixed {
+  background: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+.team-card-fixed:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-team-header {
+  padding: 1rem;
   background: var(--tech-gray-light);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.75rem;
 }
 
-.panel-header h2 {
-  font-family: var(--font-heading);
-  font-size: 0.85rem;
-  text-transform: uppercase;
+.team-name {
   font-weight: 700;
+  color: var(--tech-black);
+  font-size: 1rem;
+}
+
+.card-team-body {
+  padding: 1.25rem;
+  flex-grow: 1;
+}
+
+.member-list-static {
+  list-style: none;
+  padding: 0;
   margin: 0;
 }
 
-.panel-header i {
-  color: var(--primary-red);
-}
-
-.panel-body {
-  padding: 1.5rem;
-}
-.form-group {
-  margin-bottom: 1.2rem;
-}
-.form-group label {
-  display: block;
-  font-size: 0.7rem;
-  font-weight: 700;
-  text-transform: uppercase;
+.member-list-static li {
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f1f1f1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   color: var(--text-secondary);
-  margin-bottom: 0.5rem;
 }
 
-.custom-input,
-.custom-select {
+.btn-apuntarme {
   width: 100%;
-  padding: 0.6rem;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-}
-
-.fixed-number {
-  background: var(--tech-gray-light);
-  padding: 0.6rem;
-  border-radius: 6px;
-  font-weight: 700;
-  text-align: center;
-  border: 1px dashed #ccc;
-}
-
-.btn-primary-tajamar {
-  width: 100%;
-  padding: 0.8rem;
-  background: var(--tech-black);
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: var(--primary-red);
   color: var(--white);
   border: none;
-  border-radius: 6px;
-  font-weight: 600;
+  border-radius: 8px;
+  font-weight: 700;
   cursor: pointer;
   transition: var(--transition);
 }
 
-.btn-primary-tajamar:hover {
-  background: var(--primary-red);
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-}
-
-.badge-count {
-  background: var(--light-red);
-  color: var(--primary-red);
-  padding: 2%;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-
-.members-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.member-card {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  text-align: center;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.empty-team-msg{
-  width: 100%;
-}
-
-.avatar-circle {
-  width: 50px;
-  height: 50px;
-  background: var(--tech-gray-light);
-  border-radius: 50%;
-  margin: 0 auto 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.m-name {
-  font-weight: 700;
-  margin-bottom: 0;
-}
-.m-course {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  margin-bottom: 1rem;
-}
-
-.btn-expulsar {
-  background: var(--light-red);
-  color: var(--primary-red);
-  border: none;
-  padding: 5px 20px;
-  border-radius: 20px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.student-list {
-  list-style: none;
-  padding: 0;
-}
-.student-list li {
-  padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-.student-list li i {
-  color: var(--primary-red);
-  margin-right: 5px;
+.btn-apuntarme:hover {
+  background: var(--primary-red-hover);
+  box-shadow: 0 4px 12px rgba(242, 33, 47, 0.3);
 }

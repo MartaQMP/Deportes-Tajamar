@@ -1,97 +1,48 @@
-<div class="tajamar-container">
-  <div class="main-layout">
-    <aside class="panel info-equipo">
-      <div class="panel-header">
-        <i class="bi bi-info-circle-fill"></i>
-        <h2>Información del equipo</h2>
-      </div>
-      <form class="panel-body" #form="ngForm">
-        <div class="form-group">
-          <label class="form-label">Nombre del Equipo</label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="Nombre..."
-            name="nombreEquipo"
-            #nombreEquipo
-          />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Color de Camiseta</label>
-          <select class="form-select" #colorElegido name="colorElegido">
-            @for (color of colores; track $index) {
-            <option value="{{ color.idColor }}">{{ color.nombreColor }}</option>
-            }
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Miembros Mínimos</label>
-          <label class="fixed-number" #jugadoresMinimos name="jugadoresMinimos">5</label>
-        </div>
-        <button class="btn-primary-tajamar" (click)="guardarEquipo()">Guardar Equipo</button>
-      </form>
-    </aside>
+<div class="equipos-container">
+  
+  <div class="filter-panel">
+    <span class="filter-label">Eventos a los que estoy inscrito:</span>
+    <select class="custom-select-event" [(ngModel)]="idEventoSeleccionado" (change)="onEventoChange()">
+      @for (ins of inscripciones; track ins.id) {
+        <option [value]="ins.idEvento">{{ ins.nombreActividad }} - {{ ins.fechaEvento | date: 'dd/MM' }}</option>
+      }
+    </select>
+  </div>
 
-    <main class="members-column">
-      <div class="section-header">
-        <h3>Miembros Añadidos</h3>
-        <span class="badge-count">{{ miembrosEquipo.length }} añadidos</span>
+  @if (idEventoSeleccionado) {
+    <header class="equipos-main-header">
+      <div class="header-icon-circle">
+        <i class="bi bi-trophy-fill"></i>
       </div>
+      <h2 style="color: var(--white);">Equipos Disponibles</h2>
+    </header>
 
-      <div class="members-grid">
-        @for (miembro of miembrosEquipo; track $index) {
-        <div class="member-card">
-          <div class="avatar-circle">
-            <i class="bi bi-person"></i>
-          </div>
-          <p class="m-name">{{ miembro.usuario }}</p>
-          <p class="m-course">{{ miembro.curso }}</p>
-          <button class="btn-expulsar" (click)="expulsarMiembro($index)">Expulsar</button>
-        </div>
-        } @empty {
-        <div>
-          <p>Haz clic en los alumnos de la derecha para formar tu equipo.</p>
-        </div>
-        }
-      </div>
-    </main>
-
-    <aside class="panel courses-column">
-      <div class="panel-header">
-        <i class="bi bi-mortarboard-fill"></i>
-        <h2>Cursos</h2>
-      </div>
-      <div class="accordion" id="coursesAccordion">
-        @for (curso of cursos; track $index) {
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              [attr.data-bs-target]="'#curso-' + curso.idCurso"
-            >
-              {{ curso.nombre }}
-            </button>
-          </h2>
-          <div
-            [id]="'curso-' + curso.idCurso"
-            class="accordion-collapse collapse"
-            data-bs-parent="#coursesAccordion"
-          >
-            <div class="accordion-body">
-              <ul class="student-list">
-                @for (usuario of getUsuariosPorCurso(curso.idCurso); track $index) {
-                <li (click)="agregarMiembro(usuario, curso.nombre)" class="clickable-student">
-                  <i class="bi bi-plus-circle-fill"></i> {{ usuario.usuario }}
-                </li>
+    <div class="equipos-content">
+      <div class="equipos-grid">
+        @for (equipo of equiposMostrados; track equipo.idEquipo) {
+          <div class="team-card-fixed">
+            <div class="card-team-header">
+              <i class="bi bi-shield-shaded" style="font-size: 1.5rem; color: var(--primary-red);"></i>
+              <span class="team-name">{{ equipo.nombreEquipo }}</span>
+              <span class="color-text-badge">{{getNombreColor(equipo.idColor)}}</span>
+            </div>
+            
+            <div class="card-team-body">
+              <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Integrantes</small>
+              <ul class="member-list-static">
+                @for (miembro of (equipo.idEquipo | alumnosEquipo | async); track $index) {
+                  <li><i class="bi bi-person-fill"></i> {{ miembro.usuario }}</li>
+                } @empty {
+                  <li class="text-muted">No hay miembros</li>
                 }
               </ul>
+              <button class="btn-apuntarme" (click)="apuntarme(equipo.idEquipo)">
+                APUNTARME
+              </button>
             </div>
           </div>
-        </div>
         }
       </div>
-    </aside>
-  </div>
+    </div>
+  }
 </div>
