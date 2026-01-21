@@ -70,7 +70,7 @@
           <div class="activities-grid">
             @for(a of actividades; track $index) {
               
-              <div class="activity-wrapper">
+              <div class="activity-wrapper" >
                 
                 <button class="btn-reset" type="button" data-bs-toggle="collapse"
                   [attr.data-bs-target]="'#collapseActivity' + $index" 
@@ -97,16 +97,20 @@
                   </div>
                 </button>
 
-                <div class="collapse mt-2" [id]="'collapseActivity' + $index">
+                <div class="collapse mt-2" [id]="'collapseActivity' + $index" >
                   <div class="card card-body details-card">
                     <p><strong>Detalles:</strong> {{a.nombreActividad}}</p>
                     <p>Mínimo de jugadores: {{a.minimoJugadores}}</p>
                     
-                    @if(obtenerPrecioActividad(a.idEventoActividad) != 0){
-                      <p>Precio: {{ obtenerPrecioActividad(a.idEventoActividad) }} €</p>
-                    }
-                    @else{
-                      <p>Precio: No definido</p>
+                    @if (cargandoDatos == true) {
+                      <p>Cargando precios...</p>
+                    } 
+                    @else {
+                      @if(obtenerPrecioActividad(a.idEventoActividad) != 0){
+                        <p>Precio: {{ obtenerPrecioActividad(a.idEventoActividad) }} €</p>
+                      } @else {
+                        <p>Precio: No definido</p>
+                      }
                     }
 
                     @if(a.idProfesor == -1){

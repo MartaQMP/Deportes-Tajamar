@@ -46,8 +46,8 @@ export class ActividadesService {
       }
       let json=JSON.stringify(precioTotal);
       console.log(json);
-      let header=new HttpHeaders().set("Content-type", "application/json");
-      header.append('Authorization', 'Bearer ' + localStorage.getItem("token"));
+      let header=new HttpHeaders().set("Content-type", "application/json")
+      .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
       return this._http.post<boolean>(this.url+request, json, {headers: header})
   }
 

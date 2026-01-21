@@ -58,6 +58,7 @@ export class Home implements OnInit {
   public actividadesGet:Actividad[]=[]
   public precioActividad: PrecioActividad[]=[];
   public precioTotalActividad!:PrecioActividad | undefined;
+  public cargandoDatos!: boolean;
 
   constructor(
     private _perfil: PerfilService, 
@@ -137,7 +138,6 @@ export class Home implements OnInit {
       
       //ver si el usuario esta inscrito ya en alguna actividad de ese evento
       this.verInscripciones()
-      this.verPrecioActividad()
 
     })
   }
@@ -192,8 +192,21 @@ export class Home implements OnInit {
       if (result.isConfirmed) {
         console.log('Datos seleccionados:', result.value);
         this._eventos.crearActividad(this.idEventoSeleccionado, result.value.idActividad).subscribe(response=>{
-          console.log(response);
-          
+          this._actividades.buscarActividadesPorEventos(this.idEventoSeleccionado.toString()).subscribe((response)=>{
+            this.actividades = response;
+            //Ver las inscripciones a esa actividad en ese evento
+            this.actividades.forEach((a, index) =>{
+              this._inscripciones.verInscripciones(this.idEventoSeleccionado, a.idActividad).subscribe(response=>{
+                this.personasInscritas[index] = response.length;
+              })
+              this.personasInscritas.reverse()
+            })
+            
+            //ver si el usuario esta inscrito ya en alguna actividad de ese evento
+            this.verInscripciones()
+
+          })
+                
         }, error =>{
           Swal.fire('Error', 'No se inserto la actividad', 'error');
         });
@@ -314,6 +327,7 @@ if(result.isConfirmed)
         
        this._actividades.insertarPrecioActividad(a.idEventoActividad, precioFinal).subscribe(response =>{
         console.log(response);
+        this.verPrecioActividad();
        }, error =>{
            Swal.fire('Error', 'No se ha podido insertar el precio', 'error');
        })
@@ -323,6 +337,7 @@ if(result.isConfirmed)
 
   verPrecioActividad(){
     console.log(this.actividades)
+    this.cargandoDatos = true;
     this._actividades.getPrecioActividadPorEvento().subscribe(response=>{
       this.precioActividad = response
       .filter((precio: { idEventoActividad: number; }) => {
@@ -332,17 +347,21 @@ if(result.isConfirmed)
           act => act.idEventoActividad === precio.idEventoActividad
         );
 
+        this.cargandoDatos=false;
         return {
-          ...precio,             // Datos del precio
+          ...precio,
         };
       });
-
     console.log('Listado filtrado y combinado:', this.precioActividad);
+
   });
   }
 
   obtenerPrecioActividad(idEventoActividad: number): number {
-  
+  console.log(idEventoActividad);
+  if (!this.precioActividad || this.precioActividad.length === 0) {
+    return 0;
+  }
   const encontrado = this.precioActividad.find(p => p.idEventoActividad === idEventoActividad);
   this.precioTotalActividad = encontrado || undefined;
   return encontrado ? encontrado.precioTotal : 0;
@@ -351,8 +370,8 @@ if(result.isConfirmed)
   eliminarActividadEvento(a:ActividadEvento){
     
     
-    // this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe(response=>{
-    //   console.log(response);
-    // })
+    this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe(response=>{
+      console.log(response);
+    })
   }
 }
