@@ -1,12 +1,22 @@
 <div class="equipos-container">
-  
   <div class="filter-panel">
     <span class="filter-label">Eventos a los que estoy inscrito:</span>
-    <select class="custom-select-event" [(ngModel)]="idEventoSeleccionado" (change)="onEventoChange()">
+    <select
+      class="custom-select-event"
+      [(ngModel)]="idEventoSeleccionado"
+      (change)="cambioEvento()"
+    >
       @for (ins of inscripciones; track ins.id) {
-        <option [value]="ins.idEvento">{{ ins.nombreActividad }} - {{ ins.fechaEvento | date: 'dd/MM' }}</option>
+        <option [value]="ins.idEvento">
+          {{ ins.nombreActividad }} - {{ ins.fechaEvento | date: 'dd/MM' }}
+        </option>
       }
     </select>
+    @if (permisosUsuario == 'CAPITAN/ALUMNO') {
+      <button class="btn-crear" (click)="formularioCrearEquipo()">
+        <i class="bi bi-shield-fill-plus"></i> Crear Equipo
+      </button>
+    }
   </div>
 
   @if (idEventoSeleccionado) {
@@ -14,7 +24,7 @@
       <div class="header-icon-circle">
         <i class="bi bi-trophy-fill"></i>
       </div>
-      <h2 style="color: var(--white);">Equipos Disponibles</h2>
+      <h2 style="color: var(--white)">Equipos Disponibles</h2>
     </header>
 
     <div class="equipos-content">
@@ -22,23 +32,35 @@
         @for (equipo of equiposMostrados; track equipo.idEquipo) {
           <div class="team-card-fixed">
             <div class="card-team-header">
-              <i class="bi bi-shield-shaded" style="font-size: 1.5rem; color: var(--primary-red);"></i>
+              <i
+                class="bi bi-shield-shaded"
+                style="font-size: 1.5rem; color: var(--primary-red)"
+              ></i>
               <span class="team-name">{{ equipo.nombreEquipo }}</span>
-              <span class="color-text-badge">{{getNombreColor(equipo.idColor)}}</span>
+              <span class="color-text-badge">{{ getNombreColor(equipo.idColor) }}</span>
             </div>
-            
+
             <div class="card-team-body">
-              <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Integrantes</small>
+              <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem"
+                >Integrantes</small
+              >
               <ul class="member-list-static">
-                @for (miembro of (equipo.idEquipo | alumnosEquipo | async); track $index) {
+                @for (miembro of equipo.idEquipo | alumnosEquipo | async; track $index) {
                   <li><i class="bi bi-person-fill"></i> {{ miembro.usuario }}</li>
                 } @empty {
                   <li class="text-muted">No hay miembros</li>
                 }
               </ul>
-              <button class="btn-apuntarme" (click)="apuntarme(equipo.idEquipo)">
-                APUNTARME
-              </button>
+              @if (estaInscrito) {
+                <button class="btn-apuntado" disabled>YA ESTAS INSCRITO</button>
+              } @else {
+                <button
+                  class="btn-apuntarme"
+                  (click)="apuntarme(equipo.idEquipo, equipo.idEventoActividad)"
+                >
+                  APUNTARME
+                </button>
+              }
             </div>
           </div>
         }

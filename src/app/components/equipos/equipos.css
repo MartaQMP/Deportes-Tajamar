@@ -160,3 +160,36 @@
   background: var(--primary-red-hover);
   box-shadow: 0 4px 12px rgba(242, 33, 47, 0.3);
 }
+
+.btn-apuntado {
+  width: 100%;
+  margin-top: 1%;
+  padding: 4%;
+  background: var(--primary-red-disactive);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.btn-crear {
+  background: var(--primary-red-disactive);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  padding: 1%;
+  margin-left: auto;
+}
+
+.btn-crear:hover {
+  background: var(--primary-red-hover);
+  box-shadow: 0 4px 12px rgba(242, 33, 47, 0.3);
+}
+
+.swal-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 10px;
+}

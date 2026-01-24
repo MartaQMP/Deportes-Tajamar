@@ -37,18 +37,17 @@ export class EquiposService {
     return this._http.get<Array<Capitan>>(environment.url + request);
   }
 
-  crearEquipo(equipo: any): Observable<any> {
+  crearEquipo(equipo: Equipo): Observable<any> {
     let request = 'api/equipos/create';
     let dataJson = JSON.stringify(equipo);
     let header = new HttpHeaders().set('Content-Type', 'application/json');
     return this._http.post(environment.url + request, dataJson, { headers: header });
   }
 
-  aniadirMiembroEquipo(token: string, idUsuario: number, idEquipo: number): Observable<any> {
-    let request = 'api/miembroequipos/create/' + idUsuario + '/' + idEquipo;
-    let header = new HttpHeaders().set('Content-Type', 'application/json');
-    header.append('Auth', token);
-    return this._http.post(environment.url + request, { headers: header });
+  aniadirMiembroEquipo(token: string, idEquipo: number): Observable<any> {
+    let request = 'api/usuariosdeportes/apuntarmeequipo/' + idEquipo;
+    let header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this._http.post(environment.url + request, {}, { headers: header });
   }
 
   getInscripcionesUsuario(token: string): Observable<any> {

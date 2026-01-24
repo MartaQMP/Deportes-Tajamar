@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Login } from '../../models/login';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import ResponseLogin from '../../models/responseLogin';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,10 @@ export class InicioSesion {
   @ViewChild('username') username!: ElementRef;
   @ViewChild('password') password!: ElementRef;
 
-  constructor(private _service: LoginService, private _route: Router) {}
+  constructor(
+    private _service: LoginService,
+    private _route: Router,
+  ) {}
 
   //No funciona la API con esto al menos entramos a la Home
   //Quitar cuando funcione la API
@@ -33,10 +37,10 @@ export class InicioSesion {
     };
 
     this._service.crearToken(login).subscribe({
-      next: (response) => {
-        console.log(response.response);
+      next: (data: ResponseLogin) => {
         localStorage.clear();
-        localStorage.setItem('token', response.response);
+        localStorage.setItem('token', data.response);
+        localStorage.setItem('permisosUsuario', data.permisosusuario);
         this._route.navigate(['/deportes']);
       },
       error: (error) => {
