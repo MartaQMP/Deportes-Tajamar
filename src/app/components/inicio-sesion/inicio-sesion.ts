@@ -14,7 +14,7 @@ import ResponseLogin from '../../models/responseLogin';
 })
 export class InicioSesion {
   dominio: string = '@tajamar365.com';
-  contraseniaOculta: boolean = false;
+  contraseniaOculta: boolean = true;
   @ViewChild('username') username!: ElementRef;
   @ViewChild('password') password!: ElementRef;
 

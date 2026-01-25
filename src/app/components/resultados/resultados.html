@@ -13,9 +13,9 @@
           >
             <option value="" selected disabled>Selecciona una fecha</option>
             @for (evento of this.eventos; track $index) {
-            <option value="{{ evento.idEvento }}">
-              {{ evento.fechaEvento | date : "EEEE, d 'de' MMMM 'de' y" }}
-            </option>
+              <option value="{{ evento.idEvento }}">
+                {{ evento.fechaEvento | date: "EEEE, d 'de' MMMM 'de' y" }}
+              </option>
             }
           </select>
         </div>
@@ -35,7 +35,7 @@
           >
             <option value="" selected disabled>Selecciona una actividad</option>
             @for (actividad of this.actividades; track $index) {
-            <option value="{{ actividad.idActividad }}">{{ actividad.nombre }}</option>
+              <option value="{{ actividad.idActividad }}">{{ actividad.nombre }}</option>
             }
           </select>
         </div>
@@ -57,53 +57,57 @@
   <section class="results-list">
     <div class="accordion" id="accordionExample">
       @for (resultado of this.resultadosAMostrar; track resultado.idPartidoResultado) {
-      <div class="accordion-item">
-        <h2 class="accordion-header">
-          <button
-            class="accordion-button collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            [attr.data-bs-target]="'#collapse' + resultado.idPartidoResultado"
-            aria-expanded="false"
-            [attr.aria-controls]="'collapse' + resultado.idPartidoResultado"
-          >
-            <div class="d-flex justify-content-between w-100 pe-4">
-              <span class="text-start" style="flex: 1">{{
-                resultado.idEquipoLocal | nombreEquipo | async
-              }}</span>
-              <span class="fw-bold px-3"
-                >{{ resultado.puntosLocal }} - {{ resultado.puntosVisitante }}</span
-              >
-              <span class="text-end" style="flex: 1">{{
-                resultado.idEquipoVisitante | nombreEquipo | async
-              }}</span>
-            </div>
-          </button>
-        </h2>
-
-        <div
-          [id]="'collapse' + resultado.idPartidoResultado"
-          class="accordion-collapse collapse"
-          data-bs-parent="#accordionExample"
-        >
-          <div class="accordion-body">
-            <div class="row">
-              <div class="col-md-6 border-end">
-                @for (alumno of (resultado.idEquipoLocal | alumnosEquipo | async); track
-                alumno.idAlumno) {
-                <p class="mb-1 text-start w-100">{{ alumno.usuario }}</p>
-                }
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button
+              class="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#collapse' + resultado.idPartidoResultado"
+              aria-expanded="false"
+              [attr.aria-controls]="'collapse' + resultado.idPartidoResultado"
+            >
+              <div class="d-flex justify-content-between w-100 pe-4">
+                <span class="text-start" style="flex: 1">{{
+                  resultado.idEquipoLocal | nombreEquipoPipe | async
+                }}</span>
+                <span class="fw-bold px-3"
+                  >{{ resultado.puntosLocal }} - {{ resultado.puntosVisitante }}</span
+                >
+                <span class="text-end" style="flex: 1">{{
+                  resultado.idEquipoVisitante | nombreEquipoPipe | async
+                }}</span>
               </div>
-              <div class="col-md-6">
-                @for (alumno of (resultado.idEquipoVisitante | alumnosEquipo | async); track
-                alumno.idAlumno) {
-                <p class="mb-1 text-end w-100">{{ alumno.usuario }}</p>
-                }
+            </button>
+          </h2>
+
+          <div
+            [id]="'collapse' + resultado.idPartidoResultado"
+            class="accordion-collapse collapse"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <div class="row">
+                <div class="col-md-6 border-end">
+                  @for (
+                    alumno of resultado.idEquipoLocal | alumnosEquipoPipe | async;
+                    track alumno.idAlumno
+                  ) {
+                    <p class="mb-1 text-start w-100">{{ alumno.usuario }}</p>
+                  }
+                </div>
+                <div class="col-md-6">
+                  @for (
+                    alumno of resultado.idEquipoVisitante | alumnosEquipoPipe | async;
+                    track alumno.idAlumno
+                  ) {
+                    <p class="mb-1 text-end w-100">{{ alumno.usuario }}</p>
+                  }
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       }
     </div>
   </section>

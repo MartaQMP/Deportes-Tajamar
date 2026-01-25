@@ -9,6 +9,7 @@ import usuarioLogeado from '../models/usuarioLogeado';
 import Capitan from '../models/capitan';
 import { he } from 'date-fns/locale';
 import Equipo from '../models/equipo';
+import Actividad from '../models/actividad';
 
 @Injectable({
   providedIn: 'root',
@@ -21,26 +22,23 @@ export class EquiposService {
     return this._http.get<Array<Color>>(environment.url + request);
   }
 
-  getCursos(): Observable<Array<Curso>> {
-    let request = environment.url + 'api/GestionEvento/CursosActivos';
-    return this._http.get<Array<Curso>>(request);
-  }
-
   getDatosUsuario(token: string): Observable<usuarioLogeado> {
     let request = environment.url + 'api/UsuariosDeportes/Perfil';
     let header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
     return this._http.get<usuarioLogeado>(request, { headers: header });
   }
 
-  getCapitanes(): Observable<Array<Capitan>> {
-    let request = 'api/capitanactividades';
-    return this._http.get<Array<Capitan>>(environment.url + request);
+  getActividadPorId(idActividad: number): Observable<Actividad> {
+    let request = 'api/actividades/' + idActividad;
+    return this._http.get<Actividad>(environment.url + request);
   }
 
-  crearEquipo(equipo: Equipo): Observable<any> {
+  crearEquipo(token: string, equipo: Equipo): Observable<any> {
     let request = 'api/equipos/create';
     let dataJson = JSON.stringify(equipo);
-    let header = new HttpHeaders().set('Content-Type', 'application/json');
+    let header = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', 'Bearer ' + token);
     return this._http.post(environment.url + request, dataJson, { headers: header });
   }
 
@@ -59,5 +57,22 @@ export class EquiposService {
   getEquipos(): Observable<Array<Equipo>> {
     let request = 'api/equipos';
     return this._http.get<Array<Equipo>>(environment.url + request);
+  }
+
+  getUsuarioCapitanEventoActividad(idEventoActividad: number): Observable<Alumno> {
+    let request = 'api/CapitanActividades/FindCapitanEventoActividad/' + idEventoActividad;
+    return this._http.get<Alumno>(environment.url + request);
+  }
+
+  deleteEquipo(token: string, idEquipo: number): Observable<any> {
+    let request = 'api/equipos/' + idEquipo;
+    let header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this._http.delete(environment.url + request, { headers: header });
+  }
+
+  deleteMiembroEquipo(token: string, idMiembroEquipo: number): Observable<any> {
+    let request = 'api/MiembroEquipos/' + idMiembroEquipo;
+    let header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this._http.delete(environment.url + request, { headers: header });
   }
 }

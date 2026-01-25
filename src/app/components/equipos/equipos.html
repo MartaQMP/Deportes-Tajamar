@@ -12,7 +12,7 @@
         </option>
       }
     </select>
-    @if (permisosUsuario == 'CAPITAN/ALUMNO') {
+    @if (permisosUsuario == 'CAPITAN/ALUMNO' && esCapitanEnEvento) {
       <button class="btn-crear" (click)="formularioCrearEquipo()">
         <i class="bi bi-shield-fill-plus"></i> Crear Equipo
       </button>
@@ -22,7 +22,7 @@
   @if (idEventoSeleccionado) {
     <header class="equipos-main-header">
       <div class="header-icon-circle">
-        <i class="bi bi-trophy-fill"></i>
+        <i class="bi bi-shield-shaded"></i>
       </div>
       <h2 style="color: var(--white)">Equipos Disponibles</h2>
     </header>
@@ -38,6 +38,14 @@
               ></i>
               <span class="team-name">{{ equipo.nombreEquipo }}</span>
               <span class="color-text-badge">{{ getNombreColor(equipo.idColor) }}</span>
+              @if (permisosUsuario == 'CAPITAN/ALUMNO' && esCapitanEnEvento) {
+                <i
+                  class="bi bi-trash3-fill action-icon delete"
+                  title="Eliminar equipo"
+                  (click)="eliminarEquipo(equipo.idEquipo)"
+                  style="margin-left: auto"
+                ></i>
+              }
             </div>
 
             <div class="card-team-body">
@@ -45,8 +53,18 @@
                 >Integrantes</small
               >
               <ul class="member-list-static">
-                @for (miembro of equipo.idEquipo | alumnosEquipo | async; track $index) {
-                  <li><i class="bi bi-person-fill"></i> {{ miembro.usuario }}</li>
+                @for (miembro of equipo.idEquipo | alumnosEquipoPipe | async; track $index) {
+                  <li>
+                    <i class="bi bi-person-fill"></i> {{ miembro.usuario }}
+                    @if (permisosUsuario == 'CAPITAN/ALUMNO' && esCapitanEnEvento) {
+                      <i
+                        class="bi bi-trash3-fill action-icon delete"
+                        title="Editar miembros"
+                        style="margin-left: auto"
+                        (click)="eliminarMiembroEquipo(miembro.idMiembroEquipo)"
+                      ></i>
+                    }
+                  </li>
                 } @empty {
                   <li class="text-muted">No hay miembros</li>
                 }
@@ -67,4 +85,18 @@
       </div>
     </div>
   }
+  <div style="display: none" #guardarFormulario name="guardarFormulario">
+    <div class="swal-form" #formNuevoEquipo name="formNuevoEquipo">
+      <label class="form-label">Nombre del Equipo</label>
+      <input class="form-control" placeholder="Ej: Los Cracks" name="nombreEquipo" #nombreEquipo />
+      <br />
+      <label class="form-label">Selecciona el Color</label>
+      <select class="form-select" name="colorSeleccionado" #colorSeleccionado>
+        <option value="">Seleccione un color...</option>
+        @for (color of coloresActivos; track color.idColor) {
+          <option value="{{ color.idColor }}">{{ color.nombreColor }}</option>
+        }
+      </select>
+    </div>
+  </div>
 </div>
