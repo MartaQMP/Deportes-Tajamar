@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
 import Evento from '../models/evento';
+import Profesores from '../models/profesores';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +33,12 @@ export class EventosService {
     
       let header=new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
       return this._http.post(this.url+request, null, {headers: header})
+  }
+
+  getProfesor(idProfesor:number):Observable<any>{
+    var request =  "api/profesEventos/findprofe";
+    let header=new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
+    return this._http.post<Profesores>(this.url+request, null, {headers: header})
   }
 
 }

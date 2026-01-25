@@ -59,14 +59,16 @@ export class ActividadesService {
 
   deleteActividadEvento(idActividadEvento:number):Observable<any>{
     var request = "api/PrecioActividad/"+idActividadEvento;
-      let header=new HttpHeaders().set("Content-type", "application/json");
+      let header=new HttpHeaders().set("Content-type", "application/json")
+      .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
        return this._http.delete<boolean>(this.url+request, {headers: header})
 
   }
 
   deleteActividadEventoPrecio(idPrecioActividad:number):Observable<any>{
     var request = "api/PrecioActividad/"+idPrecioActividad;
-      let header=new HttpHeaders().set("Content-type", "application/json");
+      let header=new HttpHeaders().set("Content-type", "application/json")
+      .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
        return this._http.delete<boolean>(this.url+request, {headers: header})
 
   }

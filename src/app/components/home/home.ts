@@ -21,6 +21,7 @@ import UsuarioActividad from '../../models/usuarioActividad';
 import Swal from 'sweetalert2';
 import Actividad from '../../models/actividad';
 import PrecioActividad from '../../models/precioActividad';
+import Profesores from '../../models/profesores';
 
 @Component({
   selector: 'app-home',
@@ -59,6 +60,7 @@ export class Home implements OnInit {
   public precioActividad: PrecioActividad[]=[];
   public precioTotalActividad!:PrecioActividad | undefined;
   public cargandoDatos!: boolean;
+  public profesores:Profesores[]=[];
 
   constructor(
     private _perfil: PerfilService, 
@@ -97,6 +99,7 @@ export class Home implements OnInit {
     this._eventos.buscarEventosAbiertos().subscribe({
       next: (response) => {
         this.eventos = response;
+        
 
         const nuevosEventos: CalendarEvent[] = this.eventos.map(eventoApi => {
           return {
@@ -110,12 +113,13 @@ export class Home implements OnInit {
         this.events = nuevosEventos;
 
         this.refresh.next(); 
-
+        
        
       },
       error: (err) => {
         console.error("Error cargando eventos", err);
       }
+      
     });
 
     
@@ -138,6 +142,7 @@ export class Home implements OnInit {
       
       //ver si el usuario esta inscrito ya en alguna actividad de ese evento
       this.verInscripciones()
+      this.verPrecioActividad()
 
     })
   }
@@ -336,8 +341,6 @@ if(result.isConfirmed)
   }
 
   verPrecioActividad(){
-    console.log(this.actividades)
-    this.cargandoDatos = true;
     this._actividades.getPrecioActividadPorEvento().subscribe(response=>{
       this.precioActividad = response
       .filter((precio: { idEventoActividad: number; }) => {
@@ -346,19 +349,16 @@ if(result.isConfirmed)
         this.actividades.find(
           act => act.idEventoActividad === precio.idEventoActividad
         );
-
-        this.cargandoDatos=false;
+        console.log("hola")
         return {
           ...precio,
         };
       });
-    console.log('Listado filtrado y combinado:', this.precioActividad);
 
   });
   }
 
   obtenerPrecioActividad(idEventoActividad: number): number {
-  console.log(idEventoActividad);
   if (!this.precioActividad || this.precioActividad.length === 0) {
     return 0;
   }
@@ -368,8 +368,6 @@ if(result.isConfirmed)
 }
 
   eliminarActividadEvento(a:ActividadEvento){
-    
-    
     this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe(response=>{
       console.log(response);
     })
