@@ -29,16 +29,16 @@ export class EventosService {
   }
 
   crearActividad(idEvento:number, idActividad:number):Observable<any>{
-      var request = "api/ActividadesEvento/create?idEvento="+idEvento+"&idActividad="+idActividad;
+      var request = "api/ActividadesEvento/create/"+idEvento+"/"+idActividad;
     
       let header=new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
       return this._http.post(this.url+request, null, {headers: header})
   }
 
-  getProfesor(idProfesor:number):Observable<any>{
-    var request =  "api/profesEventos/findprofe";
+  getProfesor():Observable<Profesores[]>{
+    var request =  "api/ProfesEventos/ProfesActivos";
     let header=new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
-    return this._http.post<Profesores>(this.url+request, null, {headers: header})
+    return this._http.get<Profesores[]>(this.url+request, {headers: header})
   }
 
 }

@@ -60,7 +60,7 @@ export class Home implements OnInit {
   public precioActividad: PrecioActividad[]=[];
   public precioTotalActividad!:PrecioActividad | undefined;
   public cargandoDatos!: boolean;
-  public profesores:Profesores[]=[];
+  public profesor: Profesores[]=[];
 
   constructor(
     private _perfil: PerfilService, 
@@ -99,6 +99,11 @@ export class Home implements OnInit {
     this._eventos.buscarEventosAbiertos().subscribe({
       next: (response) => {
         this.eventos = response;
+            this._eventos.getProfesor().subscribe(p=>{
+              this.profesor=p;
+              console.log(p)
+              
+        })
         
 
         const nuevosEventos: CalendarEvent[] = this.eventos.map(eventoApi => {
@@ -123,6 +128,11 @@ export class Home implements OnInit {
     });
 
     
+  }
+
+  verProfesorEvento(id:number) : string{
+   var p = this.profesor.find(p=>p.idUsuario = id)?.usuario || "";
+    return p;
   }
   
   //Llamada al api Actividades por evento para recoger las actividades disponibles por cada evento
@@ -222,6 +232,51 @@ export class Home implements OnInit {
     console.error('Error al cargar actividades', error);
     Swal.fire('Error', 'No se pudieron cargar las actividades', 'error');
   });
+
+}
+
+
+
+abrirModalActividadCrear() {
+
+Swal.fire({
+      title: 'Crear Actividad',
+      html: `
+        <div style="text-align: left; margin-bottom: 5px; color: #555;">
+        <label>Nombre del deporte:</label>
+        <input type="text" id="swal-deporte" class="form-control mx-auto my-4">
+        <label>Jugadores minimos del deporte:</label>
+        <input type="number" id="swal-deporte-minimo" class="form-control mx-auto my-4"></div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Crear',
+      cancelButtonText: 'Cancelar',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'swal-popup-discreto',
+        confirmButton: 'btn-confirm-discreto',
+        cancelButton: 'btn-cancel-discreto',
+        title: 'swal-title-discreto'
+      },
+      preConfirm: () => {
+        return {
+          deporte: (document.getElementById('swal-deporte') as HTMLSelectElement).value,
+          minimo: (document.getElementById('swal-deporte-minimo') as HTMLSelectElement).value
+        };
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log('Datos seleccionados:', result.value);
+        this._actividades.crearActividad(result.value.deporte, result.value.minimo).subscribe({
+          next: response=>{
+            console.log(response);
+          },
+          error:(error)=>{
+            Swal.fire('Error', 'Error al insertar la actividad', 'error');
+          }
+        })
+      }
+    })
 
 }
     
@@ -349,7 +404,6 @@ if(result.isConfirmed)
         this.actividades.find(
           act => act.idEventoActividad === precio.idEventoActividad
         );
-        console.log("hola")
         return {
           ...precio,
         };

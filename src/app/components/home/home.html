@@ -29,7 +29,11 @@
                 </div>
                 <div class="event-info">
                   <h4>{{ e.fechaEvento | date: 'EEEE' }}, Evento #{{ e.idEvento }}</h4>
-                  <span class="tap-hint">Ver actividades <i class="fas fa-arrow-right"></i></span>
+                  @if(verProfesorEvento(e.idProfesor) == ""){
+                    <span class="tap-hint">Por escoger<i class="fas fa-arrow-right"></i></span>
+                  }@else{
+                    <span class="tap-hint">{{verProfesorEvento(e.idProfesor)}}<i class="fas fa-arrow-right"></i></span>
+                  }
                 </div>
               </div>
             }
@@ -162,19 +166,29 @@
 
       </div>
       @if(eventoSeleccionado){
-      <div class = "contetn-boton">
+        
+      <div class="d-grid gap-2 d-md-flex justify-content-md-center contetn-boton">
+        <button (click)="abrirModalActividadCrear()" class="btn-create-discreto">
+          <i class="fas fa-plus"></i>
+          Crear actividad
+        </button>
       <button (click)="abrirModalActividad()" class="btn-create-discreto">
         <i class="fas fa-plus"></i>
         Añadir actividad
       </button>
       </div>
     }@else{
-      <div class = "contetn-boton">
+      <div class="d-grid gap-2 d-md-flex justify-content-md-center contetn-boton">
+        <button (click)="abrirModalActividadCrear()" class="btn-create-discreto">
+          <i class="fas fa-plus"></i>
+          Crear actividad
+        </button>
       <button (click)="abrirModalActividad()" class="btn-create-discreto disabled" disabled>
         <i class="fas fa-plus"></i>
         Selecciona un evento
       </button>
       </div>
+      
     }
     </section>
     

@@ -360,7 +360,7 @@
   justify-content: center;
   align-items: center;
   gap: 0.6rem;
-  width: 50%;
+  width: 40%;
   margin: 0px 0px 20px 0px;
   /* Fondo blanco y borde sutil para que parezca una tarjeta más */
   background-color: var(--white);

@@ -72,4 +72,18 @@ export class ActividadesService {
        return this._http.delete<boolean>(this.url+request, {headers: header})
 
   }
+
+  crearActividad(nombre:string, minimo:number):Observable<any>{
+  var request = "api/Actividades/create";
+      var actividad={
+          "idActividad":0,
+          "nombre":nombre,
+          "minimoJugadores": minimo,
+        }
+        let json=JSON.stringify(actividad);
+        console.log(json);
+        let header=new HttpHeaders().set("Content-type", "application/json")
+        .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
+        return this._http.post<boolean>(this.url+request, json, {headers: header})
+    }
 }
