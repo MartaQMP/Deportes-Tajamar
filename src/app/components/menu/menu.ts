@@ -29,22 +29,7 @@ export class Menu implements OnInit {
       return;
     }
 
-    this._perfilservice.getDatosUsuario(token).subscribe((response) => {
-      this.usuarioLogueado = response;
-
-      if (this.usuarioLogueado) {
-        this._menuservice.getCapitanes().subscribe((todosLosCapitanes) => {
-          const usuarioCapitan = todosLosCapitanes.find(
-            (c) => c.idUsuario === this.usuarioLogueado.idUsuario,
-          );
-
-          if (usuarioCapitan) {
-            this.ideventoactividad = usuarioCapitan.idEventoActividad;
-            this.soyCapitan = true;
-          }
-        });
-      }
-    });
+    
   }
 
   cerrarSesion(): void {

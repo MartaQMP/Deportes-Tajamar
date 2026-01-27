@@ -1,3 +1,4 @@
+import { Equipos } from './components/equipos/equipos';
 import { Routes } from '@angular/router';
 import { InicioSesion } from './components/inicio-sesion/inicio-sesion';
 import { Home } from './components/home/home';
@@ -17,7 +18,7 @@ export const routes: Routes = [
       { path: 'perfil', component: Perfil },
       { path: 'cursos', component: Cursos },
       { path: 'resultados', component: Resultados },
-      { path: 'crear-equipo/:ideventoactividad', component: Resultados },
+      { path: 'equipos', component: Equipos },
       { path: 'solicitar-material/:idEvento', component: SolicitarMaterial },
       { path: '**', redirectTo: '' },
     ],
