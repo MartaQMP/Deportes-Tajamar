@@ -11,7 +11,7 @@ import { Router, RouterModule } from '@angular/router';
 import usuarioLogeado from '../../models/usuarioLogeado';
 import { EventosService } from '../../services/eventos.service';
 import Evento from '../../models/evento';
-import { Subject, map } from 'rxjs'; 
+import { Subject, forkJoin, map } from 'rxjs'; 
 import ActividadEvento from '../../models/actividades';
 import { ActividadesService } from '../../services/actividades.service';
 import { InscripcionService } from '../../services/inscripcion.service';
@@ -22,6 +22,9 @@ import Swal from 'sweetalert2';
 import Actividad from '../../models/actividad';
 import PrecioActividad from '../../models/precioActividad';
 import Profesores from '../../models/profesores';
+import Alumno from '../../models/alumno';
+import Capitan from '../../models/capitan';
+import ActividadesEvento from '../../models/actividadesevento';
 
 @Component({
   selector: 'app-home',
@@ -53,14 +56,15 @@ export class Home implements OnInit {
   public contador: number=0;
   public capitan:boolean=false;
   public idEventoSeleccionado!:number;
-  public validarBoton:boolean=true;
   public eventoSeleccionado:boolean = false;
   public usuarioActividades:UsuarioActividad[]=[];
   public actividadesGet:Actividad[]=[]
   public precioActividad: PrecioActividad[]=[];
   public precioTotalActividad!:PrecioActividad | undefined;
   public cargandoDatos!: boolean;
-  public profesor: Profesores[]=[];
+  public profesores: Map<number, string> = new Map();
+  public usuarioCapitan!: Alumno;
+  public token : any;
 
   constructor(
     private _perfil: PerfilService, 
@@ -99,11 +103,7 @@ export class Home implements OnInit {
     this._eventos.buscarEventosAbiertos().subscribe({
       next: (response) => {
         this.eventos = response;
-            this._eventos.getProfesor().subscribe(p=>{
-              this.profesor=p;
-              console.log(p)
-              
-        })
+            
         
 
         const nuevosEventos: CalendarEvent[] = this.eventos.map(eventoApi => {
@@ -119,6 +119,17 @@ export class Home implements OnInit {
 
         this.refresh.next(); 
         
+         this._eventos.getProfesor().subscribe({
+          next: response=>{
+            console.log(response);
+            response.forEach(r=>{
+              this.profesores.set(r.idUsuario, r.usuario);
+            })
+            console.log(this.profesores)
+          }, error :(error)=>{
+            console.log("No entra profesores")
+          }
+    })
        
       },
       error: (err) => {
@@ -129,10 +140,13 @@ export class Home implements OnInit {
 
     
   }
+    
+
+  
 
   verProfesorEvento(id:number) : string{
-   var p = this.profesor.find(p=>p.idUsuario = id)?.usuario || "";
-    return p;
+  //  var p = this.profesores.find(p=>p.idUsuario = id)?.usuario || "";
+    return "";
   }
   
   //Llamada al api Actividades por evento para recoger las actividades disponibles por cada evento
@@ -426,4 +440,60 @@ if(result.isConfirmed)
       console.log(response);
     })
   }
+  elegirCapitan(idActividad: number, idEvento: number) {
+    this._inscripciones
+      .buscarActividadEvento(idEvento, idActividad)
+      .subscribe((eventoActividad) => {
+        if (eventoActividad) {
+          this._inscripciones
+            .getUsuariosCapitanEventoActividad(idEvento, idActividad)
+            .subscribe((voluntarios) => {
+              if (voluntarios.length > 0) {
+                const index = Math.floor(Math.random() * voluntarios.length);
+                this.usuarioCapitan = voluntarios[index];
+              } else {
+                this._inscripciones.verInscripciones(idEvento, idActividad).subscribe((todos) => {
+                  if (todos.length > 0) {
+                    const index = Math.floor(Math.random() * todos.length);
+                    this.usuarioCapitan = todos[index];
+
+                    let capitan: Capitan = {
+                      idCapitanActividad: 0,
+                      idEventoActividad: eventoActividad.idEventoActividad,
+                      idUsuario: this.usuarioCapitan.idUsuario,
+                    };
+                    this._inscripciones.crearCapitan(capitan).subscribe();
+                  }
+                });
+                return;
+              }
+
+              if (this.usuarioCapitan) {
+                let capitan: Capitan = {
+                  idCapitanActividad: 0,
+                  idEventoActividad: eventoActividad.idEventoActividad,
+                  idUsuario: this.usuarioCapitan.idUsuario,
+                };
+                console.log('Usuario: ' + this.usuarioCapitan.usuario);
+                console.log('EventoActividad: ' + eventoActividad.idEventoActividad);
+                this._inscripciones.crearCapitan(capitan).subscribe();
+              }
+            });
+        }
+      });
+  }
+
+  comprobarSiHacerSorteoYHacerlo(idEvento: number, idCurso: number) {
+    forkJoin({
+      inscritos: this._inscripciones.getUsuariosInscritosEventoCurso(idEvento, idCurso),
+      totales: this._inscripciones.getUsuariosCurso(idCurso),
+    }).subscribe(({ inscritos, totales }) => {
+      if (inscritos.length === totales.length && totales.length > 0) {
+        this.actividades.forEach((act) => {
+          this.elegirCapitan(act.idActividad, idEvento);
+        });
+      }
+    });
+  }
+}
 }
