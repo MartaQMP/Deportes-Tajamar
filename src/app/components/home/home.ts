@@ -559,6 +559,7 @@ esPasado(idEvento: number): boolean {
               this.eventos = response;
                   this.ordenarEventos();
                   this.eventoSeleccionado=false;
+                  this.actividades=[];
             
             })
           },error:(error)=>{
