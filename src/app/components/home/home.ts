@@ -23,8 +23,8 @@ import Actividad from '../../models/actividad';
 import PrecioActividad from '../../models/precioActividad';
 import Profesores from '../../models/profesores';
 import Alumno from '../../models/alumno';
-import Capitan from '../../models/capitan';
 import ActividadesEvento from '../../models/actividadesevento';
+import Capitan from '../../models/capitan';
 
 @Component({
   selector: 'app-home',
@@ -335,7 +335,7 @@ if(result.isConfirmed)
 }
 
     Inscribirse(e:ActividadEvento){
-      this._inscripciones.inscribirActividadEvento(this.usuario.idUsuario, e.idEventoActividad, this.capitan).subscribe(
+      this._inscripciones.inscribirActividadEvento(e.idEventoActividad, this.capitan, localStorage["token"]).subscribe(
         (response=>{
           console.log(response);
           this.verInscripciones();
@@ -495,5 +495,4 @@ if(result.isConfirmed)
       }
     });
   }
-}
 }
