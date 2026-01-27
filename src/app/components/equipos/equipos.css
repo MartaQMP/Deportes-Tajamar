@@ -188,7 +188,7 @@
 }
 
 .btn-crear {
-  background: var(--primary-red-disactive);
+  background: var(--primary-red);
   color: var(--white);
   border: none;
   border-radius: 8px;

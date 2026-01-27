@@ -275,6 +275,7 @@ export class Equipos implements OnInit {
       const inscripcionActual = this.inscripciones.find(
         (ins) => ins.idEvento == this.idEventoSeleccionado,
       );
+
       // MIRO SI EL EQUIPO TIENE MIEMBROS
       this._serviceResultados.getUsuariosDeEquipo(idEquipo).subscribe((response) => {
         if (response && response.length > 0) {
@@ -286,29 +287,40 @@ export class Equipos implements OnInit {
             confirmButtonColor: '#f2212f',
           });
         } else {
-          // SI NO, LO BORRA
-          this._serviceEquipos.deleteEquipo(tokenSeguro, idEquipo).subscribe({
-            next: () => {
-              Swal.fire({
-                title: 'Eliminado',
-                text: 'El equipo se ha eliminado correctamente.',
-                icon: 'success',
-                confirmButtonColor: '#f2212f',
-              });
+          Swal.fire({
+            title: '¿Estas seguro?',
+            text: 'No podrás revertirlo',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#f2212f',
+            cancelButtonColor: '#272626',
+            confirmButtonText: 'Si, eliminalo',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this._serviceEquipos.deleteEquipo(tokenSeguro, idEquipo).subscribe({
+                next: () => {
+                  Swal.fire({
+                    title: 'Eliminado',
+                    text: 'El equipo se ha eliminado correctamente.',
+                    icon: 'success',
+                    confirmButtonColor: '#f2212f',
+                  });
 
-              // SE HACE LA RECARGA DE EQUIPOS
-              if (inscripcionActual) {
-                this.cargarEquiposDelEvento(inscripcionActual.idEventoActividad);
-              }
-            },
-            error: (err) => {
-              Swal.fire({
-                title: 'Error',
-                text: 'No se ha podido eliminar el equipo.',
-                icon: 'error',
-                confirmButtonColor: '#f2212f',
+                  // SE HACE LA RECARGA DE EQUIPOS
+                  if (inscripcionActual) {
+                    this.cargarEquiposDelEvento(inscripcionActual.idEventoActividad);
+                  }
+                },
+                error: (err) => {
+                  Swal.fire({
+                    title: 'Error',
+                    text: 'No se ha podido eliminar el equipo.',
+                    icon: 'error',
+                    confirmButtonColor: '#f2212f',
+                  });
+                },
               });
-            },
+            }
           });
         }
       });
@@ -316,39 +328,52 @@ export class Equipos implements OnInit {
   }
 
   eliminarMiembroEquipo(idMiembroEquipo: number) {
-    if (this.token) {
-      this._serviceEquipos.deleteMiembroEquipo(this.token, idMiembroEquipo).subscribe({
-        next: () => {
-          Swal.fire({
-            title: 'Eliminado',
-            text: 'El usuario se ha eliminado correctamente del equipo.',
-            icon: 'success',
-            confirmButtonColor: '#f2212f',
+    let tokenSeguro = this.token;
+    if (tokenSeguro) {
+      Swal.fire({
+        title: '¿Estas seguro?',
+        text: 'No podrás revertirlo',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#f2212f',
+        cancelButtonColor: '#272626',
+        confirmButtonText: 'Si, eliminalo',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this._serviceEquipos.deleteMiembroEquipo(tokenSeguro, idMiembroEquipo).subscribe({
+            next: () => {
+              Swal.fire({
+                title: 'Eliminado',
+                text: 'El usuario se ha eliminado correctamente del equipo.',
+                icon: 'success',
+                confirmButtonColor: '#f2212f',
+              });
+
+              const inscripcionActual = this.inscripciones.find(
+                (ins) => ins.idEvento == this.idEventoSeleccionado,
+              );
+
+              // PARA RECARGAR LOS EQUIPOS
+              if (inscripcionActual) {
+                const equiposCopia = [...this.equiposMostrados];
+                this.equiposMostrados = [];
+
+                setTimeout(() => {
+                  this.equiposMostrados = equiposCopia;
+                  this.cargarEquiposDelEvento(inscripcionActual.idEventoActividad);
+                }, 50);
+              }
+            },
+            error: () => {
+              Swal.fire({
+                title: 'Error',
+                text: 'No se ha podido eliminar el usuario del equipo.',
+                icon: 'error',
+                confirmButtonColor: '#f2212f',
+              });
+            },
           });
-
-          const inscripcionActual = this.inscripciones.find(
-            (ins) => ins.idEvento == this.idEventoSeleccionado,
-          );
-
-          // PARA RECARGAR LOS EQUIPOS
-          if (inscripcionActual) {
-            const equiposCopia = [...this.equiposMostrados];
-            this.equiposMostrados = [];
-
-            setTimeout(() => {
-              this.equiposMostrados = equiposCopia;
-              this.cargarEquiposDelEvento(inscripcionActual.idEventoActividad);
-            }, 50);
-          }
-        },
-        error: () => {
-          Swal.fire({
-            title: 'Error',
-            text: 'No se ha podido eliminar el usuario del equipo.',
-            icon: 'error',
-            confirmButtonColor: '#f2212f',
-          });
-        },
+        }
       });
     }
   }
