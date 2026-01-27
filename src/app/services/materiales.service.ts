@@ -3,8 +3,6 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "../../environments/environment.development";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
-import Actividad from "../models/actividad";
-import usuarioLogeado from "../models/usuarioLogeado";
 
 @Injectable({
     providedIn: 'root'
@@ -40,11 +38,6 @@ export default class MaterialesService {
     eliminarMaterial(idMaterial: number): Observable<any>{
         let request = environment.url + "api/Materiales/" + idMaterial;
         return this._http.delete(request);
-    }
-
-    getUsuarioAportadorMaterial(idUsuario: number): Observable<usuarioLogeado>{
-        let request = environment.url + "api/UsuarioDeportes/FindUsuarioById/"+idUsuario;
-        return this._http.get<usuarioLogeado>(request);
     }
 
 }
