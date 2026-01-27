@@ -50,6 +50,19 @@ export class ActividadesService {
       .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
       return this._http.post<boolean>(this.url+request, json, {headers: header})
   }
+  modificarPrecioActividad(idPrecioActividad:number, idActividadEvento: number, precio:number):Observable<any>{
+    var request = "api/PrecioActividad/update";
+    var precioTotal={
+        "idPrecioActividad":idPrecioActividad,
+        "idEventoActividad":idActividadEvento,
+        "precioTotal": precio,
+      }
+      let json=JSON.stringify(precioTotal);
+      console.log(json);
+      let header=new HttpHeaders().set("Content-type", "application/json")
+      .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
+      return this._http.put<boolean>(this.url+request, json, {headers: header})
+  }
 
   getPrecioActividadPorEvento():Observable<any>{
     var request = "api/precioActividad";
@@ -65,13 +78,6 @@ export class ActividadesService {
 
   }
 
-  deleteActividadEventoPrecio(idPrecioActividad:number):Observable<any>{
-    var request = "api/PrecioActividad/"+idPrecioActividad;
-      let header=new HttpHeaders().set("Content-type", "application/json")
-      .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
-       return this._http.delete<boolean>(this.url+request, {headers: header})
-
-  }
 
   crearActividad(nombre:string, minimo:number):Observable<any>{
   var request = "api/Actividades/create";

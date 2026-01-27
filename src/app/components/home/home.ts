@@ -95,6 +95,7 @@ export class Home implements OnInit {
     this._perfil.getDatosUsuario(token).subscribe((response) => {
       this.usuarioLogeado = true;
       this.usuario = response;
+      console.log(this.usuario)
     });
 
     //Llamada al api eventos para recoger los eventos abiertos e incluirlos en el calendario
@@ -102,7 +103,7 @@ export class Home implements OnInit {
     this._eventos.buscarEventosAbiertos().subscribe({
       next: (response) => {
         this.eventos = response;
-
+        this.ordenarEventos();
 
 
         const nuevosEventos: CalendarEvent[] = this.eventos.map(eventoApi => {
@@ -141,6 +142,45 @@ export class Home implements OnInit {
   }
 
 
+ordenarEventos() {
+    const fechaReferencia = new Date();
+    fechaReferencia.setHours(0, 0, 0, 0);
+    const hoy = fechaReferencia.getTime();
+
+    const futuros = this.eventos
+      .filter(e => {
+        const fechaE = new Date(e.fechaEvento);
+        fechaE.setHours(0, 0, 0, 0);
+        return fechaE.getTime() >= hoy;
+      })
+      .sort((a, b) => new Date(a.fechaEvento).getTime() - new Date(b.fechaEvento).getTime());
+
+    const pasados = this.eventos
+      .filter(e => {
+        const fechaE = new Date(e.fechaEvento);
+        fechaE.setHours(0, 0, 0, 0);
+        return fechaE.getTime() < hoy;
+      })
+      .sort((a, b) => new Date(b.fechaEvento).getTime() - new Date(a.fechaEvento).getTime());
+
+    this.eventos = [...futuros, ...pasados];
+}
+
+esPasado(idEvento: number): boolean {
+  const evento = this.eventos.find(e => e.idEvento === idEvento);
+
+  if (!evento) {
+    return false;
+  }
+
+  const fechaEvento = new Date(evento.fechaEvento);
+  fechaEvento.setHours(0, 0, 0, 0);
+
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  return fechaEvento.getTime() < hoy.getTime();
+}
 
 
   verProfesorEvento(id: number): string {
@@ -187,9 +227,21 @@ export class Home implements OnInit {
     //Llamada al api para recoger los deportes disponibles
 
     this._actividades.getActividades().subscribe(response => {
-      const actividadesHTML = response.map((a: { idActividad: any; nombre: any; }) =>
-        `<option value="${a.idActividad}">${a.nombre}</option>`
-      ).join('');
+
+      const disponibles = response.filter((apiAct: any) => {
+          const yaExiste = this.actividades.some(local => local.idActividad === apiAct.idActividad);
+          return !yaExiste;
+        });
+
+        let actividadesHTML = '';
+        
+        if (disponibles.length > 0) {
+          actividadesHTML = disponibles.map((a: any) =>
+            `<option value="${a.idActividad}">${a.nombre}</option>`
+          ).join('');
+        } else {
+          actividadesHTML = `<option disabled>No quedan actividades disponibles</option>`;
+        }
 
       Swal.fire({
         title: 'Añadir a Evento #' + this.idEventoSeleccionado,
@@ -341,9 +393,11 @@ export class Home implements OnInit {
         const randomIndex = Math.floor(Math.random() * response.length);
         this._eventos.postProfesorEvento(idEvento, response[randomIndex].idUsuario).subscribe(response => {
           console.log(response);
-           this._eventos.buscarEventosAbiertos().subscribe(
+          this._eventos.buscarEventosAbiertos().subscribe(
             (response) => {
-                this.eventos = response;
+              this.eventos = response;
+                  this.ordenarEventos();
+
             })
         })
       } else {
@@ -353,17 +407,18 @@ export class Home implements OnInit {
           const randomIndex = Math.floor(Math.random() * keys.length);
           const randomKey = keys[randomIndex];
           this._eventos.postProfesorEvento(idEvento, randomKey)
-          .subscribe(response => {
-                    console.log(response);
-                     this._eventos.buscarEventosAbiertos().subscribe(
-                    (response) => {
-                        this.eventos = response;
-                    })
-          })
+            .subscribe(response => {
+              console.log(response);
+              this._eventos.buscarEventosAbiertos().subscribe(
+                (response) => {
+                  this.eventos = response;
+                  this.ordenarEventos();
+                })
+            })
         }
       }
-     
-  })
+
+    })
   }
 
   Inscribirse(e: ActividadEvento) {
@@ -431,12 +486,28 @@ export class Home implements OnInit {
         const precioFinal = result.value;
         console.log('Precio guardado:', precioFinal);
 
+        if(this.precioActividad.length>0){
+
+            var precioModificado = this.precioActividad.find(p=>p.idEventoActividad === a.idEventoActividad);
+            if(precioModificado)
+            this._actividades.modificarPrecioActividad(precioModificado.idPrecioActividad, precioModificado.idEventoActividad, precioFinal).subscribe(response => {
+            console.log("modificado");
+            this.verPrecioActividad();
+          }, error => {
+            Swal.fire('Error', 'No se ha podido modificar el precio', 'error');
+          })
+
+        }else
+
         this._actividades.insertarPrecioActividad(a.idEventoActividad, precioFinal).subscribe(response => {
           console.log(response);
+            console.log("insertado");
+
           this.verPrecioActividad();
         }, error => {
           Swal.fire('Error', 'No se ha podido insertar el precio', 'error');
         })
+
       }
     });
   }
@@ -462,26 +533,37 @@ export class Home implements OnInit {
 
     const encontrado = this.precioActividad.find(p => p.idEventoActividad === idEventoActividad);
 
-    // Asignamos directamente. Si es undefined, se asigna undefined.
-    // No hace falta poner '|| undefined'
     this.precioTotalActividad = encontrado;
 
     return encontrado;
   }
-  eliminarActividadEventoPrecio(a: ActividadEvento) {
-    var p = this.obtenerPrecioActividad(a.idEventoActividad);
-    if (p != undefined)
-      this._actividades.deleteActividadEventoPrecio(p.idPrecioActividad).subscribe(response => {
-        console.log(response);
-        this.eliminarActividadEvento(a);
-      })
-  }
 
 
   eliminarActividadEvento(a: ActividadEvento) {
-    this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe(response => {
+    this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe({
+      next:response => {
       console.log(response);
       this.MostrarActividades(a.idEvento);
+    },error:(error)=>{
+      Swal.fire('Error', 'No se ha podido eliminar la actividad', 'error');
+    }
+  })
+  }
+
+  eliminarEvento(){
+    this._eventos.eliminarEvento(this.idEventoSeleccionado).subscribe({
+      next:response => {
+      console.log(response);
+      this._eventos.buscarEventosAbiertos().subscribe(
+            (response) => {
+              this.eventos = response;
+                  this.ordenarEventos();
+                  this.eventoSeleccionado=false;
+            
+            })
+          },error:(error)=>{
+          Swal.fire('Error', 'No se ha podido eliminar el evento', 'error');
+      }
     })
   }
 
