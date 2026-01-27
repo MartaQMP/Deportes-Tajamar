@@ -58,7 +58,7 @@ export class ActividadesService {
   }
 
   deleteActividadEvento(idActividadEvento:number):Observable<any>{
-    var request = "api/PrecioActividad/"+idActividadEvento;
+    var request = "api/ActividadesEvento/"+idActividadEvento;
       let header=new HttpHeaders().set("Content-type", "application/json")
       .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
        return this._http.delete<boolean>(this.url+request, {headers: header})

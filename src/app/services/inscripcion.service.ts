@@ -23,6 +23,21 @@ export class InscripcionService {
     return this._http.get<Inscripciones[]>(this.url+ request, {headers: header});
   }
 
+    inscribirActividadEventoUsuario(idUsuario:number, idEventoActividad:number, capitan:boolean):Observable<any>{
+      var request = "api/inscripciones/create";
+      var inscripcion={
+        "idInscripcion":0,
+        "idUsuario": idUsuario,
+        "idEventoActividad":idEventoActividad,
+        "quiereSerCapitan": capitan,
+        "fechaInscripcion" : new Date()
+      }
+      let json=JSON.stringify(inscripcion);
+      console.log(json);
+      let header=new HttpHeaders().set("Content-type", "application/json");
+      header.append('Authorization', 'Bearer ' + localStorage.getItem("token"));
+      return this._http.post(this.url + request, json, {headers:header})}
+
   inscribirActividadEvento(
     idEventoActividad: number,
     capitan: boolean,

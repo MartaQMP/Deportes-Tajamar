@@ -11,7 +11,7 @@ import { Router, RouterModule } from '@angular/router';
 import usuarioLogeado from '../../models/usuarioLogeado';
 import { EventosService } from '../../services/eventos.service';
 import Evento from '../../models/evento';
-import { Subject, forkJoin, map } from 'rxjs'; 
+import { Subject, forkJoin, map } from 'rxjs';
 import ActividadEvento from '../../models/actividades';
 import { ActividadesService } from '../../services/actividades.service';
 import { InscripcionService } from '../../services/inscripcion.service';
@@ -43,32 +43,31 @@ export class Home implements OnInit {
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
-  
-  refresh: Subject<void> = new Subject<void>(); 
 
-  events: CalendarEvent[] = []; 
+  refresh: Subject<void> = new Subject<void>();
+
+  events: CalendarEvent[] = [];
 
   public usuario!: usuarioLogeado;
   public usuarioLogeado: boolean = false;
   public eventos: Evento[] = [];
-  public actividades: ActividadEvento[]=[];
-  public personasInscritas: number[]=[];
-  public contador: number=0;
-  public capitan:boolean=false;
-  public idEventoSeleccionado!:number;
-  public eventoSeleccionado:boolean = false;
-  public usuarioActividades:UsuarioActividad[]=[];
-  public actividadesGet:Actividad[]=[]
-  public precioActividad: PrecioActividad[]=[];
-  public precioTotalActividad!:PrecioActividad | undefined;
+  public actividades: ActividadEvento[] = [];
+  public personasInscritas: number[] = [];
+  public contador: number = 0;
+  public capitan: boolean = false;
+  public idEventoSeleccionado!: number;
+  public eventoSeleccionado: boolean = false;
+  public usuarioActividades: UsuarioActividad[] = [];
+  public actividadesGet: Actividad[] = []
+  public precioActividad: PrecioActividad[] = [];
+  public precioTotalActividad!: PrecioActividad | undefined;
   public cargandoDatos!: boolean;
   public profesores: Map<number, string> = new Map();
   public usuarioCapitan!: Alumno;
-  public token : any;
-
+  public token: any;
   constructor(
-    private _perfil: PerfilService, 
-    private _eventos: EventosService, 
+    private _perfil: PerfilService,
+    private _eventos: EventosService,
     private _actividades: ActividadesService,
     private _router: Router,
     private _inscripciones: InscripcionService
@@ -90,7 +89,7 @@ export class Home implements OnInit {
 
     if (!token) {
       this._router.navigate(['/login']);
-      return; 
+      return;
     }
 
     this._perfil.getDatosUsuario(token).subscribe((response) => {
@@ -103,98 +102,98 @@ export class Home implements OnInit {
     this._eventos.buscarEventosAbiertos().subscribe({
       next: (response) => {
         this.eventos = response;
-            
-        
+
+
 
         const nuevosEventos: CalendarEvent[] = this.eventos.map(eventoApi => {
           return {
             start: new Date(eventoApi.fechaEvento),
-            title: 'Evento #'+eventoApi.idEvento, 
+            title: 'Evento #' + eventoApi.idEvento,
             color: { primary: '#ad2121', secondary: '#FAE3E3' },
-            meta: eventoApi 
+            meta: eventoApi
           };
         });
 
         this.events = nuevosEventos;
 
-        this.refresh.next(); 
-        
-         this._eventos.getProfesor().subscribe({
-          next: response=>{
+        this.refresh.next();
+
+        this._eventos.getProfesor().subscribe({
+          next: response => {
             console.log(response);
-            response.forEach(r=>{
+            response.forEach(r => {
               this.profesores.set(r.idUsuario, r.usuario);
             })
             console.log(this.profesores)
-          }, error :(error)=>{
+          }, error: (error) => {
             console.log("No entra profesores")
           }
-    })
-       
+        })
+
       },
       error: (err) => {
         console.error("Error cargando eventos", err);
       }
-      
+
     });
 
-    
-  }
-    
 
-  
-
-  verProfesorEvento(id:number) : string{
-  //  var p = this.profesores.find(p=>p.idUsuario = id)?.usuario || "";
-    return "";
   }
-  
+
+
+
+
+  verProfesorEvento(id: number): string {
+    var p = this.profesores.get(id);
+    return p ?? 'Profesor no encontrado';
+  }
+
   //Llamada al api Actividades por evento para recoger las actividades disponibles por cada evento
-  MostrarActividades(e:Evento){
+  MostrarActividades(e: number) {
     console.log(e);
-    this.eventoSeleccionado=true;
-    this.idEventoSeleccionado = e.idEvento;
-    this._actividades.buscarActividadesPorEventos(e.idEvento.toString()).subscribe((response)=>{
+    this.eventoSeleccionado = true;
+    this.idEventoSeleccionado = e;
+    this._actividades.buscarActividadesPorEventos(e.toString()).subscribe((response) => {
       this.actividades = response;
       //Ver las inscripciones a esa actividad en ese evento
-      this.actividades.forEach((a, index) =>{
-        this._inscripciones.verInscripciones(e.idEvento, a.idActividad).subscribe(response=>{
+      this.actividades.forEach((a, index) => {
+        this._inscripciones.verInscripciones(e, a.idActividad).subscribe(response => {
           this.personasInscritas[index] = response.length;
         })
         this.personasInscritas.reverse()
       })
-      
+
       //ver si el usuario esta inscrito ya en alguna actividad de ese evento
       this.verInscripciones()
       this.verPrecioActividad()
 
     })
   }
-  verInscripciones(){
-    this._actividades.verUsuarioApuntado().subscribe(response=>{
-      this.usuarioActividades=response;
+  verInscripciones() {
+    this._actividades.verUsuarioApuntado().subscribe(response => {
+      this.usuarioActividades = response;
       console.log(this.usuarioActividades)
     })
-  } 
+  }
 
   yaEstaInscrito(idEvento: number): boolean {
-  
+
     return this.usuarioActividades.some(actividad => actividad.idEvento === idEvento);
   }
 
 
   abrirModalActividad() {
 
-//Llamada al api para recoger los deportes disponibles
+    //Llamada al api para recoger los deportes disponibles
 
-  this._actividades.getActividades().subscribe(response => {
-    const actividadesHTML = response.map((a: { idActividad: any; nombre: any; }) => 
-      `<option value="${a.idActividad}">${a.nombre}</option>`
-    ).join('');
+    this._actividades.getActividades().subscribe(response => {
+      const actividadesHTML = response.map((a: { idActividad: any; nombre: any; }) =>
+        `<option value="${a.idActividad}">${a.nombre}</option>`
+      ).join('');
 
-    Swal.fire({
-      title: 'Añadir a Evento #'+this.idEventoSeleccionado,
-      html: `
+      Swal.fire({
+        title: 'Añadir a Evento #' + this.idEventoSeleccionado,
+        html: `
         <div style="text-align: left; margin-bottom: 5px; color: #555;">Deporte:</div>
         <select id="swal-deporte" class="input-date-discreto" style="margin: 0 !important;">
           <option value="" disabled selected>Selecciona una actividad...</option>
@@ -202,58 +201,58 @@ export class Home implements OnInit {
         </select>
         
       `,
-      showCancelButton: true,
-      confirmButtonText: 'Crear',
-      cancelButtonText: 'Cancelar',
-      buttonsStyling: false,
-      customClass: {
-        popup: 'swal-popup-discreto',
-        confirmButton: 'btn-confirm-discreto',
-        cancelButton: 'btn-cancel-discreto',
-        title: 'swal-title-discreto'
-      },
-      preConfirm: () => {
-        return {
-          idActividad: (document.getElementById('swal-deporte') as HTMLSelectElement).value
-        };
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log('Datos seleccionados:', result.value);
-        this._eventos.crearActividad(this.idEventoSeleccionado, result.value.idActividad).subscribe(response=>{
-          this._actividades.buscarActividadesPorEventos(this.idEventoSeleccionado.toString()).subscribe((response)=>{
-            this.actividades = response;
-            //Ver las inscripciones a esa actividad en ese evento
-            this.actividades.forEach((a, index) =>{
-              this._inscripciones.verInscripciones(this.idEventoSeleccionado, a.idActividad).subscribe(response=>{
-                this.personasInscritas[index] = response.length;
+        showCancelButton: true,
+        confirmButtonText: 'Crear',
+        cancelButtonText: 'Cancelar',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'swal-popup-discreto',
+          confirmButton: 'btn-confirm-discreto',
+          cancelButton: 'btn-cancel-discreto',
+          title: 'swal-title-discreto'
+        },
+        preConfirm: () => {
+          return {
+            idActividad: (document.getElementById('swal-deporte') as HTMLSelectElement).value
+          };
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log('Datos seleccionados:', result.value);
+          this._eventos.crearActividad(this.idEventoSeleccionado, result.value.idActividad).subscribe(response => {
+            this._actividades.buscarActividadesPorEventos(this.idEventoSeleccionado.toString()).subscribe((response) => {
+              this.actividades = response;
+              //Ver las inscripciones a esa actividad en ese evento
+              this.actividades.forEach((a, index) => {
+                this._inscripciones.verInscripciones(this.idEventoSeleccionado, a.idActividad).subscribe(response => {
+                  this.personasInscritas[index] = response.length;
+                })
+                this.personasInscritas.reverse()
               })
-              this.personasInscritas.reverse()
-            })
-            
-            //ver si el usuario esta inscrito ya en alguna actividad de ese evento
-            this.verInscripciones()
 
-          })
-                
-        }, error =>{
-          Swal.fire('Error', 'No se inserto la actividad', 'error');
-        });
-      }
+              //ver si el usuario esta inscrito ya en alguna actividad de ese evento
+              this.verInscripciones()
+
+            })
+
+          }, error => {
+            Swal.fire('Error', 'No se inserto la actividad', 'error');
+          });
+        }
+      });
+
+    }, error => {
+      console.error('Error al cargar actividades', error);
+      Swal.fire('Error', 'No se pudieron cargar las actividades', 'error');
     });
 
-  }, error => {
-    console.error('Error al cargar actividades', error);
-    Swal.fire('Error', 'No se pudieron cargar las actividades', 'error');
-  });
-
-}
+  }
 
 
 
-abrirModalActividadCrear() {
+  abrirModalActividadCrear() {
 
-Swal.fire({
+    Swal.fire({
       title: 'Crear Actividad',
       html: `
         <div style="text-align: left; margin-bottom: 5px; color: #555;">
@@ -282,76 +281,109 @@ Swal.fire({
       if (result.isConfirmed) {
         console.log('Datos seleccionados:', result.value);
         this._actividades.crearActividad(result.value.deporte, result.value.minimo).subscribe({
-          next: response=>{
+          next: response => {
             console.log(response);
           },
-          error:(error)=>{
+          error: (error) => {
             Swal.fire('Error', 'Error al insertar la actividad', 'error');
           }
         })
       }
     })
 
-}
-    
+  }
+
 
 
 
   abrirModalFecha() {
-  Swal.fire({
-    title: 'Crear evento',
-    text: 'Selecciona la fecha del evento:',
-    input: 'date', 
-    inputAttributes: {
-      autocapitalize: 'off'
-    },
-    showCancelButton: true,
-    confirmButtonText: 'Crear',
-    cancelButtonText: 'Cancelar',
-    customClass: {
-        popup: 'swal-popup-discreto',      
-        confirmButton: 'btn-confirm-discreto', 
-        cancelButton: 'btn-cancel-discreto',   
-        input: 'input-date-discreto',       
-        title: 'swal-title-discreto'          
-      }
-  }).then((result) => {
-
-if(result.isConfirmed)
-    this._eventos.crearEvento(result.value).subscribe({
-      next: response =>{
-        const fechaSeleccionada = result.value;
-        if (fechaSeleccionada) {
-          console.log('Fecha seleccionada:', fechaSeleccionada);
-          Swal.fire('¡Listo!', `Evento creado para el ${fechaSeleccionada}`, 'success');
-        }
+    Swal.fire({
+      title: 'Crear evento',
+      text: 'Selecciona la fecha del evento:',
+      input: 'date',
+      inputAttributes: {
+        autocapitalize: 'off'
       },
-      error : (error)=>{
-          Swal.fire('Error', 'Debes seleccionar una fecha', 'error');
+      showCancelButton: true,
+      confirmButtonText: 'Crear',
+      cancelButtonText: 'Cancelar',
+      customClass: {
+        popup: 'swal-popup-discreto',
+        confirmButton: 'btn-confirm-discreto',
+        cancelButton: 'btn-cancel-discreto',
+        input: 'input-date-discreto',
+        title: 'swal-title-discreto'
       }
-    })
-    
-  });
-}
+    }).then((result) => {
 
-    Inscribirse(e:ActividadEvento){
-      this._inscripciones.inscribirActividadEvento(e.idEventoActividad, this.capitan, localStorage["token"]).subscribe(
-        (response=>{
+      if (result.isConfirmed)
+        this._eventos.crearEvento(result.value).subscribe({
+          next: response => {
+            const fechaSeleccionada = result.value;
+            if (fechaSeleccionada) {
+              console.log('Fecha seleccionada:', fechaSeleccionada);
+              console.log(response);
+              this.asociarProfesorEvento(response.idEvento);
+              Swal.fire('¡Listo!', `Evento creado para el ${fechaSeleccionada}`, 'success');
+            }
+          },
+          error: (error) => {
+            Swal.fire('Error', 'Debes seleccionar una fecha', 'error');
+          }
+        })
+
+    });
+  }
+
+  asociarProfesorEvento(idEvento: number) {
+    this._eventos.getProfesorSinEvento().subscribe((response) => {
+      if (response.length > 0) {
+        const randomIndex = Math.floor(Math.random() * response.length);
+        this._eventos.postProfesorEvento(idEvento, response[randomIndex].idUsuario).subscribe(response => {
           console.log(response);
-          this.verInscripciones();
-          this.actividades.forEach((a, index) =>{
-          this._inscripciones.verInscripciones(e.idEvento, a.idActividad).subscribe(response=>{
+           this._eventos.buscarEventosAbiertos().subscribe(
+            (response) => {
+                this.eventos = response;
+            })
+        })
+      } else {
+        const keys = Array.from(this.profesores.keys());
+
+        if (keys.length > 0) {
+          const randomIndex = Math.floor(Math.random() * keys.length);
+          const randomKey = keys[randomIndex];
+          this._eventos.postProfesorEvento(idEvento, randomKey)
+          .subscribe(response => {
+                    console.log(response);
+                     this._eventos.buscarEventosAbiertos().subscribe(
+                    (response) => {
+                        this.eventos = response;
+                    })
+          })
+        }
+      }
+     
+  })
+  }
+
+  Inscribirse(e: ActividadEvento) {
+    this._inscripciones.inscribirActividadEventoUsuario(this.usuario.idUsuario, e.idEventoActividad, this.capitan).subscribe(
+      (response => {
+        console.log(response);
+        this.verInscripciones();
+        this.actividades.forEach((a, index) => {
+          this._inscripciones.verInscripciones(e.idEvento, a.idActividad).subscribe(response => {
             this.personasInscritas[index] = response.length;
           })
           this.personasInscritas.reverse()
         })
-        })
-      )
-    }
+      })
+    )
+  }
 
 
 
-    anadirPrecio(a:ActividadEvento) {
+  anadirPrecio(a: ActividadEvento) {
     Swal.fire({
       title: 'Añadir Precio',
       html: `
@@ -382,64 +414,77 @@ if(result.isConfirmed)
       didOpen: () => {
         // Opcional: Pone el foco en el input automáticamente al abrir
         const input = Swal.getPopup()?.querySelector('#swal-input-precio') as HTMLInputElement;
-        if(input) input.focus();
+        if (input) input.focus();
       },
-    preConfirm: () => {
-      const precioInput = document.getElementById('swal-input-precio') as HTMLInputElement;
-      const precioValor = precioInput.value;
+      preConfirm: () => {
+        const precioInput = document.getElementById('swal-input-precio') as HTMLInputElement;
+        const precioValor = precioInput.value;
 
-      if (!precioValor) {
-        Swal.showValidationMessage('Por favor, escribe un precio válido');
-        return false;
+        if (!precioValor) {
+          Swal.showValidationMessage('Por favor, escribe un precio válido');
+          return false;
+        }
+        return parseFloat(precioValor);
       }
-      return parseFloat(precioValor);
-    }
     }).then((result) => {
       if (result.isConfirmed) {
         const precioFinal = result.value;
         console.log('Precio guardado:', precioFinal);
-        
-       this._actividades.insertarPrecioActividad(a.idEventoActividad, precioFinal).subscribe(response =>{
-        console.log(response);
-        this.verPrecioActividad();
-       }, error =>{
-           Swal.fire('Error', 'No se ha podido insertar el precio', 'error');
-       })
+
+        this._actividades.insertarPrecioActividad(a.idEventoActividad, precioFinal).subscribe(response => {
+          console.log(response);
+          this.verPrecioActividad();
+        }, error => {
+          Swal.fire('Error', 'No se ha podido insertar el precio', 'error');
+        })
       }
     });
   }
 
-  verPrecioActividad(){
-    this._actividades.getPrecioActividadPorEvento().subscribe(response=>{
+  verPrecioActividad() {
+    this._actividades.getPrecioActividadPorEvento().subscribe(response => {
       this.precioActividad = response
-      .filter((precio: { idEventoActividad: number; }) => {
-        return this.actividades.some(act => act.idEventoActividad === precio.idEventoActividad);
-      }).map((precio: { idEventoActividad: number; }) => {
-        this.actividades.find(
-          act => act.idEventoActividad === precio.idEventoActividad
-        );
-        return {
-          ...precio,
-        };
-      });
+        .filter((precio: { idEventoActividad: number; }) => {
+          return this.actividades.some(act => act.idEventoActividad === precio.idEventoActividad);
+        }).map((precio: { idEventoActividad: number; }) => {
+          this.actividades.find(
+            act => act.idEventoActividad === precio.idEventoActividad
+          );
+          return {
+            ...precio,
+          };
+        });
 
-  });
+    });
   }
 
-  obtenerPrecioActividad(idEventoActividad: number): number {
-  if (!this.precioActividad || this.precioActividad.length === 0) {
-    return 0;
-  }
-  const encontrado = this.precioActividad.find(p => p.idEventoActividad === idEventoActividad);
-  this.precioTotalActividad = encontrado || undefined;
-  return encontrado ? encontrado.precioTotal : 0;
-}
+  obtenerPrecioActividad(idEventoActividad: number): PrecioActividad | undefined {
 
-  eliminarActividadEvento(a:ActividadEvento){
-    this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe(response=>{
+    const encontrado = this.precioActividad.find(p => p.idEventoActividad === idEventoActividad);
+
+    // Asignamos directamente. Si es undefined, se asigna undefined.
+    // No hace falta poner '|| undefined'
+    this.precioTotalActividad = encontrado;
+
+    return encontrado;
+  }
+  eliminarActividadEventoPrecio(a: ActividadEvento) {
+    var p = this.obtenerPrecioActividad(a.idEventoActividad);
+    if (p != undefined)
+      this._actividades.deleteActividadEventoPrecio(p.idPrecioActividad).subscribe(response => {
+        console.log(response);
+        this.eliminarActividadEvento(a);
+      })
+  }
+
+
+  eliminarActividadEvento(a: ActividadEvento) {
+    this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe(response => {
       console.log(response);
+      this.MostrarActividades(a.idEvento);
     })
   }
+
   elegirCapitan(idActividad: number, idEvento: number) {
     this._inscripciones
       .buscarActividadEvento(idEvento, idActividad)

@@ -25,7 +25,7 @@ export class EventosService {
     var request = "api/Eventos/create/"+fecha;
     let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
     console.log({headers:header})
-    return this._http.post<boolean>(this.url+request, null, {headers: header})
+    return this._http.post<Evento>(this.url+request, null, {headers: header})
   }
 
   crearActividad(idEvento:number, idActividad:number):Observable<any>{
@@ -39,6 +39,17 @@ export class EventosService {
     var request =  "api/ProfesEventos/ProfesActivos";
     let header=new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
     return this._http.get<Profesores[]>(this.url+request, {headers: header})
+  }
+  getProfesorSinEvento():Observable<Profesores[]>{
+    var request =  "api/ProfesEventos/ProfesSinEventos";
+    let header=new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
+    return this._http.get<Profesores[]>(this.url+request, {headers: header})
+  }
+  postProfesorEvento(idEvento:number, idProfesor:number){
+     var request = "api/profeseventos/asociarprofesorEvento/"+idEvento+"/"+idProfesor;
+    
+      let header=new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
+      return this._http.post(this.url+request, null, {headers: header})
   }
 
 }

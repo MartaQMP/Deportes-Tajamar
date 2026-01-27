@@ -22,18 +22,14 @@
         } @else {
           <div class="timeline-list">
             @for(e of eventos; track $index){
-              <div class="event-card" (click)="MostrarActividades(e)">
+              <div class="event-card" (click)="MostrarActividades(e.idEvento)">
                 <div class="event-date-box">
                   <span class="day">{{ e.fechaEvento | date: 'dd' }}</span>
                   <span class="month">{{ e.fechaEvento | date: 'MMM' }}</span>
                 </div>
                 <div class="event-info">
                   <h4>{{ e.fechaEvento | date: 'EEEE' }}, Evento #{{ e.idEvento }}</h4>
-                  @if(verProfesorEvento(e.idProfesor) == ""){
-                    <span class="tap-hint">Por escoger<i class="fas fa-arrow-right"></i></span>
-                  }@else{
                     <span class="tap-hint">{{verProfesorEvento(e.idProfesor)}}<i class="fas fa-arrow-right"></i></span>
-                  }
                 </div>
               </div>
             }
@@ -111,16 +107,10 @@
                     <p>Mínimo de jugadores: {{a.minimoJugadores}}</p>
                     
                     
-                      @if(obtenerPrecioActividad(a.idEventoActividad) != 0){
-                        <p>Precio: {{ obtenerPrecioActividad(a.idEventoActividad) }} €</p>
-                      } @else {
-                        <p>Precio: No definido</p>
-                      }
-
-                    @if(a.idProfesor == -1){
-                      <p>Profesor: Por escoger</p>
+                   @if (obtenerPrecioActividad(a.idEventoActividad); as precioObj) {
+                      <p>Precio: {{ precioObj.precioTotal }} €</p>
                     } @else {
-                      <p>Profesor: {{a.idProfesor}}</p>
+                      <p>Precio: No definido</p>
                     }
                     
 
@@ -143,19 +133,21 @@
                     }
 
                     <div class="d-grid gap-2 d-md-flex justify-content-md-center contetn-boton">
-                    @if(obtenerPrecioActividad(a.idEventoActividad) != 0){
+                    @if(obtenerPrecioActividad(a.idEventoActividad) != undefined){
                       <button (click)="anadirPrecio(a)" class="btn btn-create-discreto actividad">
                         <i class="fas fa-plus"></i> Modificar precio
+                      </button>
+                       <button  class="btn btn-create-discreto actividad" (click) = "eliminarActividadEventoPrecio(a)">
+                        <i class="fas fa-trash"></i> Eliminar actividad
                       </button>
                     }@else{
                       <button (click)="anadirPrecio(a)" class="btn btn-create-discreto actividad">
                         <i class="fas fa-plus"></i> Añadir precio
                       </button>
-                    }
-
-                      <button  class="btn btn-create-discreto actividad" (click) = "eliminarActividadEvento(a)">
+                       <button  class="btn btn-create-discreto actividad" (click) = "eliminarActividadEvento(a)">
                         <i class="fas fa-trash"></i> Eliminar actividad
                       </button>
+                    }
 
                     </div>
 
