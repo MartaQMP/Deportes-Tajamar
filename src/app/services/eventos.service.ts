@@ -52,7 +52,7 @@ export class EventosService {
       return this._http.post(this.url+request, null, {headers: header})
   }
   eliminarEvento(idEvento:number):Observable<any>{
-  var request = "api/Eventos/"+idEvento;
+  var request = "api/Eventos/deleteeventopanic/"+idEvento;
       let header=new HttpHeaders().set("Content-type", "application/json")
       .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
        return this._http.delete<boolean>(this.url+request, {headers: header})
