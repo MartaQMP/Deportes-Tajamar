@@ -10,8 +10,8 @@ import Swal from 'sweetalert2';
 import { forkJoin } from 'rxjs';
 import { ResultadosService } from '../../services/resultados.service';
 import usuarioLogeado from '../../models/usuarioLogeado';
-import { Title } from '@angular/platform-browser';
 import Actividad from '../../models/actividad';
+import PerfilService from '../../services/perfil.service';
 
 @Component({
   selector: 'app-equipos',
@@ -41,6 +41,7 @@ export class Equipos implements OnInit {
     private _serviceEquipos: EquiposService,
     private _router: Router,
     private _serviceResultados: ResultadosService,
+    private _servicePerfil: PerfilService
   ) {}
 
   ngOnInit(): void {
@@ -53,7 +54,7 @@ export class Equipos implements OnInit {
     }
     let tokenSeguro = this.token;
     // USUARIO LOGUEADO
-    this._serviceEquipos.getDatosUsuario(tokenSeguro).subscribe((responseUsuario) => {
+    this._servicePerfil.getDatosUsuario(tokenSeguro).subscribe((responseUsuario) => {
       this.usuarioLogueado = responseUsuario;
     });
 

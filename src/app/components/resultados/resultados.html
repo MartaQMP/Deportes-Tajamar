@@ -8,47 +8,58 @@
             id="evento"
             class="custom-select"
             name="evento"
-            #evento
+            [(ngModel)]="idEventoSeleccionado"
             (change)="filtrarPorEvento($event)"
           >
-            <option value="" selected disabled>Selecciona una fecha</option>
-            @for (evento of this.eventos; track $index) {
-              <option value="{{ evento.idEvento }}">
+            <option [value]="0" disabled>Selecciona una fecha</option>
+            @for (evento of eventos; track evento.idEvento) {
+              <option [value]="evento.idEvento">
                 {{ evento.fechaEvento | date: "EEEE, d 'de' MMMM 'de' y" }}
               </option>
             }
           </select>
         </div>
       </form>
+      <div class="filter-mostrar mt-2">
+        <button
+          type="button"
+          class="btn btn-outline-light btn-sm d-flex align-items-center gap-2"
+          (click)="limpiarFiltros()"
+        >
+          <i class="bi bi-arrow-clockwise"></i> Mostrar todos
+        </button>
+      </div>
     </div>
 
     <div class="filter-group">
       <form #form="ngForm">
-        <label for="deporte" class="form-label">Filtrar por deporte:</label>
+        <label for="deporte" class="form-label">Filtrar por actividad:</label>
         <div class="select-wrapper">
           <select
             id="deporte"
             class="custom-select"
             name="deporte"
-            #deporte
+            [(ngModel)]="idActividadSeleccionada"
             (change)="filtrarPorActividad($event)"
           >
-            <option value="" selected disabled>Selecciona una actividad</option>
-            @for (actividad of this.actividades; track $index) {
-              <option value="{{ actividad.idActividad }}">{{ actividad.nombre }}</option>
+            <option [value]="0" disabled>Selecciona una actividad</option>
+            @for (actividad of actividades; track actividad.idActividad) {
+              <option [value]="actividad.idActividad">{{ actividad.nombre }}</option>
             }
           </select>
         </div>
       </form>
-    </div>
-    <div class="filter-actions mb-1">
-      <button
-        type="button"
-        class="btn btn-outline-light btn-sm d-flex align-items-center gap-2"
-        (click)="limpiarFiltros()"
-      >
-        <i class="bi bi-arrow-clockwise"></i> Mostrar todos
-      </button>
+      @if (permisosUsuario == 'CAPITAN/ALUMNO' && esCapitanEnEvento) {
+        <div class="filter-crear mt-2">
+          <button
+            type="button"
+            class="btn btn-outline-light btn-sm d-flex align-items-center gap-2"
+            (click)="formularioCrearResultado()"
+          >
+            <i class="bi bi-plus-lg"></i> Crear Resultado
+          </button>
+        </div>
+      }
     </div>
   </section>
 
@@ -111,4 +122,36 @@
       }
     </div>
   </section>
+  <div style="display: none" #formCrearResultados name="formCrearResultados">
+    <div class="swal-form" #formNuevoResultado name="formNuevoResultado">
+      <label class="form-label">Selecciona el equipo Local:</label>
+      <select
+        class="form-select puntos"
+        (change)="actualizarFiltroEquipos('local')"
+        name="equipoLocal"
+        #equipoLocal
+      >
+        @for (equipos of equiposLocales; track equipos.idEquipo) {
+          <option value="{{ equipos.idEquipo }}">{{ equipos.nombreEquipo }}</option>
+        }
+      </select>
+      <br />
+      <label class="form-label">Selecciona el equipo Visitante:</label>
+      <select
+        class="form-select puntos"
+        (change)="actualizarFiltroEquipos('visitante')"
+        name="equipoVisitante"
+        #equipoVisitante
+      >
+        @for (equipos of equiposVisitantes; track equipos.idEquipo) {
+          <option value="{{ equipos.idEquipo }}">{{ equipos.nombreEquipo }}</option>
+        }
+      </select>
+      <br />
+      <label class="form-label">Puntos Equipo Local:</label>
+      <input class="form-control puntos" type="number" name="puntosLocal" #puntosLocal />
+      <label class="form-label">Puntos Equipo Visitante:</label>
+      <input class="form-control puntos" type="number" name="puntosVisitante" #puntosVisitante />
+    </div>
+  </div>
 </div>

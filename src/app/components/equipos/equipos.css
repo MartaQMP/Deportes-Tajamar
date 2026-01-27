@@ -1,10 +1,11 @@
+/* ─── CONTENEDOR PRINCIPAL ─── */
 .equipos-container {
   width: 85%;
   margin: auto;
   margin-top: 2%;
 }
 
-/* FILTRO SUPERIOR ESTILO TAJAMAR */
+/* ─── PANEL DE FILTRO SUPERIOR ─── */
 .filter-panel {
   background: var(--white);
   padding: 1.25rem 2rem;
@@ -37,11 +38,11 @@
   border-color: var(--primary-red);
 }
 
-/* HEADER DEL PANEL (Igual que Cursos) */
+/* ─── CABECERA DE SECCIÓN ─── */
 .equipos-main-header {
   background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
   border-radius: 16px 16px 0 0;
-  padding: 1.5rem 2rem;
+  padding: 2rem;
   display: flex;
   align-items: center;
   gap: 1.25rem;
@@ -74,10 +75,10 @@
   font-weight: 600;
   color: var(--text-secondary);
   font-style: italic;
-  text-transform: capitalize; /* Pone la primera letra en mayúscula */
+  text-transform: capitalize;
 }
 
-/* GRID DE EQUIPOS AL 20-25% */
+/* ─── CUERPO Y GRID DE EQUIPOS ─── */
 .equipos-content {
   background: var(--white);
   border-radius: 0 0 16px 16px;
@@ -91,10 +92,10 @@
   gap: 1.5rem;
 }
 
-/* CARD FIJA ESTILO TAJAMAR */
+/* ─── TARJETAS DE EQUIPO ─── */
 .team-card-fixed {
   background: var(--white);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -123,6 +124,7 @@
   font-size: 1rem;
 }
 
+/* ─── ICONOS DE ACCIÓN ─── */
 .action-icon {
   cursor: pointer;
   font-size: 1.2rem;
@@ -135,6 +137,7 @@
   transform: scale(1.1);
 }
 
+/* ─── LISTA DE MIEMBROS ─── */
 .card-team-body {
   padding: 1.25rem;
   flex-grow: 1;
@@ -158,6 +161,7 @@
   color: var(--text-secondary);
 }
 
+/* ─── BOTON DE APUNTARSE A EQUIPO ─── */
 .btn-apuntarme {
   width: 100%;
   margin-top: auto;
@@ -187,6 +191,7 @@
   font-weight: 700;
 }
 
+/* ─── BOTÓN CREAR EQUIPO ─── */
 .btn-crear {
   background: var(--primary-red);
   color: var(--white);
@@ -202,9 +207,53 @@
   box-shadow: 0 4px 12px rgba(242, 33, 47, 0.3);
 }
 
+/* ─── FORMULARIO CREAR EQUIPO ─── */
 .swal-form {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 0 10px;
+  color: var(--text-main);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 992px) {
+  .equipos-container {
+    width: 95%;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-panel {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.5rem;
+  }
+
+  .btn-crear {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .equipos-main-header {
+    padding: 1.5rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .equipos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .equipos-container {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .equipos-main-header h2 {
+    font-size: 1.2rem;
+  }
 }
