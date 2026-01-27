@@ -1,0 +1,231 @@
+/* ─── CONTENEDOR PRINCIPAL ─── */
+.pagos-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ─── PANEL DE FILTROS (EL BLOQUE ROJO) ─── */
+.filter-panel {
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 24px rgba(242, 33, 47, 0.2);
+  color: var(--white);
+  display: flex;
+  justify-content: center;
+  width: 40%;
+  margin: auto;
+}
+
+.filter-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── SELECTORES PERSONALIZADOS ─── */
+.custom-select-event {
+  width: 30%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: var(--white);
+  color: var(--text-main);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.custom-select-event:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.custom-select-event:disabled {
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ─── BOTÓN AÑADIR PAGO ─── */
+.btn-crear {
+  background-color: var(--white);
+  color: var(--primary-red);
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-crear:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  background-color: var(--tech-gray-light);
+}
+
+/* ─── SEPARADOR ─── */
+.divider {
+  border: 0;
+  border-top: 2px solid rgba(0, 0, 0, 0.05);
+  margin: 2.5rem 0;
+}
+
+/* ─── TABLA DE RESULTADOS ─── */
+.equipos-content {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background-color: var(--tech-gray-light);
+  color: var(--text-main);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 1rem;
+  border: none;
+}
+
+.table tbody td {
+  padding: 1.25rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* ─── BADGES DE ESTADO (PILLS) ─── */
+.badge-status {
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.badge-status.pagado {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.badge-status.pendiente {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.badge-status.exento {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+/* ─── BOTONES DE ACCIÓN ─── */
+.btn-action-ok {
+  background-color: var(--primary-red);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.btn-action-edit {
+  background-color: var(--text-main);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem;
+  transition: transform 0.2s;
+}
+
+.btn-action-ok:hover,
+.btn-action-edit:hover {
+  transform: scale(1.1);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  .filter-panel {
+    width: 70%;
+  }
+
+  .custom-select-event {
+    width: 60%;
+  }
+}
+
+@media (max-width: 768px) {
+  .pagos-container {
+    width: 95%;
+    margin: 1rem auto;
+  }
+
+  .filter-panel {
+    width: 100%;
+    padding: 1.5rem;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .filter-content-wrapper {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .custom-select-event {
+    width: 100%;
+  }
+
+  .btn-crear {
+    width: 100%;
+    text-align: center;
+  }
+
+  .equipos-content {
+    overflow-x: auto;
+    padding: 1rem;
+  }
+
+  .table {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .table thead {
+    display: none;
+  }
+
+  .badge-status {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.65rem;
+  }
+
+  .btn-action-ok,
+  .btn-action-edit {
+    padding: 0.4rem;
+  }
+}

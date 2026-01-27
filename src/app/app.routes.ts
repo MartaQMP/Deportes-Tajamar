@@ -7,6 +7,7 @@ import { Perfil } from './components/perfil/perfil';
 import { Cursos } from './components/cursos/cursos';
 import { Resultados } from './components/resultados/resultados';
 import { SolicitarMaterial } from './components/solicitar-material/solicitar-material';
+import { Pagos } from './components/pagos/pagos';
 
 export const routes: Routes = [
   { path: '', component: InicioSesion },
@@ -19,6 +20,7 @@ export const routes: Routes = [
       { path: 'cursos', component: Cursos },
       { path: 'resultados', component: Resultados },
       { path: 'equipos', component: Equipos },
+      { path: 'pagos', component: Pagos },
       { path: 'solicitar-material/:idEvento', component: SolicitarMaterial },
       { path: '**', redirectTo: '' },
     ],

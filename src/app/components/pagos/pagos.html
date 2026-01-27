@@ -1,0 +1,121 @@
+<div class="pagos-container">
+  <section class="filter-panel d-flex justify-content-center">
+    <div class="filter-content-wrapper">
+      <div class="filter-item">
+        <label class="filter-label">FILTRAR POR EVENTO:</label>
+
+        <select
+          class="custom-select-event w-100"
+          [(ngModel)]="idEventoSeleccionado"
+          (change)="cargarPagosDelEvento()"
+        >
+          <option [value]="0" disabled>Selecciona una fecha...</option>
+
+          @for (e of eventos; track e.idEvento) {
+            <option [value]="e.idEvento">
+              {{ e.fechaEvento | date: "EEEE, d 'de' MMMM 'de' y" }}
+            </option>
+          }
+        </select>
+      </div>
+
+      @if (permisosUsuario === 'ORGANIZADOR/ALUMNO' && idEventoSeleccionado > 0) {
+        <div class="filter-item-button">
+          <button class="btn-crear" (click)="formularioNuevoPago()">
+            <i class="bi bi-plus-circle-fill"></i> Añadir Pago
+          </button>
+        </div>
+      }
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  @if (idEventoSeleccionado > 0 && cursosConPagos.length > 0) {
+    <div class="equipos-content">
+      <table class="table table-hover align-middle custom-expandable-table">
+        <thead>
+          <tr>
+            <th style="width: 50px"></th>
+            <th>Nombre del Curso</th>
+            <th class="text-center">Actividades</th>
+            <th class="text-end pe-4">Acciones Curso</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (grupo of cursosConPagos; track grupo.idCurso) {
+            <tr
+              class="main-row"
+              data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#details' + grupo.idCurso"
+              style="cursor: pointer"
+            >
+              <td class="text-center">
+                <i class="bi bi-chevron-right toggle-icon"></i>
+              </td>
+              <td class="fw-bold text-uppercase" style="color: var(--primary-red);">
+                {{ grupo.nombreCurso }}
+              </td>
+              <td class="text-center">
+                <span class="badge rounded-pill bg-light text-dark border">
+                  {{ grupo.pagos.length }} Actividades
+                </span>
+              </td>
+              <td class="text-end pe-4">
+                <button class="btn btn-sm btn-outline-secondary border-0" title="Ver detalles">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr class="collapse-row">
+              <td colspan="4" class="p-0 border-0">
+                <div [id]="'details' + grupo.idCurso" class="collapse accordion-collapse">
+                  <div class="p-4 bg-light-subtle inner-table-container">
+                    <table class="table table-sm mb-0 bg-white shadow-sm rounded">
+                      <thead class="table-dark">
+                        <tr>
+                          <th class="ps-3">Actividad</th>
+                          <th>Precio Indiv.</th>
+                          <th class="text-center">Estado</th>
+                          <th class="text-end pe-3">Gestión</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (pago of grupo.pagos; track pago.idPago) {
+                          <tr>
+                            <td class="ps-3 fw-semibold">{{ pago.actividad }}</td>
+                            <td>{{ pago.cantidadPagada }}€</td>
+                            <td class="text-center">
+                              <span [class]="'badge-status ' + pago.estado.toLowerCase()">
+                                {{ pago.estado }}
+                              </span>
+                            </td>
+                            <td class="text-end pe-3">
+                              <button
+                                class="btn-action-ok btn-sm me-1"
+                                (click)="confirmarPago(pago); $event.stopPropagation()"
+                              >
+                                <i class="bi bi-check-lg"></i>
+                              </button>
+                              <button
+                                class="btn-action-edit btn-sm"
+                                (click)="editarPago(pago); $event.stopPropagation()"
+                              >
+                                <i class="bi bi-pencil-fill"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
