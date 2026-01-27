@@ -22,12 +22,6 @@ export class EquiposService {
     return this._http.get<Array<Color>>(environment.url + request);
   }
 
-  getDatosUsuario(token: string): Observable<usuarioLogeado> {
-    let request = environment.url + 'api/UsuariosDeportes/Perfil';
-    let header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
-    return this._http.get<usuarioLogeado>(request, { headers: header });
-  }
-
   getActividadPorId(idActividad: number): Observable<Actividad> {
     let request = 'api/actividades/' + idActividad;
     return this._http.get<Actividad>(environment.url + request);
