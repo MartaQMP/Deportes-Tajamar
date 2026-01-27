@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Login } from '../models/login';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import ResponseLogin from '../models/responseLogin';
 
 @Injectable({
   providedIn: 'root',
@@ -10,12 +11,10 @@ import { environment } from '../../environments/environment.development';
 export class LoginService {
   constructor(private _http: HttpClient) {}
 
-  crearToken(login: Login): Observable<any> {
+  crearToken(login: Login): Observable<ResponseLogin> {
     let request = 'api/auth/logineventos';
     let dataJson = JSON.stringify(login);
     let header = new HttpHeaders().set('Content-Type', 'application/json');
-    return this._http.post(environment.url + request, dataJson, { headers: header });
+    return this._http.post<ResponseLogin>(environment.url + request, dataJson, { headers: header });
   }
-  
 }
-

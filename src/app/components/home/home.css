@@ -124,6 +124,28 @@
 .scroll-container::-webkit-scrollbar-thumb { background-color: #e9ecef; border-radius: 4px; }
 
 
+/* Esta clase se añade automáticamente a la tarjeta base */
+.evento-pasado {
+  background-color: #f0f0f0; /* Fondo gris claro */
+  color: #888;               /* Texto gris oscuro */
+  border-left: 4px solid #aaa; /* Borde gris (en vez del color principal) */
+  opacity: 0.8;              /* Un poco transparente */
+}
+
+/* Opcional: Si quieres que toda la tarjeta se vea en blanco y negro */
+.evento-pasado {
+  filter: grayscale(100%);
+  opacity: 0.7;
+} 
+
+
+/* Opcional: Cambiar el estilo de la cajita de la fecha también */
+.evento-pasado .event-date-box {
+  background-color: #ccc;
+  color: #666;
+}
+
+
 /* ─── ITEMS DE EVENTOS (Basado en .dato-item) ─── */
 .timeline-list {
   display: flex;
@@ -348,21 +370,26 @@
 }
 
 
-
+.contetn-boton{
+  display: flex;
+  justify-content: space-evenly;
+}
 
 /* ─── BOTÓN DISCRETO (Estilo Secundario) ─── */
 .btn-create-discreto {
-  display: inline-flex;
+  
+  display: flex;
+  justify-content: center;
   align-items: center;
   gap: 0.6rem;
-  width: 50%;
-  
+  width: 40%;
+  margin: 0px 0px 20px 0px;
   /* Fondo blanco y borde sutil para que parezca una tarjeta más */
   background-color: var(--white);
   border: 1px solid rgba(0, 0, 0, 0.08); /* Borde gris muy suave */
   color: var(--primary-red);          /* Texto gris, no llama la atención */
   
-  padding: 0.7rem 1.5rem;
+  padding: 0.7rem 1rem;
   border-radius: 50px;                   /* Pill shape */
   font-weight: 600;
   text-decoration: none;
@@ -399,6 +426,28 @@
 .btn-create-discreto:active {
   background-color: var(--light-red);
   transform: translateY(0);
+}
+ 
+.disabled{
+  color:grey;
+  border: grey 1px solid;
+}
+.disabled:active{
+   background-color: var(--light-red);
+}
+.disabled:hover{
+   color: grey;          
+  border-color: grey;
+  background-color: #fffbfb;   
+  transform: translateY(0px);
+  box-shadow: 0 4px 12px grey; 
+}
+.actividad{
+  width: 100%;
+  margin: 20px 0px 0px 0px;
+}
+.actividad:hover{
+background-color: var(--light-red);
 }
 
 
@@ -596,4 +645,5 @@
   .calendar-header-row { flex-direction: column; gap: 1rem; align-items: stretch; }
   .calendar-controls { justify-content: center; }
 }
+
 

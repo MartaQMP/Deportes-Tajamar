@@ -1,0 +1,259 @@
+/* ─── CONTENEDOR PRINCIPAL ─── */
+.equipos-container {
+  width: 85%;
+  margin: auto;
+  margin-top: 2%;
+}
+
+/* ─── PANEL DE FILTRO SUPERIOR ─── */
+.filter-panel {
+  background: var(--white);
+  padding: 1.25rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.filter-label {
+  font-weight: 700;
+  color: var(--tech-black);
+  font-size: 0.95rem;
+}
+
+.custom-select-event {
+  border: 2px solid #eee;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: var(--primary-red);
+  outline: none;
+  transition: var(--transition);
+}
+
+.custom-select-event:focus {
+  border-color: var(--primary-red);
+}
+
+/* ─── CABECERA DE SECCIÓN ─── */
+.equipos-main-header {
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
+  border-radius: 16px 16px 0 0;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  color: var(--white);
+}
+
+.header-icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-red);
+  font-size: 1.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.equipos-main-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.color-text-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-style: italic;
+  text-transform: capitalize;
+}
+
+/* ─── CUERPO Y GRID DE EQUIPOS ─── */
+.equipos-content {
+  background: var(--white);
+  border-radius: 0 0 16px 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.equipos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ─── TARJETAS DE EQUIPO ─── */
+.team-card-fixed {
+  background: var(--white);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+  overflow: hidden;
+  height: 100%;
+}
+
+.team-card-fixed:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-team-header {
+  padding: 1rem;
+  background: var(--tech-gray-light);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.team-name {
+  font-weight: 700;
+  color: var(--tech-black);
+  font-size: 1rem;
+}
+
+/* ─── ICONOS DE ACCIÓN ─── */
+.action-icon {
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--primary-red);
+  transition: transform 0.2s;
+}
+
+.action-icon.delete:hover {
+  color: var(--primary-red-hover);
+  transform: scale(1.1);
+}
+
+/* ─── LISTA DE MIEMBROS ─── */
+.card-team-body {
+  padding: 1.25rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.member-list-static {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.member-list-static li {
+  font-size: 0.85rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f1f1f1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+}
+
+/* ─── BOTON DE APUNTARSE A EQUIPO ─── */
+.btn-apuntarme {
+  width: 100%;
+  margin-top: auto;
+  padding: 0.75rem;
+  background: var(--primary-red);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-apuntarme:hover {
+  background: var(--primary-red-hover);
+  box-shadow: 0 4px 12px rgba(242, 33, 47, 0.3);
+}
+
+.btn-apuntado {
+  width: 100%;
+  margin-top: auto;
+  padding: 4%;
+  background: var(--primary-red-disactive);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+/* ─── BOTÓN CREAR EQUIPO ─── */
+.btn-crear {
+  background: var(--primary-red);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  padding: 1%;
+  margin-left: auto;
+}
+
+.btn-crear:hover {
+  background: var(--primary-red-hover);
+  box-shadow: 0 4px 12px rgba(242, 33, 47, 0.3);
+}
+
+/* ─── FORMULARIO CREAR EQUIPO ─── */
+.swal-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 10px;
+  color: var(--text-main);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 992px) {
+  .equipos-container {
+    width: 95%;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-panel {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.5rem;
+  }
+
+  .btn-crear {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .equipos-main-header {
+    padding: 1.5rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .equipos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .equipos-container {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .equipos-main-header h2 {
+    font-size: 1.2rem;
+  }
+}
