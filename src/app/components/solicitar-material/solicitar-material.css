@@ -1316,7 +1316,8 @@
 
 /* ─── SELECT PERSONALIZADO (TEMA OSCURO - APORTAR MATERIAL) ─── */
 ::ng-deep #materialSelect,
-::ng-deep #estadoMaterial {
+::ng-deep #estadoMaterial,
+::ng-deep #actividadSelect {
   appearance: none;
   background-color: #ffffff;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'%3E%3Cpath fill='%231a1a1a' d='M7 10L2 5h10z'/%3E%3C/svg%3E");
@@ -1329,14 +1330,16 @@
 }
 
 ::ng-deep #materialSelect:hover,
-::ng-deep #estadoMaterial:hover {
+::ng-deep #estadoMaterial:hover,
+::ng-deep #actividadSelect:hover {
   background-color: #f8f9fa;
   border-color: #1a1a1a;
   box-shadow: 0 2px 8px rgba(26, 26, 26, 0.1);
 }
 
 ::ng-deep #materialSelect:focus,
-::ng-deep #estadoMaterial:focus {
+::ng-deep #estadoMaterial:focus,
+::ng-deep #actividadSelect:focus {
   border-color: #1a1a1a;
   box-shadow: 0 0 0 4px rgba(26, 26, 26, 0.1);
   background-color: #ffffff;
@@ -1345,7 +1348,8 @@
 
 /* Estilos para las opciones del select */
 ::ng-deep #materialSelect option,
-::ng-deep #estadoMaterial option {
+::ng-deep #estadoMaterial option,
+::ng-deep #actividadSelect option {
   padding: 0.75rem 1rem;
   background-color: #ffffff;
   color: #1a1a1a;
@@ -1353,12 +1357,14 @@
 }
 
 ::ng-deep #materialSelect option:hover,
-::ng-deep #estadoMaterial option:hover {
+::ng-deep #estadoMaterial option:hover,
+::ng-deep #actividadSelect option:hover {
   background-color: rgba(26, 26, 26, 0.05);
 }
 
 ::ng-deep #materialSelect option:checked,
-::ng-deep #estadoMaterial option:checked {
+::ng-deep #estadoMaterial option:checked,
+::ng-deep #actividadSelect option:checked {
   background-color: rgba(26, 26, 26, 0.1);
   color: #1a1a1a;
   font-weight: 600;
@@ -1366,14 +1372,16 @@
 
 /* Estilo para la opción por defecto (placeholder) */
 ::ng-deep #materialSelect option:first-child,
-::ng-deep #estadoMaterial option:first-child {
+::ng-deep #estadoMaterial option:first-child,
+::ng-deep #actividadSelect option:first-child {
   color: #adb5bd;
   font-style: italic;
 }
 
 /* Estado cuando no se ha seleccionado nada */
 ::ng-deep #materialSelect:invalid,
-::ng-deep #estadoMaterial:invalid {
+::ng-deep #estadoMaterial:invalid,
+::ng-deep #actividadSelect:invalid {
   color: #adb5bd;
 }
 

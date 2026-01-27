@@ -28,7 +28,7 @@
       <div class="section-header">
         <div class="section-title">
           <div class="title-icon">
-            <i class="bi bi-activity"></i>
+            <i class="bi bi-list-ul"></i>
           </div>
           <div class="title-text">
             <h2>Actividades del Evento</h2>
@@ -63,7 +63,7 @@
               
               <!-- Icono de la Actividad -->
               <div class="actividad-icon">
-                <i class="bi bi-dribbble"></i>
+                <i class="bi bi-trophy"></i>
               </div>
 
               <!-- Información de la Actividad -->
@@ -133,10 +133,6 @@
                         <i class="bi bi-calendar3"></i>
                         {{ material.fechaSolicitud | date: 'dd/MM/yyyy' }}
                       </span>
-                      <span class="meta-tag" *ngIf="material.idUsuarioAportacion">
-                        <i class="bi bi-person-check"></i>
-                        Aportado por usuario #{{ material.idUsuarioAportacion }}
-                      </span>
                     </div>
                   </div>
 
@@ -149,7 +145,7 @@
                     
                     <span class="status-label completado" *ngIf="!material.pendiente">
                       <i class="bi bi-check-circle-fill"></i>
-                      <span>Recibido</span>
+                      <span>Aportado</span>
                     </span>
                   </div>
 
