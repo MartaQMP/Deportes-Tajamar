@@ -3,7 +3,7 @@ import { ResultadosService } from '../services/resultados.service';
 import { Observable, map, of } from 'rxjs';
 
 @Pipe({
-  name: 'alumnosEquipo',
+  name: 'alumnosEquipoPipe',
   standalone: true,
 })
 export class AlumnosEquipoPipe implements PipeTransform {
