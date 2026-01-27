@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
-import Resultados from '../models/resultado';
+import Resultado from '../models/resultado';
 import Alumno from '../models/alumno';
 import Actividad from '../models/actividad';
 import Evento from '../models/evento';
@@ -15,9 +15,9 @@ import ActividadesEvento from '../models/actividadesevento';
 export class ResultadosService {
   constructor(private _http: HttpClient) {}
 
-  getResultados(): Observable<Array<Resultados>> {
+  getResultados(): Observable<Array<Resultado>> {
     let request = 'api/partidoresultado';
-    return this._http.get<Resultados[]>(environment.url + request);
+    return this._http.get<Resultado[]>(environment.url + request);
   }
 
   getUsuariosDeEquipo(idEquipo: number): Observable<Array<Alumno>> {
@@ -43,5 +43,14 @@ export class ResultadosService {
   getEventoActividades(): Observable<Array<ActividadesEvento>> {
     let request = 'api/actividadesevento';
     return this._http.get<Array<ActividadesEvento>>(environment.url + request);
+  }
+
+  postResultado(token: string, resultado: Resultado): Observable<any> {
+    let request = 'api/partidoresultado/create';
+    let dataJson = JSON.stringify(resultado);
+    let header = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', 'Bearer ' + token);
+    return this._http.post(environment.url + request, dataJson, { headers: header });
   }
 }
