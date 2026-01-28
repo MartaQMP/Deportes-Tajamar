@@ -51,12 +51,20 @@ export class Resultados implements OnInit {
   public idActividadSeleccionada: number = 0;
   public equiposEventoActividad!: Array<Equipo>;
 
+  // PARA EL ACORDEÓN PERSONALIZADO
+  public expandedPartido: number | null = null;
+
   constructor(
     private _serviceResultados: ResultadosService,
     private _router: Router,
     private _servicePerfil: PerfilService,
     private _serviceEquipos: EquiposService,
-  ) {}
+  ) { }
+
+  // TOGGLE PARA EXPANDIR/COLAPSAR ACORDEÓN
+  togglePartido(idPartido: number): void {
+    this.expandedPartido = this.expandedPartido === idPartido ? null : idPartido;
+  }
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token');

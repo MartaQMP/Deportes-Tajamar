@@ -1,163 +1,903 @@
-/* ─── CONTENEDOR PRINCIPAL ─── */
-.tajamar-container {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 0 1.5rem;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+/* ══════════════════════════════════════════════════════════════
+   RESULTADOS - Diseño Homogéneo con Dashboard, Perfil y Materiales
+   ══════════════════════════════════════════════════════════════ */
+
+/* ─── PÁGINA PRINCIPAL ─── */
+.resultados-page {
+  min-height: calc(100vh - 80px);
+  background: var(--tech-gray-light);
 }
 
-/* ─── SECCIÓN DE FILTROS ─── */
-.filter-container {
-  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
-  border-radius: 16px;
-  padding: 2rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
+/* ═══════════════════════════════════════════════════════════════
+   HEADER DE RESULTADOS
+   ═══════════════════════════════════════════════════════════════ */
+.resultados-header {
+  background: var(--white);
+  padding: 1.25rem 2rem;
+  border-bottom: 3px solid var(--primary-red);
 }
 
-.filter-group {
+.resultados-header .header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resultados-header .header-title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--tech-black);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.resultados-header .header-title i {
+  font-size: 1.3rem;
+  color: var(--primary-red);
+}
+
+.resultados-header .header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--light-red);
+  color: var(--primary-red);
+}
+
+.resultados-header .header-badge i {
+  font-size: 0.45rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CONTENIDO PRINCIPAL
+   ═══════════════════════════════════════════════════════════════ */
+.resultados-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.5rem;
 }
 
-.filter-group label {
-  font-weight: 700;
+/* ═══════════════════════════════════════════════════════════════
+   SECCIÓN DE FILTROS
+   ═══════════════════════════════════════════════════════════════ */
+.filtros-section {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+/* ─── SECTION HEADER ─── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: var(--white);
+  border-bottom: 2px solid var(--light-red);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(242, 33, 47, 0.25);
+}
+
+.title-icon i {
+  font-size: 1.3rem;
   color: var(--white);
+}
+
+.title-icon.secondary {
+  background: linear-gradient(135deg, var(--tech-black) 0%, #374151 100%);
+  box-shadow: 0 4px 12px rgba(26, 26, 26, 0.25);
+}
+
+.title-text h2 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--tech-black);
+  margin: 0;
   text-transform: uppercase;
-  font-size: 0.85rem;
   letter-spacing: 0.5px;
 }
 
-/* ─── SELECT ─── */
+.title-text p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin: 0.15rem 0 0 0;
+  font-weight: 500;
+}
+
+/* ─── CONTENIDO DE FILTROS ─── */
+.filtros-content {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.filtros-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ─── FILTRO CARD ─── */
+.filtro-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--tech-gray-light);
+  border-radius: 12px;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.filtro-card:hover {
+  background: var(--light-red);
+  border-color: rgba(242, 33, 47, 0.1);
+}
+
+.filtro-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.filtro-icon i {
+  font-size: 1.15rem;
+  color: var(--primary-red);
+}
+
+.filtro-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filtro-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ─── SELECT PERSONALIZADO ─── */
 .select-wrapper {
   position: relative;
 }
 
 .custom-select {
   width: 100%;
-  padding: 0.85rem 1rem;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: var(--white);
-  font-size: 0.95rem;
-  color: var(--text-main);
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  background-color: #f8fafc;
+  font-size: 0.85rem;
+  color: #1e293b;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   appearance: none;
   -webkit-appearance: none;
 }
 
 .custom-select:hover {
-  background-color: var(--tech-gray-light);
+  border-color: var(--primary-red);
+  background-color: var(--white);
 }
 
-.select-wrapper::after {
-  content: '▼';
+.custom-select:focus {
+  outline: none;
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 4px rgba(242, 33, 47, 0.15);
+}
+
+.select-arrow {
   position: absolute;
-  right: 15px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
   pointer-events: none;
+  transition: var(--transition);
 }
 
-/* ─── BOTONES MOSTRAR Y CREAR ─── */
-.filter-mostrar {
+.custom-select:focus+.select-arrow {
+  color: var(--primary-red);
+}
+
+/* ─── ACCIONES DE FILTROS ─── */
+.filtros-actions {
   display: flex;
+  gap: 1rem;
   justify-content: flex-start;
-  width: 100%;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.filter-crear {
+.btn-filtro {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+}
+
+.btn-reset-filtro {
+  background: var(--tech-gray-light);
+  color: var(--text-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.btn-reset-filtro:hover {
+  background: var(--white);
+  color: var(--tech-black);
+  border-color: rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.btn-reset-filtro i {
+  transition: transform 0.3s ease;
+}
+
+.btn-reset-filtro:hover i {
+  transform: rotate(180deg);
+}
+
+.btn-crear-resultado {
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
+  color: var(--white);
+  box-shadow: 0 4px 12px rgba(242, 33, 47, 0.25);
+}
+
+.btn-crear-resultado:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(242, 33, 47, 0.35);
+}
+
+.btn-crear-resultado i {
+  transition: transform 0.3s ease;
+}
+
+.btn-crear-resultado:hover i {
+  transform: rotate(90deg);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SECCIÓN DE PARTIDOS
+   ═══════════════════════════════════════════════════════════════ */
+.partidos-section {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+/* ─── STATS BADGES ─── */
+.resultados-stats {
   display: flex;
-  justify-content: flex-end;
-  width: 100%;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-/* ─── SEPARADOR ─── */
-.divider {
-  border: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  margin: 2.5rem 0;
+.stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
 }
 
-/* ─── ACORDEÓN DE RESULTADOS ─── */
-.results-list .accordion {
-  --bs-accordion-bg: var(--white);
-  --bs-accordion-border-color: rgba(0, 0, 0, 1);
-  --bs-accordion-border-radius: 12px;
-  --bs-accordion-inner-border-radius: 12px;
-  --bs-accordion-btn-focus-box-shadow: none;
+.stat-badge.total {
+  background: var(--light-red);
+  color: var(--primary-red);
+  border: 1px solid rgba(242, 33, 47, 0.2);
+}
+
+.stat-badge i {
+  font-size: 0.7rem;
+}
+
+/* ─── CONTENIDO DE PARTIDOS ─── */
+.partidos-content {
+  padding: 1.25rem 1.5rem 1.5rem;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.partidos-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.partidos-content::-webkit-scrollbar-thumb {
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+/* ─── GRID DE PARTIDOS ─── */
+.partidos-grid {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.accordion-item {
-  border: 1px solid rgba(0, 0, 0, 0.2) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+/* ═══════════════════════════════════════════════════════════════
+   ACORDEÓN DE PARTIDOS
+   ═══════════════════════════════════════════════════════════════ */
+.partido-accordion {
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: var(--transition);
 }
 
-.accordion-button {
-  padding: 1.25rem 1.5rem;
+.partido-accordion:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── CABECERA DEL PARTIDO ─── */
+.partido-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  background: var(--tech-gray-light);
+  transition: var(--transition);
+  border-bottom: 2px solid transparent;
+}
+
+.partido-header:hover {
+  background: var(--light-red);
+}
+
+.partido-header.expanded {
+  background: var(--light-red);
+  border-bottom-color: rgba(242, 33, 47, 0.15);
+}
+
+/* ─── EQUIPO INFO ─── */
+.equipo-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.equipo-info.local {
+  justify-content: flex-start;
+}
+
+.equipo-info.visitante {
+  justify-content: flex-end;
+}
+
+.equipo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.equipo-icon i {
+  font-size: 1rem;
+  color: var(--primary-red);
+}
+
+.equipo-nombre {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--tech-black);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── MARCADOR BOX ─── */
+.marcador-box {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-hover) 100%);
+  border-radius: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(242, 33, 47, 0.25);
+}
+
+.marcador-box .puntos {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-main);
-  background-color: var(--white);
-  transition: all 0.3s ease;
+  color: var(--white);
+  min-width: 24px;
   text-align: center;
 }
 
-.accordion-button:not(.collapsed) {
-  background-color: var(--tech-gray-light);
+.marcador-box .separador {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ─── TOGGLE DEL ACORDEÓN ─── */
+.partido-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  transition: var(--transition);
+}
+
+.partido-toggle i {
+  font-size: 1rem;
+  color: var(--tech-black);
+  transition: transform 0.3s ease;
+}
+
+.partido-toggle i.rotated {
+  transform: rotate(180deg);
+}
+
+.partido-header:hover .partido-toggle {
+  background: var(--white);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── CONTENIDO DESPLEGABLE ─── */
+.partido-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  background: var(--white);
+}
+
+.partido-content.expanded {
+  max-height: 400px;
+  padding: 1.25rem;
+}
+
+/* ─── CONTENEDOR DE JUGADORES ─── */
+.jugadores-container {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.jugadores-equipo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.jugadores-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--light-red);
+}
+
+.jugadores-equipo.local .jugadores-header {
+  justify-content: flex-start;
+}
+
+.jugadores-equipo.visitante .jugadores-header {
+  justify-content: flex-end;
+}
+
+.jugadores-header i {
+  font-size: 0.9rem;
   color: var(--primary-red);
-  box-shadow: none;
 }
 
-/* ─── INDICADOR ROJO LA ABRIRSE EL ACORDEON ─── */
-.accordion-button:not(.collapsed)::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  height: 70%;
-  width: 4px;
-  background-color: var(--primary-red);
-  border-radius: 0 4px 4px 0;
+.jugadores-header span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--tech-black);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }
 
-.accordion-body {
-  padding: 1.5rem;
-  background-color: var(--white);
-  border-top: 1px solid rgba(0, 0, 0, 0.04);
+.jugadores-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.jugador-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--tech-gray-light);
+  border-radius: 8px;
+  transition: var(--transition);
+}
+
+.jugadores-equipo.local .jugador-item {
+  justify-content: flex-start;
+}
+
+.jugadores-equipo.visitante .jugador-item {
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+}
+
+.jugador-item:hover {
+  background: var(--light-red);
+  transform: translateX(4px);
+}
+
+.jugadores-equipo.visitante .jugador-item:hover {
+  transform: translateX(-4px);
+}
+
+.jugador-item i {
+  font-size: 0.8rem;
   color: var(--text-secondary);
-  line-height: 1.6;
 }
 
-/* ─── FORMULARIO CREAR RESULTADO ─── */
+.jugador-item span {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--tech-black);
+}
+
+/* ─── VERSUS DIVIDER ─── */
+.versus-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.versus-divider span {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  background: var(--tech-gray-light);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  letter-spacing: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ESTADO VACÍO
+   ═══════════════════════════════════════════════════════════════ */
+.empty-resultados {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.empty-resultados .empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--tech-gray-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.empty-resultados .empty-icon i {
+  font-size: 2rem;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.empty-resultados h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--tech-black);
+  margin: 0 0 0.35rem 0;
+}
+
+.empty-resultados p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 400px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ESTILOS SWEETALERT - CREAR RESULTADO
+   ═══════════════════════════════════════════════════════════════ */
 .swal-form {
   display: flex;
   flex-direction: column;
-  padding: 0 10px;
-  color: var(--text-main);
-  text-align: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  text-align: left;
 }
 
-.puntos {
-  width: 60%;
-  margin: auto;
-  text-align: center;
+.swal-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--tech-black);
+  margin-bottom: 0.35rem;
 }
 
-/* ─── RESPONSIVE ─── */
-@media (max-width: 768px) {
-  .filter-container {
+.swal-label i {
+  font-size: 0.9rem;
+  color: var(--primary-red);
+}
+
+.swal-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: var(--white);
+  font-size: 0.9rem;
+  color: var(--tech-black);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 0.5rem;
+}
+
+.swal-select:focus {
+  outline: none;
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(242, 33, 47, 0.1);
+}
+
+.swal-puntos-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.swal-puntos-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.swal-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: var(--white);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--tech-black);
+  text-align: center;
+  transition: var(--transition);
+}
+
+.swal-input:focus {
+  outline: none;
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(242, 33, 47, 0.1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Tablets */
+@media (max-width: 991.98px) {
+  .resultados-header .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .section-title {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .filtros-grid {
     grid-template-columns: 1fr;
-    padding: 1.5rem;
+  }
+
+  .filtros-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-filtro {
+    justify-content: center;
+  }
+
+  .jugadores-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .versus-divider {
+    padding: 0.5rem 0;
+  }
+
+  .jugadores-equipo.visitante .jugadores-header {
+    justify-content: flex-start;
+  }
+
+  .jugadores-equipo.visitante .jugador-item {
+    justify-content: flex-start;
+    flex-direction: row;
+  }
+
+  .jugadores-equipo.visitante .jugador-item:hover {
+    transform: translateX(4px);
+  }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+  .resultados-main {
+    padding: 1rem;
+  }
+
+  .resultados-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .resultados-header .header-title {
+    font-size: 1.15rem;
+  }
+
+  .section-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .title-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .title-icon i {
+    font-size: 1.1rem;
+  }
+
+  .filtros-content,
+  .partidos-content {
+    padding: 1rem 1.25rem 1.25rem;
+  }
+
+  .filtro-card {
+    padding: 0.85rem;
+  }
+
+  .filtro-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .partido-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .equipo-info {
+    flex: 1 1 40%;
+  }
+
+  .marcador-box {
+    order: -1;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .partido-toggle {
+    position: absolute;
+    top: 0.85rem;
+    right: 1rem;
+    width: 28px;
+    height: 28px;
+  }
+
+  .partido-accordion {
+    position: relative;
+  }
+
+  .equipo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .equipo-nombre {
+    font-size: 0.85rem;
+  }
+}
+
+/* Extra small */
+@media (max-width: 575.98px) {
+  .marcador-box .puntos {
+    font-size: 1.1rem;
+  }
+
+  .jugador-item {
+    padding: 0.4rem 0.6rem;
+  }
+
+  .jugador-item span {
+    font-size: 0.8rem;
+  }
+
+  .swal-puntos-row {
+    grid-template-columns: 1fr;
   }
 }
