@@ -1,157 +1,247 @@
-<div class="tajamar-container">
-  <section class="filter-container">
-    <div class="filter-group">
-      <form #form="ngForm">
-        <label for="evento" class="form-label">Filtrar por evento:</label>
-        <div class="select-wrapper">
-          <select
-            id="evento"
-            class="custom-select"
-            name="evento"
-            [(ngModel)]="idEventoSeleccionado"
-            (change)="filtrarPorEvento($event)"
-          >
-            <option [value]="0" disabled>Selecciona una fecha</option>
-            @for (evento of eventos; track evento.idEvento) {
-              <option [value]="evento.idEvento">
-                {{ evento.fechaEvento | date: "EEEE, d 'de' MMMM 'de' y" }}
-              </option>
-            }
-          </select>
-        </div>
-      </form>
-      <div class="filter-mostrar mt-2">
-        <button
-          type="button"
-          class="btn btn-outline-light btn-sm d-flex align-items-center gap-2"
-          (click)="limpiarFiltros()"
-        >
-          <i class="bi bi-arrow-clockwise"></i> Mostrar todos
-        </button>
+<div class="resultados-page">
+  <!-- ═══════════════════════════════════════════════════════════════
+       HEADER DE RESULTADOS
+       ═══════════════════════════════════════════════════════════════ -->
+  <header class="resultados-header">
+    <div class="header-content">
+      <h1 class="header-title">
+        <i class="bi bi-trophy"></i>
+        Resultados de Partidos
+      </h1>
+      <div class="header-badge">
+        <i class="bi bi-circle-fill"></i>
+        {{ resultadosAMostrar?.length || 0 }} partidos
       </div>
     </div>
+  </header>
 
-    <div class="filter-group">
-      <form #form="ngForm">
-        <label for="deporte" class="form-label">Filtrar por actividad:</label>
-        <div class="select-wrapper">
-          <select
-            id="deporte"
-            class="custom-select"
-            name="deporte"
-            [(ngModel)]="idActividadSeleccionada"
-            (change)="filtrarPorActividad($event)"
-          >
-            <option [value]="0" disabled>Selecciona una actividad</option>
-            @for (actividad of actividades; track actividad.idActividad) {
-              <option [value]="actividad.idActividad">{{ actividad.nombre }}</option>
-            }
-          </select>
+  <!-- ═══════════════════════════════════════════════════════════════
+       CONTENIDO PRINCIPAL
+       ═══════════════════════════════════════════════════════════════ -->
+  <main class="resultados-main">
+    <!-- ─── SECCIÓN DE FILTROS ─── -->
+    <section class="filtros-section">
+      <div class="section-header">
+        <div class="section-title">
+          <div class="title-icon">
+            <i class="bi bi-funnel"></i>
+          </div>
+          <div class="title-text">
+            <h2>Filtros de Búsqueda</h2>
+            <p>Encuentra partidos por evento o actividad</p>
+          </div>
         </div>
-      </form>
-      @if (permisosUsuario == 'CAPITAN/ALUMNO' && esCapitanEnEvento) {
-        <div class="filter-crear mt-2">
-          <button
-            type="button"
-            class="btn btn-outline-light btn-sm d-flex align-items-center gap-2"
-            (click)="formularioCrearResultado()"
-          >
-            <i class="bi bi-plus-lg"></i> Crear Resultado
-          </button>
-        </div>
-      }
-    </div>
-  </section>
+      </div>
 
-  <hr class="divider" />
-
-  <section class="results-list">
-    <div class="accordion" id="accordionExample">
-      @for (resultado of this.resultadosAMostrar; track resultado.idPartidoResultado) {
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              [attr.data-bs-target]="'#collapse' + resultado.idPartidoResultado"
-              aria-expanded="false"
-              [attr.aria-controls]="'collapse' + resultado.idPartidoResultado"
-            >
-              <div class="d-flex justify-content-between w-100 pe-4">
-                <span class="text-start" style="flex: 1">{{
-                  resultado.idEquipoLocal | nombreEquipoPipe | async
-                }}</span>
-                <span class="fw-bold px-3"
-                  >{{ resultado.puntosLocal }} - {{ resultado.puntosVisitante }}</span
-                >
-                <span class="text-end" style="flex: 1">{{
-                  resultado.idEquipoVisitante | nombreEquipoPipe | async
-                }}</span>
-              </div>
-            </button>
-          </h2>
-
-          <div
-            [id]="'collapse' + resultado.idPartidoResultado"
-            class="accordion-collapse collapse"
-            data-bs-parent="#accordionExample"
-          >
-            <div class="accordion-body">
-              <div class="row">
-                <div class="col-md-6 border-end">
-                  @for (
-                    alumno of resultado.idEquipoLocal | alumnosEquipoPipe | async;
-                    track alumno.idAlumno
-                  ) {
-                    <p class="mb-1 text-start w-100">{{ alumno.usuario }}</p>
-                  }
+      <div class="filtros-content">
+        <div class="filtros-grid">
+          <!-- Filtro por Evento -->
+          <div class="filtro-card">
+            <div class="filtro-icon">
+              <i class="bi bi-calendar-event"></i>
+            </div>
+            <div class="filtro-body">
+              <label for="evento" class="filtro-label">Filtrar por Evento</label>
+              <form #form="ngForm">
+                <div class="select-wrapper">
+                  <select id="evento" class="custom-select" name="evento" [(ngModel)]="idEventoSeleccionado"
+                    (change)="filtrarPorEvento($event)">
+                    <option [value]="0" disabled>Selecciona una fecha</option>
+                    @for (evento of eventos; track evento.idEvento) {
+                    <option [value]="evento.idEvento">
+                      {{ evento.fechaEvento | date: "EEEE, d 'de' MMMM 'de' y" }}
+                    </option>
+                    }
+                  </select>
+                  <i class="bi bi-chevron-down select-arrow"></i>
                 </div>
-                <div class="col-md-6">
-                  @for (
-                    alumno of resultado.idEquipoVisitante | alumnosEquipoPipe | async;
-                    track alumno.idAlumno
-                  ) {
-                    <p class="mb-1 text-end w-100">{{ alumno.usuario }}</p>
-                  }
+              </form>
+            </div>
+          </div>
+
+          <!-- Filtro por Actividad -->
+          <div class="filtro-card">
+            <div class="filtro-icon">
+              <i class="bi bi-dribbble"></i>
+            </div>
+            <div class="filtro-body">
+              <label for="deporte" class="filtro-label">Filtrar por Actividad</label>
+              <form #form="ngForm">
+                <div class="select-wrapper">
+                  <select id="deporte" class="custom-select" name="deporte" [(ngModel)]="idActividadSeleccionada"
+                    (change)="filtrarPorActividad($event)">
+                    <option [value]="0" disabled>Selecciona una actividad</option>
+                    @for (actividad of actividades; track actividad.idActividad) {
+                    <option [value]="actividad.idActividad">{{ actividad.nombre }}</option>
+                    }
+                  </select>
+                  <i class="bi bi-chevron-down select-arrow"></i>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones de Filtros -->
+        <div class="filtros-actions">
+          <button type="button" class="btn-filtro btn-reset-filtro" (click)="limpiarFiltros()">
+            <i class="bi bi-arrow-clockwise"></i>
+            Mostrar Todos
+          </button>
+
+          @if (permisosUsuario == 'CAPITAN/ALUMNO' && esCapitanEnEvento) {
+          <button type="button" class="btn-filtro btn-crear-resultado" (click)="formularioCrearResultado()">
+            <i class="bi bi-plus-lg"></i>
+            Crear Resultado
+          </button>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECCIÓN DE RESULTADOS ─── -->
+    <section class="partidos-section">
+      <div class="section-header">
+        <div class="section-title">
+          <div class="title-icon secondary">
+            <i class="bi bi-clipboard2-data"></i>
+          </div>
+          <div class="title-text">
+            <h2>Partidos Registrados</h2>
+            <p>Consulta los marcadores y equipos</p>
+          </div>
+        </div>
+        <div class="resultados-stats">
+          <span class="stat-badge total">
+            <i class="bi bi-trophy"></i>
+            {{ resultadosAMostrar?.length || 0 }} partidos
+          </span>
+        </div>
+      </div>
+
+      <div class="partidos-content">
+        @if (resultadosAMostrar && resultadosAMostrar.length > 0) {
+        <div class="partidos-grid">
+          @for (resultado of resultadosAMostrar; track resultado.idPartidoResultado) {
+          <div class="partido-accordion">
+            <!-- Cabecera del Partido -->
+            <div class="partido-header" [class.expanded]="expandedPartido === resultado.idPartidoResultado"
+              (click)="togglePartido(resultado.idPartidoResultado)">
+              <!-- Equipo Local -->
+              <div class="equipo-info local">
+                <div class="equipo-icon">
+                  <i class="bi bi-people-fill"></i>
+                </div>
+                <span class="equipo-nombre">{{ resultado.idEquipoLocal | nombreEquipoPipe | async }}</span>
+              </div>
+
+              <!-- Marcador -->
+              <div class="marcador-box">
+                <span class="puntos local">{{ resultado.puntosLocal }}</span>
+                <span class="separador">-</span>
+                <span class="puntos visitante">{{ resultado.puntosVisitante }}</span>
+              </div>
+
+              <!-- Equipo Visitante -->
+              <div class="equipo-info visitante">
+                <span class="equipo-nombre">{{ resultado.idEquipoVisitante | nombreEquipoPipe | async }}</span>
+                <div class="equipo-icon">
+                  <i class="bi bi-people-fill"></i>
+                </div>
+              </div>
+
+              <!-- Toggle -->
+              <div class="partido-toggle">
+                <i class="bi bi-chevron-down" [class.rotated]="expandedPartido === resultado.idPartidoResultado"></i>
+              </div>
+            </div>
+
+            <!-- Contenido Desplegable -->
+            <div class="partido-content" [class.expanded]="expandedPartido === resultado.idPartidoResultado">
+              <div class="jugadores-container">
+                <!-- Jugadores Local -->
+                <div class="jugadores-equipo local">
+                  <div class="jugadores-header">
+                    <i class="bi bi-house-fill"></i>
+                    <span>Equipo Local</span>
+                  </div>
+                  <div class="jugadores-lista">
+                    @for (alumno of resultado.idEquipoLocal | alumnosEquipoPipe | async; track alumno.idAlumno) {
+                    <div class="jugador-item">
+                      <i class="bi bi-person-fill"></i>
+                      <span>{{ alumno.usuario }}</span>
+                    </div>
+                    }
+                  </div>
+                </div>
+
+                <!-- Separador Visual -->
+                <div class="versus-divider">
+                  <span>VS</span>
+                </div>
+
+                <!-- Jugadores Visitante -->
+                <div class="jugadores-equipo visitante">
+                  <div class="jugadores-header">
+                    <i class="bi bi-airplane-fill"></i>
+                    <span>Equipo Visitante</span>
+                  </div>
+                  <div class="jugadores-lista">
+                    @for (alumno of resultado.idEquipoVisitante | alumnosEquipoPipe | async; track alumno.idAlumno) {
+                    <div class="jugador-item">
+                      <i class="bi bi-person-fill"></i>
+                      <span>{{ alumno.usuario }}</span>
+                    </div>
+                    }
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          }
         </div>
-      }
-    </div>
-  </section>
+        } @else {
+        <!-- Estado Vacío -->
+        <div class="empty-resultados">
+          <div class="empty-icon">
+            <i class="bi bi-trophy"></i>
+          </div>
+          <h3>No hay resultados disponibles</h3>
+          <p>Aún no se han registrado partidos o los filtros no coinciden con ningún resultado.</p>
+        </div>
+        }
+      </div>
+    </section>
+  </main>
+
+  <!-- Formulario Oculto para SweetAlert -->
   <div style="display: none" #formCrearResultados name="formCrearResultados">
     <div class="swal-form" #formNuevoResultado name="formNuevoResultado">
-      <label class="form-label">Selecciona el equipo Local:</label>
-      <select
-        class="form-select puntos"
-        (change)="actualizarFiltroEquipos('local')"
-        name="equipoLocal"
-        #equipoLocal
-      >
+      <label class="swal-label"><i class="bi bi-house"></i> Equipo Local:</label>
+      <select class="swal-select" (change)="actualizarFiltroEquipos('local')" name="equipoLocal" #equipoLocal>
         @for (equipos of equiposLocales; track equipos.idEquipo) {
-          <option value="{{ equipos.idEquipo }}">{{ equipos.nombreEquipo }}</option>
+        <option value="{{ equipos.idEquipo }}">{{ equipos.nombreEquipo }}</option>
         }
       </select>
-      <br />
-      <label class="form-label">Selecciona el equipo Visitante:</label>
-      <select
-        class="form-select puntos"
-        (change)="actualizarFiltroEquipos('visitante')"
-        name="equipoVisitante"
-        #equipoVisitante
-      >
+
+      <label class="swal-label"><i class="bi bi-airplane"></i> Equipo Visitante:</label>
+      <select class="swal-select" (change)="actualizarFiltroEquipos('visitante')" name="equipoVisitante"
+        #equipoVisitante>
         @for (equipos of equiposVisitantes; track equipos.idEquipo) {
-          <option value="{{ equipos.idEquipo }}">{{ equipos.nombreEquipo }}</option>
+        <option value="{{ equipos.idEquipo }}">{{ equipos.nombreEquipo }}</option>
         }
       </select>
-      <br />
-      <label class="form-label">Puntos Equipo Local:</label>
-      <input class="form-control puntos" type="number" name="puntosLocal" #puntosLocal />
-      <label class="form-label">Puntos Equipo Visitante:</label>
-      <input class="form-control puntos" type="number" name="puntosVisitante" #puntosVisitante />
+
+      <div class="swal-puntos-row">
+        <div class="swal-puntos-group">
+          <label class="swal-label"><i class="bi bi-1-circle"></i> Puntos Local:</label>
+          <input class="swal-input" type="number" name="puntosLocal" #puntosLocal min="0" />
+        </div>
+        <div class="swal-puntos-group">
+          <label class="swal-label"><i class="bi bi-2-circle"></i> Puntos Visitante:</label>
+          <input class="swal-input" type="number" name="puntosVisitante" #puntosVisitante min="0" />
+        </div>
+      </div>
     </div>
   </div>
 </div>
