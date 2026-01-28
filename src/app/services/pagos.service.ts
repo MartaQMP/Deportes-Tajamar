@@ -22,18 +22,21 @@ export class PagoService {
     return this._http.get<Array<Pago>>(environment.url + request);
   }
 
-  putPagoCompleto(token: string, pago: number): Observable<any> {
-    let request = 'api/pagos/update';
-    let dataJson = JSON.stringify(pago);
-    let header = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .set('Authorization', 'Bearer ' + token);
-    return this._http.put(environment.url + request, dataJson, { headers: header });
-  }
-
   putPago(token: string, idPago: number, cantidad: number, estado: string): Observable<any> {
     let request = 'api/pagos/updatepago/' + idPago + '/' + cantidad + '/' + estado;
     let header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
     return this._http.put(environment.url + request, {}, { headers: header });
+  }
+
+  postPago(
+    token: string,
+    idEventoActividad: number,
+    idCurso: number,
+    cantidad: number,
+  ): Observable<any> {
+    let request =
+      'api/Pagos/PagoEventoActividad/' + idEventoActividad + '/' + idCurso + '/' + cantidad;
+    let header = new HttpHeaders().set('Authorization', 'Bearer ' + token);
+    return this._http.post(environment.url + request, {}, { headers: header });
   }
 }
