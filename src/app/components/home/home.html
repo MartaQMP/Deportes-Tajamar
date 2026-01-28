@@ -1,238 +1,220 @@
 <div class="dashboard-wrapper">
-
-  <h1 class="welcome">Bienvenido, {{usuario.nombre}}</h1>
+  <h1 class="welcome">Bienvenido, {{ usuario.nombre }}</h1>
 
   <div class="dashboard-grid">
-
     <section class="panel-section">
       <div class="section-header">
         <h3><i class="fas fa-calendar-check" style="margin-right: 8px;"></i> Próximos Eventos</h3>
-        @if(eventos.length > 0) {
-        <span class="badge-count">{{eventos.length}} Activos</span>
+        @if (eventos.length > 0) {
+          <span class="badge-count">{{ eventos.length }} Activos</span>
         }
       </div>
 
       <div class="scroll-container">
-        @if(eventos.length <= 0){ <div class="empty-state">
-          <div class="empty-icon">📅</div>
-          <p>No hay eventos programados</p>
-          <small>Revisa más tarde para nuevas fechas</small>
-      </div>
-      } @else {
-      <div class="timeline-list">
-        @for(e of eventos; track $index){
-        <div class="event-card" [class.evento-pasado]="esPasado(e.idEvento)"
-          (click)="MostrarActividades(e.idEvento)">
-
-          <div class="event-date-box">
-            <span class="day">{{ e.fechaEvento | date: 'dd' }}</span>
-            <span class="month">{{ e.fechaEvento | date: 'MMM' }}</span>
+        @if (eventos.length <= 0) {
+          <div class="empty-state">
+            <div class="empty-icon">📅</div>
+            <p>No hay eventos programados</p>
+            <small>Revisa más tarde para nuevas fechas</small>
           </div>
-
-          <div class="event-info">
-            <h4>{{ e.fechaEvento | date: 'EEEE' }}, Evento #{{ e.idEvento }}</h4>
-            <span class="tap-hint">
-              {{verProfesorEvento(e.idProfesor)}}
-              <i class="fas fa-arrow-right"></i>
-            </span>
-          </div>
-        </div>
-        }
-      </div>
-      }
-  </div>
-  @if(usuario.idRole == 3 || usuario.idRole ==4){
-
-    <div class="contetn-boton">
-      <button (click)="abrirModalFecha()" class="btn-create-discreto">
-        <i class="fas fa-plus"></i>
-        Crear evento
-      </button>
-      @if(eventoSeleccionado){
-        
-        <button (click)="eliminarEvento()" class="btn-create-discreto">
-          <i class="fas fa-plus"></i>
-        Eliminar evento
-      </button>
-    }@else{
-      <button class="btn-create-discreto disabled" disabled>
-        <i class="fas fa-plus"></i>
-        Eliminar evento
-      </button>
-    }
-  </div>
-}
-  </section>
-
-  <section class="panel-section activities-panel">
-
-    <div class="section-header">
-      @if(eventoSeleccionado){
-      <h3><i class="fas fa-dumbbell" style="margin-right: 8px;"></i> Actividades Disponibles (Evento
-        #{{idEventoSeleccionado}})</h3>
-      <a [routerLink]="['/deportes/solicitar-material', idEventoSeleccionado]" class="btn-solicitar-material">
-        <i class="bi bi-send-fill"></i>
-        Solicitar Material
-      </a>
-      } @else {
-      <h3><i class="fas fa-dumbbell" style="margin-right: 8px;"></i> Actividades Disponibles</h3>
-      }
-    </div>
-
-    <div class="scroll-container">
-
-      @if(actividades.length <= 0) { 
-        <div class="empty-state dashed">
-        @if(!eventoSeleccionado ) {
-        <p>Selecciona un evento para ver sus actividades.</p>
         } @else {
-        <p>No hay actividades disponibles para este evento.</p>
+          <div class="timeline-list">
+            @for (e of eventos; track $index) {
+              <div class="event-card" [class.evento-pasado]="esPasado(e.idEvento)"
+                (click)="MostrarActividades(e.idEvento)">
+                <div class="event-date-box">
+                  <span class="day">{{ e.fechaEvento | date: 'dd' }}</span>
+                  <span class="month">{{ e.fechaEvento | date: 'MMM' }}</span>
+                </div>
+
+                <div class="event-info">
+                  <h4>{{ e.fechaEvento | date: 'EEEE' }}, Evento #{{ e.idEvento }}</h4>
+                  <span class="tap-hint">
+                    {{ verProfesorEvento(e.idProfesor) }}
+                    <i class="fas fa-arrow-right"></i>
+                  </span>
+                </div>
+              </div>
+            }
+          </div>
         }
-    </div>
-    }
-
-    @else {
-    <div class="activities-grid">
-      @for(a of actividades; track $index) {
-
-      <div class="activity-wrapper">
-
-        <button class="btn-reset" type="button" data-bs-toggle="collapse"
-          [attr.data-bs-target]="'#collapseActivity' + $index" [attr.aria-controls]="'collapseActivity' + $index"
-          aria-expanded="false">
-
-          <div class="activity-chip">
-            <div class="chip-icon-wrapper">
-              <i class="fas fa-running">👉🏻</i>
-            </div>
-
-            <span class="chip-text">{{a.nombreActividad}}</span>
-
-            <div class="chip-actions">
-              <div class="inscritos-badge" title="Personas inscritas">
-                <i class="fas fa-user-friends"></i>
-                <span>{{ personasInscritas[$index] || 0 }}</span>
-              </div>
-
-              <div class="btn-add-visual">
-                <i class="fas fa-plus"></i>
-              </div>
-            </div>
-          </div>
-        </button>
-
-        <div class="collapse mt-2" [id]="'collapseActivity' + $index">
-          <div class="card card-body details-card">
-            <p><strong>Detalles:</strong> {{a.nombreActividad}}</p>
-            <p>Mínimo de jugadores: {{a.minimoJugadores}}</p>
-
-
-            @if (obtenerPrecioActividad(a.idEventoActividad); as precioObj) {
-            <p>Precio: {{ precioObj.precioTotal }} €</p>
-            } @else {
-            <p>Precio: No definido</p>
-            }
-
-
-            <label class="custom-switch">
-              <input type="checkbox" [(ngModel)]="capitan">
-              <span class="slider"></span>
-              <span class="label-text">¿Quieres ser capitán?</span>
-            </label>
-            
-            @if (yaEstaInscrito(a.idEvento)) {
-            <button class="btn btn-sm w-100 botonConfirmar mt-3" disabled>
-              Ya te has inscrito a una actividad
-            </button>
-            }
-            @else {
-            <button class="btn btn-sm  w-100 botonConfirmar mt-3" (click)="Inscribirse(a)">
-              Confirmar Inscripción
-            </button>
-            }
-            @if(usuario.idRole == 3 || usuario.idRole ==4){
-            <div class="contetn-boton">
-                @if(obtenerPrecioActividad(a.idEventoActividad) != undefined){
-                <button (click)="anadirPrecio(a)" class="btn btn-create-discreto actividad">
-                  <i class="fas fa-plus"></i> Modificar precio
-                </button>
-                
-                }@else{
-                <button (click)="anadirPrecio(a)" class="btn btn-create-discreto actividad">
-                  <i class="fas fa-plus"></i> Añadir precio
-                </button>
-              }
-              <button class="btn btn-create-discreto actividad" (click)="eliminarActividadEvento(a)">
-                <i class="fas fa-trash"></i> Eliminar actividad
-              </button>
-
-            </div>
-          }
-
-          </div>
-        </div>
-
       </div>
+
+      @if (usuario.idRole == 3 || usuario.idRole == 4) {
+        <div class="contetn-boton">
+          <button (click)="abrirModalFecha()" class="btn-create-discreto">
+            <i class="fas fa-plus"></i>
+            Crear evento
+          </button>
+
+          @if (eventoSeleccionado) {
+            <button (click)="eliminarEvento()" class="btn-create-discreto">
+              <i class="fas fa-plus"></i>
+              Eliminar evento
+            </button>
+          } @else {
+            <button class="btn-create-discreto disabled" disabled>
+              <i class="fas fa-plus"></i>
+              Eliminar evento
+            </button>
+          }
+        </div>
       }
-    </div>
-    }
+    </section>
 
-</div>
-@if(usuario.idRole == 3 || usuario.idRole ==4){
-@if(eventoSeleccionado){
+    <section class="panel-section activities-panel">
+      <div class="section-header">
+        @if (eventoSeleccionado) {
+          <h3><i class="fas fa-dumbbell" style="margin-right: 8px;"></i> Actividades Disponibles (Evento #{{ idEventoSeleccionado }})</h3>
+          <a [routerLink]="['/deportes/solicitar-material', idEventoSeleccionado]" class="btn-solicitar-material">
+            <i class="bi bi-send-fill"></i>
+            Solicitar / Aportar Material
+          </a>
+        } @else {
+          <h3><i class="fas fa-dumbbell" style="margin-right: 8px;"></i> Actividades Disponibles</h3>
+        }
+      </div>
 
-<div class="contetn-boton">
-  <button (click)="abrirModalActividadCrear()" class="btn-create-discreto">
-    <i class="fas fa-plus"></i>
-    Crear actividad
-  </button>
-  @if (!esPasado(idEventoSeleccionado)) {
-  <button (click)="abrirModalActividad()" class="btn-create-discreto">
-    <i class="fas fa-plus"></i> Añadir actividad
-  </button>
-}@else{
-  <button (click)="abrirModalActividad()" class="btn-create-discreto disabled" disabled>
-    <i class="fas fa-plus"></i> Evento finalizado
-  </button>
-}
-</div>
-}@else{
-<div class="contetn-boton">
-  <button (click)="abrirModalActividadCrear()" class="btn-create-discreto">
-    <i class="fas fa-plus"></i>
-    Crear actividad
-  </button>
-  <button (click)="abrirModalActividad()" class="btn-create-discreto disabled" disabled>
-    <i class="fas fa-plus"></i>
-    Selecciona evento
-  </button>
-</div>
+      <div class="scroll-container">
+        @if (actividades.length <= 0) {
+          <div class="empty-state dashed">
+            @if (!eventoSeleccionado) {
+              <p>Selecciona un evento para ver sus actividades.</p>
+            } @else {
+              <p>No hay actividades disponibles para este evento.</p>
+            }
+          </div>
+        } @else {
+          <div class="activities-grid">
+            @for (a of actividades; track $index) {
+              <div class="activity-wrapper">
+                <button class="btn-reset" type="button" data-bs-toggle="collapse"
+                  [attr.data-bs-target]="'#collapseActivity' + $index" [attr.aria-controls]="'collapseActivity' + $index"
+                  aria-expanded="false">
+                  <div class="activity-chip">
+                    <div class="chip-icon-wrapper">
+                      <i class="fas fa-running">👉🏻</i>
+                    </div>
 
-}
-}
-</section>
+                    <span class="chip-text">{{ a.nombreActividad }}</span>
 
+                    <div class="chip-actions">
+                      <div class="inscritos-badge" title="Personas inscritas">
+                        <i class="fas fa-user-friends"></i>
+                        <span>{{ personasInscritas[$index] || 0 }}</span>
+                      </div>
 
-</div>
-<div class="calendar-section">
-  <div class="calendar-header-row">
-    <h2>Calendario Global</h2>
-    <div class="calendar-controls">
-      <button class="btn-view" [class.active]="view === CalendarView.Month"
-        (click)="setView(CalendarView.Month)">Mes</button>
-      <button class="btn-view" [class.active]="view === CalendarView.Week"
-        (click)="setView(CalendarView.Week)">Semana</button>
-    </div>
+                      <div class="btn-add-visual">
+                        <i class="fas fa-plus"></i>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+
+                <div class="collapse mt-2" [id]="'collapseActivity' + $index">
+                  <div class="card card-body details-card">
+                    <p><strong>Detalles:</strong> {{ a.nombreActividad }}</p>
+                    <p>Mínimo de jugadores: {{ a.minimoJugadores }}</p>
+
+                    @if (obtenerPrecioActividad(a.idEventoActividad); as precioObj) {
+                      <p>Precio: {{ precioObj.precioTotal }} €</p>
+                    } @else {
+                      <p>Precio: No definido</p>
+                    }
+
+                    <label class="custom-switch">
+                      <input type="checkbox" [(ngModel)]="capitan">
+                      <span class="slider"></span>
+                      <span class="label-text">¿Quieres ser capitán?</span>
+                    </label>
+
+                    @if (yaEstaInscrito(a.idEvento)) {
+                      <button class="btn btn-sm w-100 botonConfirmar mt-3" disabled>
+                        Ya te has inscrito a una actividad
+                      </button>
+                    } @else {
+                      <button class="btn btn-sm w-100 botonConfirmar mt-3" (click)="Inscribirse(a)">
+                        Confirmar Inscripción
+                      </button>
+                    }
+
+                    @if (usuario.idRole == 3 || usuario.idRole == 4) {
+                      <div class="contetn-boton">
+                        @if (obtenerPrecioActividad(a.idEventoActividad) != undefined) {
+                          <button (click)="anadirPrecio(a)" class="btn btn-create-discreto actividad">
+                            <i class="fas fa-plus"></i> Modificar precio
+                          </button>
+                        } @else {
+                          <button (click)="anadirPrecio(a)" class="btn btn-create-discreto actividad">
+                            <i class="fas fa-plus"></i> Añadir precio
+                          </button>
+                        }
+
+                        <button class="btn btn-create-discreto actividad" (click)="eliminarActividadEvento(a)">
+                          <i class="fas fa-trash"></i> Eliminar actividad
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      @if (usuario.idRole == 3 || usuario.idRole == 4) {
+        @if (eventoSeleccionado) {
+          <div class="contetn-boton">
+            <button (click)="abrirModalActividadCrear()" class="btn-create-discreto">
+              <i class="fas fa-plus"></i>
+              Crear actividad
+            </button>
+
+            @if (!esPasado(idEventoSeleccionado)) {
+              <button (click)="abrirModalActividad()" class="btn-create-discreto">
+                <i class="fas fa-plus"></i> Añadir actividad
+              </button>
+            } @else {
+              <button (click)="abrirModalActividad()" class="btn-create-discreto disabled" disabled>
+                <i class="fas fa-plus"></i> Evento finalizado
+              </button>
+            }
+          </div>
+        } @else {
+          <div class="contetn-boton">
+            <button (click)="abrirModalActividadCrear()" class="btn-create-discreto">
+              <i class="fas fa-plus"></i>
+              Crear actividad
+            </button>
+            <button (click)="abrirModalActividad()" class="btn-create-discreto disabled" disabled>
+              <i class="fas fa-plus"></i>
+              Selecciona evento
+            </button>
+          </div>
+        }
+      }
+    </section>
   </div>
 
-  <div class="calendar-card" [ngSwitch]="view">
-    <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
-      (eventClicked)="handleEvent('Clicked', $event.event)">
-    </mwl-calendar-month-view>
-    <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
-      (eventClicked)="handleEvent('Clicked', $event.event)">
-    </mwl-calendar-week-view>
+  <div class="calendar-section">
+    <div class="calendar-header-row">
+      <h2>Calendario Global</h2>
+      <div class="calendar-controls">
+        <button class="btn-view" [class.active]="view === CalendarView.Month"
+          (click)="setView(CalendarView.Month)">Mes</button>
+        <button class="btn-view" [class.active]="view === CalendarView.Week"
+          (click)="setView(CalendarView.Week)">Semana</button>
+      </div>
+    </div>
+
+    <div class="calendar-card" [ngSwitch]="view">
+      <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [viewDate]="viewDate" [events]="events"
+        (eventClicked)="handleEvent('Clicked', $event.event)">
+      </mwl-calendar-month-view>
+      <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
+        (eventClicked)="handleEvent('Clicked', $event.event)">
+      </mwl-calendar-week-view>
+    </div>
   </div>
 </div>
-
-</div> ```
