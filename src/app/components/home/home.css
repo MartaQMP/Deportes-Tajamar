@@ -294,6 +294,35 @@
   opacity: 0.8;
 }
 
+/* ─── Estado HOVER (Pasar el ratón) ─── */
+/* Este es el estilo suave y transitorio */
+.event-card:hover {
+  background: var(--light-red);
+  transform: translateX(4px);
+  /* Borde sutil, casi transparente */
+  border-color: rgba(242, 33, 47, 0.2); 
+}
+
+/* ─── Estado SELECTED (Clicado/Fijo) ─── */
+/* Este debe destacar más que el hover */
+.event-card.selected {
+  background: var(--light-red); /* Mantenemos el fondo rojito */
+  transform: translateX(4px);   /* Se queda desplazado hacia la derecha */
+  
+  /* --- LA DIFERENCIA CLAVE --- */
+  /* Borde sólido y del color principal. Se nota mucho más. */
+  border: 1px solid var(--primary-red) !important; 
+  
+  /* Opcional: Una sombra roja un poco más intensa para darle "peso" */
+  box-shadow: 0 4px 10px rgba(242, 33, 47, 0.2);
+}
+
+/* Opcional: ¿Qué pasa si hago hover SOBRE el seleccionado? */
+/* Para que no haga un "saltito" raro, forzamos a que se mantenga el estilo de seleccionado */
+.event-card.selected:hover {
+    border-color: var(--primary-red);
+    transform: translateX(4px);
+}
 
 
   /* ─── CLASE NUEVA: Resetea el botón para que no moleste al diseño ─── */
