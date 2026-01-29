@@ -80,8 +80,13 @@ export class InscripcionService {
     return this._http.get<Array<Alumno>>(environment.url + request);
   }
 
-  crearCapitan(token: string, capitan: Capitan): Observable<any> {
+  crearCapitan(token: string, idEventoActividad:number, idUsuario:number): Observable<any> {
     let request = 'api/capitanactividades/create';
+    var capitan={
+      "idCapitanActividad":0,
+      "idEventoActividad":idEventoActividad,
+      "idUsuario":idUsuario
+    }
     let json = JSON.stringify(capitan);
     let header = new HttpHeaders()
       .set('Content-type', 'application/json')

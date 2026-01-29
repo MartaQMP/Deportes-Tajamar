@@ -641,33 +641,28 @@ export class Home implements OnInit {
       elegido = montonUsuarios[indexAleatorio];
     }
 
-    // 3. Preparamos el objeto para el POST (Estructura de Capitan)
-    const nuevoCapitan = {
-      idCapitanActividad: 0,
-      idEventoActividad: idEvAct,
-      idUsuario: elegido.idUsuario,
-    };
-
-    console.log('Capitan: ' + nuevoCapitan.idUsuario);
-
-    this._inscripciones.crearCapitan(this.token, nuevoCapitan).subscribe({
-      next: () => {
-        Swal.fire({
-          title: 'Capitan escogido',
-          text: 'Capitan creado correctamente',
-          icon: 'success',
-          confirmButtonColor: '#f2212f',
-        });
-      },
-      error: () => {
-        Swal.fire({
-          title: 'Error',
-          text: 'Error al crear el capitan',
-          icon: 'error',
-          confirmButtonColor: '#f2212f',
-        });
-      },
+    this._perfil.findUsuario(elegido.idUsuario).subscribe(response=>{
+      var nombre=response;
+      this._inscripciones.crearCapitan(this.token, idEvAct, elegido.idUsuario).subscribe({
+        next: () => {
+          Swal.fire({
+            title: 'Capitan escogido',
+            text: 'Capitan escogido para el evento: '+nombre.usuario,
+            icon: 'success',
+            confirmButtonColor: '#f2212f',
+          });
+        },
+        error: () => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Error al crear el capitan',
+            icon: 'error',
+            confirmButtonColor: '#f2212f',
+          });
+        },
+      });
     });
+
   }
   asignarOrganizador() {
     this._cursos.getCursos().subscribe((response) => {
