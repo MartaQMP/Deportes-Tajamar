@@ -1,6 +1,11 @@
 <div class="dashboard-wrapper">
+  <div class="contenedor">
   <h1 class="welcome">Bienvenido, {{ usuario.nombre }}</h1>
-
+  @if(usuario.idRole == 3){
+    <button class="button-organizador" (click)="asignarOrganizador()">Asignar Organizador</button>
+    <button class="button-organizador" (click)="eliminarOrganizador()">Eliminar Organizador</button>
+  }
+  </div>
   <div class="dashboard-grid">
     <section class="panel-section">
       <div class="section-header">

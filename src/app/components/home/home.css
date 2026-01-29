@@ -33,11 +33,78 @@
 }
 
 /* ─── 1. HERO HEADER (Igual a .perfil-header) ─── */
-.welcome{
-    padding-left: 10px;
+
+.contenedor {
+    display: flex;
+    align-items: center; /* Alinea verticalmente al centro (h1 y botón) */
+    width: 100%; /* Asegura que ocupe todo el ancho */
+  }
+
+  /* 2. Estilos del H1 */
+  .welcome {
+    flex-grow: 1; /* TRUCO: Hace que el h1 crezca y ocupe todo el espacio libre, empujando el botón al final */
+      padding-left: 10px;
     padding-bottom: 5px;
     border-bottom: 3px #f2212f solid;
-    
+    margin-bottom: 40px; /* Quitamos márgenes por defecto para que alinee mejor */
+    padding-bottom: 5px; /* Un poco de aire entre el texto y el borde */
+  }
+
+  /* 3. Estilos del botón (Opcional, para que no se pegue) */
+  /* ─── BOTÓN ORGANIZADOR (Estilo adaptado) ─── */
+.button-organizador {
+  /* 1. Posicionamiento (Vital para tu layout con el H1) */
+  margin-left: 25px;
+  margin-bottom:35px;
+  white-space: nowrap;
+
+  /* 2. Estructura Flex (Para icono y texto si lo usas) */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+
+  /* 3. Estética Base (Copiada de tu referencia) */
+  background: var(--white); /* Asegúrate de tener esta variable o usa #fff */
+  color: var(--primary-red); /* Asegúrate de tener esta variable */
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer; /* Importante para botones */
+  
+  /* Bordes y Sombras */
+  border: 1.5px solid rgba(242, 33, 47, 0.2);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  
+  /* Transición suave */
+  transition: all 0.3s ease; /* 'all' cubre background, transform y color */
+}
+
+/* Soporte para iconos si decides ponerle uno (ej: <i class="fa fa-user"></i>) */
+.button-organizador i {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+}
+
+/* ─── ESTADOS (Hover y Active) ─── */
+
+.button-organizador:hover {
+  background: var(--light-red); /* O un color rojo muy clarito si no tienes la var */
+  color: var(--primary-red);
+  border-color: var(--primary-red);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(242, 33, 47, 0.2);
+}
+
+.button-organizador:hover i {
+  transform: translateX(2px); /* Mueve el icono un poco si existe */
+}
+
+.button-organizador:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(242, 33, 47, 0.15);
 }
 
 .greeting-badge {
