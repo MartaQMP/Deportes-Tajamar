@@ -58,7 +58,7 @@ export class Home implements OnInit {
   public profesores: Map<number, string> = new Map();
   public usuarioCapitan!: Alumno;
   public token: any;
-  public cursos: Curso[] = []
+  public cursos: Curso[] = [];
   constructor(
     private _perfil: PerfilService,
     private _eventos: EventosService,
@@ -66,8 +66,8 @@ export class Home implements OnInit {
     private _router: Router,
     private _inscripciones: InscripcionService,
     private _organizador: OrganizadorService,
-    private _cursos: CursosService
-  ) { }
+    private _cursos: CursosService,
+  ) {}
 
   setView(view: CalendarView) {
     this.view = view;
@@ -410,10 +410,10 @@ export class Home implements OnInit {
         console.log(response);
         this.verInscripciones();
         Swal.fire({
-                    title: "Confirmada tu seleccion!",
-                    text: "Se te ha apuntado a esta actividad.",
-                    icon: "success"
-              });
+          title: 'Confirmada tu seleccion!',
+          text: 'Se te ha apuntado a esta actividad.',
+          icon: 'success',
+        });
         this.actividades.forEach((a, index) => {
           this._inscripciones.verInscripciones(e.idEvento, a.idActividad).subscribe((response) => {
             this.personasInscritas[index] = response.length;
@@ -486,10 +486,10 @@ export class Home implements OnInit {
                 (response) => {
                   this.verPrecioActividad();
                   Swal.fire({
-                    title: "Modificado!",
-                    text: "El precio se ha modificado.",
-                    icon: "success"
-              });
+                    title: 'Modificado!',
+                    text: 'El precio se ha modificado.',
+                    icon: 'success',
+                  });
                 },
                 (error) => {
                   Swal.fire('Error', 'No se ha podido modificar el precio', 'error');
@@ -498,12 +498,11 @@ export class Home implements OnInit {
         } else
           this._actividades.insertarPrecioActividad(a.idEventoActividad, precioFinal).subscribe(
             (response) => {
-                            
               this.verPrecioActividad();
               Swal.fire({
-                    title: "Insertado!",
-                    text: "El precio se ha insertado.",
-                    icon: "success"
+                title: 'Insertado!',
+                text: 'El precio se ha insertado.',
+                icon: 'success',
               });
             },
             (error) => {
@@ -539,14 +538,14 @@ export class Home implements OnInit {
 
   eliminarActividadEvento(a: ActividadEvento) {
     Swal.fire({
-      title: "Estas seguro?",
-      text: "Si lo borras no hay vuelta atras!",
-      icon: "warning",
+      title: 'Estas seguro?',
+      text: 'Si lo borras no hay vuelta atras!',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, estoy seguro",
-      cancelButtonText: "Cancelar"
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro',
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe({
@@ -554,35 +553,46 @@ export class Home implements OnInit {
             console.log(response);
             this.MostrarActividades(a.idEvento);
             Swal.fire({
-              title: "Borrado!",
-              text: "La actividad ha sido borrada.",
-              icon: "success"
+              title: 'Borrado!',
+              text: 'La actividad ha sido borrada.',
+              icon: 'success',
             });
           },
           error: (error) => {
             Swal.fire('Error', 'No se ha podido eliminar la actividad', 'error');
           },
         });
-
       }
     });
-
   }
 
   eliminarEvento() {
-    this._eventos.eliminarEvento(this.idEventoSeleccionado).subscribe({
-      next: (response) => {
-        console.log(response);
-        this._eventos.buscarEventosAbiertos().subscribe((response) => {
-          this.eventos = response;
-          this.ordenarEventos();
-          this.eventoSeleccionado = false;
-          this.actividades = [];
+    Swal.fire({
+      title: 'Estas seguro?',
+      text: 'Si lo borras, no hay vuelta atras!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, estoy seguro!',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._eventos.eliminarEvento(this.idEventoSeleccionado).subscribe({
+          next: (response) => {
+            console.log(response);
+            this._eventos.buscarEventosAbiertos().subscribe((response) => {
+              this.eventos = response;
+              this.ordenarEventos();
+              this.eventoSeleccionado = false;
+              this.actividades = [];
+            });
+          },
+          error: (error) => {
+            Swal.fire('Error', 'No se ha podido eliminar el evento', 'error');
+          },
         });
-      },
-      error: (error) => {
-        Swal.fire('Error', 'No se ha podido eliminar el evento', 'error');
-      },
+      }
     });
   }
 
@@ -674,17 +684,17 @@ export class Home implements OnInit {
       },
     });
   }
-asignarOrganizador() {
-  this._cursos.getCursos().subscribe((response) => {
-    this.cursos = response;
-    
-    const cursosHTML = this.cursos
-      .map((c: any) => `<option value="${c.idCurso}">${c.nombre}</option>`)
-      .join('');
+  asignarOrganizador() {
+    this._cursos.getCursos().subscribe((response) => {
+      this.cursos = response;
 
-    Swal.fire({
-      title: 'Asignar Organizador',
-      html: `
+      const cursosHTML = this.cursos
+        .map((c: any) => `<option value="${c.idCurso}">${c.nombre}</option>`)
+        .join('');
+
+      Swal.fire({
+        title: 'Asignar Organizador',
+        html: `
         <div style="text-align: left; margin-bottom: 5px; color: #555;">
           Selecciona el curso:
         </div>
@@ -701,82 +711,84 @@ asignarOrganizador() {
           <option value="" disabled selected>Primero elige un curso...</option>
         </select>
       `,
-      showCancelButton: true,
-      confirmButtonText: 'Guardar',
-      cancelButtonText: 'Cancelar',
-      buttonsStyling: false,
-      customClass: {
-        popup: 'swal-popup-discreto',
-        confirmButton: 'btn-confirm-discreto',
-        cancelButton: 'btn-cancel-discreto',
-        title: 'swal-title-discreto',
-      },
-      didOpen: () => {
-        const popup = Swal.getPopup();
-        const cursoSelect = popup?.querySelector('#select-curso') as HTMLSelectElement;
-        const organizadorSelect = popup?.querySelector('#select-organizador') as HTMLSelectElement;
+        showCancelButton: true,
+        confirmButtonText: 'Guardar',
+        cancelButtonText: 'Cancelar',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'swal-popup-discreto',
+          confirmButton: 'btn-confirm-discreto',
+          cancelButton: 'btn-cancel-discreto',
+          title: 'swal-title-discreto',
+        },
+        didOpen: () => {
+          const popup = Swal.getPopup();
+          const cursoSelect = popup?.querySelector('#select-curso') as HTMLSelectElement;
+          const organizadorSelect = popup?.querySelector(
+            '#select-organizador',
+          ) as HTMLSelectElement;
 
-        cursoSelect.addEventListener('change', () => {
-          const idCursoSeleccionado = cursoSelect.value;
+          cursoSelect.addEventListener('change', () => {
+            const idCursoSeleccionado = cursoSelect.value;
 
-          organizadorSelect.innerHTML = '<option>Cargando datos...</option>';
-          organizadorSelect.disabled = true;
+            organizadorSelect.innerHTML = '<option>Cargando datos...</option>';
+            organizadorSelect.disabled = true;
 
-          this._cursos.getAlumnosCurso(idCursoSeleccionado).subscribe(
-            (data: Alumno[]) => {
-              
-              const options = data
-                .map(org => `<option value="${org.idCursosUsuarios}">${org.usuario}</option>`)
-                .join('');
+            this._cursos.getAlumnosCurso(idCursoSeleccionado).subscribe(
+              (data: Alumno[]) => {
+                const options = data
+                  .map((org) => `<option value="${org.idCursosUsuarios}">${org.usuario}</option>`)
+                  .join('');
 
-              organizadorSelect.innerHTML = `<option value="" disabled selected>Selecciona una opción...</option>${options}`;
-              organizadorSelect.disabled = false; 
-            },
-            (error) => {
-              organizadorSelect.innerHTML = '<option>Error al cargar</option>';
-            }
-          );
-        });
-      },
-      preConfirm: () => {
-        // Validación final antes de cerrar
-        const curso = (document.getElementById('select-curso') as HTMLSelectElement).value;
-        const organizador = (document.getElementById('select-organizador') as HTMLSelectElement).value;
+                organizadorSelect.innerHTML = `<option value="" disabled selected>Selecciona una opción...</option>${options}`;
+                organizadorSelect.disabled = false;
+              },
+              (error) => {
+                organizadorSelect.innerHTML = '<option>Error al cargar</option>';
+              },
+            );
+          });
+        },
+        preConfirm: () => {
+          // Validación final antes de cerrar
+          const curso = (document.getElementById('select-curso') as HTMLSelectElement).value;
+          const organizador = (document.getElementById('select-organizador') as HTMLSelectElement)
+            .value;
 
-        if (!curso || !organizador) {
-          Swal.showValidationMessage('Debes seleccionar ambas opciones');
-          return false;
-        }
+          if (!curso || !organizador) {
+            Swal.showValidationMessage('Debes seleccionar ambas opciones');
+            return false;
+          }
 
-        return { idCurso: curso, idOrganizador: organizador };
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log('Datos seleccionados:', result.value);
+          return { idCurso: curso, idOrganizador: organizador };
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log('Datos seleccionados:', result.value);
           this._organizador.insertarOrganizador(result.value.idOrganizador).subscribe({
-            next: response=>{
-            Swal.fire('Insertado', 'Se ha asignado rol Organizador', 'success');
-
-            },error: (error)=>{
-            Swal.fire('Error', 'No se ha podido asignar el rol', 'error');
-            }
-          })
-      }
+            next: (response) => {
+              Swal.fire('Insertado', 'Se ha asignado rol Organizador', 'success');
+            },
+            error: (error) => {
+              Swal.fire('Error', 'No se ha podido asignar el rol', 'error');
+            },
+          });
+        }
+      });
     });
-  });
-}
+  }
 
-eliminarOrganizador() {
-  this._cursos.getCursos().subscribe((response) => {
-    this.cursos = response;
-    
-    const cursosHTML = this.cursos
-      .map((c: any) => `<option value="${c.idCurso}">${c.nombre}</option>`)
-      .join('');
+  eliminarOrganizador() {
+    this._cursos.getCursos().subscribe((response) => {
+      this.cursos = response;
 
-    Swal.fire({
-      title: 'Eliminar Organizador',
-      html: `
+      const cursosHTML = this.cursos
+        .map((c: any) => `<option value="${c.idCurso}">${c.nombre}</option>`)
+        .join('');
+
+      Swal.fire({
+        title: 'Eliminar Organizador',
+        html: `
         <div style="text-align: left; margin-bottom: 5px; color: #555;">
           Selecciona el curso:
         </div>
@@ -793,77 +805,80 @@ eliminarOrganizador() {
           <option value="" disabled selected>Primero elige un curso...</option>
         </select>
       `,
-      showCancelButton: true,
-      confirmButtonText: 'Guardar',
-      cancelButtonText: 'Cancelar',
-      buttonsStyling: false,
-      customClass: {
-        popup: 'swal-popup-discreto',
-        confirmButton: 'btn-confirm-discreto',
-        cancelButton: 'btn-cancel-discreto',
-        title: 'swal-title-discreto',
-      },
-      didOpen: () => {
-  const popup = Swal.getPopup();
-  const cursoSelect = popup?.querySelector('#select-curso') as HTMLSelectElement;
-  const organizadorSelect = popup?.querySelector('#select-organizador') as HTMLSelectElement;
+        showCancelButton: true,
+        confirmButtonText: 'Guardar',
+        cancelButtonText: 'Cancelar',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'swal-popup-discreto',
+          confirmButton: 'btn-confirm-discreto',
+          cancelButton: 'btn-cancel-discreto',
+          title: 'swal-title-discreto',
+        },
+        didOpen: () => {
+          const popup = Swal.getPopup();
+          const cursoSelect = popup?.querySelector('#select-curso') as HTMLSelectElement;
+          const organizadorSelect = popup?.querySelector(
+            '#select-organizador',
+          ) as HTMLSelectElement;
 
-  cursoSelect.addEventListener('change', () => {
-    const idCursoSeleccionado = cursoSelect.value;
+          cursoSelect.addEventListener('change', () => {
+            const idCursoSeleccionado = cursoSelect.value;
 
-    organizadorSelect.innerHTML = '<option>Cargando datos...</option>';
-    organizadorSelect.disabled = true;
+            organizadorSelect.innerHTML = '<option>Cargando datos...</option>';
+            organizadorSelect.disabled = true;
 
-    this._organizador.getOrganizador().subscribe(
-      (data: Alumno[]) => {
-        
-       
-        const usuariosFiltrados = data.filter(org => org.idCurso == Number(idCursoSeleccionado));
+            this._organizador.getOrganizador().subscribe(
+              (data: Alumno[]) => {
+                const usuariosFiltrados = data.filter(
+                  (org) => org.idCurso == Number(idCursoSeleccionado),
+                );
 
-        if (usuariosFiltrados.length === 0) {
-           organizadorSelect.innerHTML = '<option value="" disabled selected>No hay usuarios en este curso</option>';
-           organizadorSelect.disabled = true; 
-           return;
-        }
+                if (usuariosFiltrados.length === 0) {
+                  organizadorSelect.innerHTML =
+                    '<option value="" disabled selected>No hay usuarios en este curso</option>';
+                  organizadorSelect.disabled = true;
+                  return;
+                }
 
-        const options = usuariosFiltrados
-          .map(org => `<option value="${org.idUsuario}">${org.usuario}</option>`)
-          .join('');
+                const options = usuariosFiltrados
+                  .map((org) => `<option value="${org.idUsuario}">${org.usuario}</option>`)
+                  .join('');
 
-        organizadorSelect.innerHTML = `<option value="" disabled selected>Selecciona una opción...</option>${options}`;
-        organizadorSelect.disabled = false; 
-      },
-      (error) => {
-        organizadorSelect.innerHTML = '<option>Error al cargar</option>';
-      }
-    );
-  });
-},
-      preConfirm: () => {
-        const curso = (document.getElementById('select-curso') as HTMLSelectElement).value;
-        const organizador = (document.getElementById('select-organizador') as HTMLSelectElement).value;
+                organizadorSelect.innerHTML = `<option value="" disabled selected>Selecciona una opción...</option>${options}`;
+                organizadorSelect.disabled = false;
+              },
+              (error) => {
+                organizadorSelect.innerHTML = '<option>Error al cargar</option>';
+              },
+            );
+          });
+        },
+        preConfirm: () => {
+          const curso = (document.getElementById('select-curso') as HTMLSelectElement).value;
+          const organizador = (document.getElementById('select-organizador') as HTMLSelectElement)
+            .value;
 
-        if (!curso || !organizador) {
-          Swal.showValidationMessage('Debes seleccionar ambas opciones');
-          return false;
-        }
+          if (!curso || !organizador) {
+            Swal.showValidationMessage('Debes seleccionar ambas opciones');
+            return false;
+          }
 
-        return { idCurso: curso, idOrganizador: organizador };
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log('Datos seleccionados:', result.value);
+          return { idCurso: curso, idOrganizador: organizador };
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log('Datos seleccionados:', result.value);
           this._organizador.deleteOrganizador(result.value.idOrganizador).subscribe({
-            next: response=>{
-            Swal.fire('Eliminado', 'Se ha designado rol Organizador', 'success');
-
-            },error: (error)=>{
-            Swal.fire('Error', 'No se ha podido designar el rol', 'error');
-            }
-          })
-      }
+            next: (response) => {
+              Swal.fire('Eliminado', 'Se ha designado rol Organizador', 'success');
+            },
+            error: (error) => {
+              Swal.fire('Error', 'No se ha podido designar el rol', 'error');
+            },
+          });
+        }
+      });
     });
-  });
-}
-
+  }
 }
