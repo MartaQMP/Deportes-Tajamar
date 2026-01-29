@@ -470,8 +470,11 @@ export class Home implements OnInit {
       if (result.isConfirmed) {
         const precioFinal = result.value;
         console.log('Precio guardado:', precioFinal);
+        const precioExistente = this.precioActividad?.find(
+          (p) => p.idEventoActividad === a.idEventoActividad
+        );
 
-        if (this.precioActividad.length > 0) {
+        if (precioExistente) {
           var precioModificado = this.precioActividad.find(
             (p) => p.idEventoActividad === a.idEventoActividad,
           );
