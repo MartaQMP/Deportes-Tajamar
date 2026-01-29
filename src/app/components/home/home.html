@@ -46,25 +46,30 @@
       }
   </div>
 
-  @if (usuario.idRole == 3 || usuario.idRole == 4) {
-  <div class="contetn-boton">
-    <button (click)="abrirModalFecha()" class="btn-create-discreto">
-      <i class="fas fa-plus"></i>
-      Crear evento
-    </button>
+      @if (usuario.idRole == 3 || usuario.idRole == 4) {
+        <div class="contetn-boton">
+          <button (click)="abrirModalFecha()" class="btn-create-discreto">
+            <i class="fas fa-plus"></i>
+            Crear evento
+          </button>
 
-    @if (eventoSeleccionado) {
-    <button (click)="eliminarEvento()" class="btn-create-discreto">
-      <i class="fas fa-plus"></i>
-      Eliminar evento
-    </button>
-    } @else {
-    <button class="btn-create-discreto disabled" disabled>
-      <i class="fas fa-plus"></i>
-      Eliminar evento
-    </button>
-    }
-  </div>
+          @if (eventoSeleccionado) {
+            <button (click)="hacerSorteoCapitanesManual()" class="btn-create-discreto">
+              <i class="fas fa-dice"></i> Realizar Sorteo
+            </button>
+
+            <button (click)="eliminarEvento()" class="btn-create-discreto">
+              <i class="fas fa-trash"></i> Eliminar evento
+            </button>
+          } @else {
+            <button class="btn-create-discreto disabled" disabled>
+              <i class="fas fa-dice"></i> Realizar Sorteo
+            </button>
+            <button class="btn-create-discreto disabled" disabled>
+              <i class="fas fa-trash"></i> Eliminar evento
+            </button>
+          }
+        </div>
   }
   </section>
 
@@ -79,6 +84,7 @@
       </a>
       } @else {
       <h3><i class="fas fa-dumbbell" style="margin-right: 8px;"></i> Actividades Disponibles</h3>
+
       }
     </div>
 
