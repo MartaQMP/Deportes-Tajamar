@@ -582,7 +582,6 @@ export class Home implements OnInit {
                 });
               });
           });
-          Swal.fire('¡Sorteo terminado!', 'Se han asignado los capitanes.', 'success');
         });
       }
     });
@@ -616,9 +615,25 @@ export class Home implements OnInit {
       idUsuario: elegido.idUsuario,
     };
 
-    console.log('Capitan: ' + this.capitan);
+    console.log('Capitan: ' + nuevoCapitan.idUsuario);
 
-    // 4. Llamada final al servicio con el token de la clase
-    this._inscripciones.crearCapitan(this.token, nuevoCapitan).subscribe();
+    this._inscripciones.crearCapitan(this.token, nuevoCapitan).subscribe({
+      next: () => {
+        Swal.fire({
+          title: 'Capitan escogido',
+          text: 'Capitan creado correctamente',
+          icon: 'success',
+          confirmButtonColor: '#f2212f',
+        });
+      },
+      error: () => {
+        Swal.fire({
+          title: 'Error',
+          text: 'Error al crear el capitan',
+          icon: 'error',
+          confirmButtonColor: '#f2212f',
+        });
+      },
+    });
   }
 }
