@@ -130,7 +130,7 @@
     <div #formNuevoPago class="text-start p-3">
       <div class="mb-3">
         <label class="form-label fw-bold">1. Selecciona el Evento:</label>
-        <select #crearEventoSelect class="form-select" (change)="actualizarActividadesModal()">
+        <select #crearEventoSelect class="form-select" (change)="cargarActividadesDeEvento()">
           <option value="" disabled selected>Selecciona un evento...</option>
           @for (e of eventosConPagos; track e.idEvento) {
             <option [value]="e.idEvento">{{ e.fechaEvento | date: 'dd/MM/yy' }}</option>
@@ -157,7 +157,7 @@
         <label class="form-label fw-bold">3. Curso:</label>
         <select #crearCursoSelect class="form-select" [disabled]="!crearActividadSelect.value">
           <option value="" disabled selected>Selecciona el curso...</option>
-          @for (c of cursosFiltradosModal; track c.idCurso) {
+          @for (c of cursosFiltrados; track c.idCurso) {
             <option [value]="c.idCurso">{{ c.nombre }}</option>
           }
         </select>

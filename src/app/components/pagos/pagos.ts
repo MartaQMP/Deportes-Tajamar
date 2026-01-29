@@ -12,7 +12,6 @@ import Curso from '../../models/curso';
 import { PagoService } from '../../services/pagos.service';
 import { forkJoin } from 'rxjs';
 import CursosService from '../../services/cursos.service';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-pagos',
@@ -22,7 +21,7 @@ import { Title } from '@angular/platform-browser';
   styleUrl: './pagos.css',
 })
 export class Pagos implements OnInit {
-  // ─── REFERENCIAS DOM (CAMBIO ESTADO) ───
+  // ─── FORMULARIO CAMBIO ESTADO ───
   @ViewChild('formCambiarEstado') formCambiarEstado!: ElementRef;
   @ViewChild('wrapperCambiarEstado') wrapperCambiarEstado!: ElementRef;
   @ViewChild('cursoSpan') cursoSpan!: ElementRef;
@@ -30,7 +29,7 @@ export class Pagos implements OnInit {
   @ViewChild('cantidadSpan') cantidadSpan!: ElementRef;
   @ViewChild('estadoSelect') estadoSelect!: ElementRef;
 
-  // ─── REFERENCIAS DOM (CREAR PAGO) ───
+  // ─── FORMULARIO CREAR PAGO ───
   @ViewChild('formNuevoPago') formNuevoPago!: ElementRef;
   @ViewChild('wrapperNuevoPago') wrapperNuevoPago!: ElementRef;
   @ViewChild('crearEventoSelect') crearEventoSelect!: ElementRef;
@@ -38,21 +37,19 @@ export class Pagos implements OnInit {
   @ViewChild('crearCursoSelect') crearCursoSelect!: ElementRef;
   @ViewChild('crearCantidadInput') crearCantidadInput!: ElementRef;
 
-  // ─── PROPIEDADES DE DATOS ───
   public eventos!: Array<Evento>;
   public eventosConPagos!: Array<Evento>;
   public actividadesValidasModal!: Array<Actividad>;
   public cursos!: Array<Curso>;
   public cursosConPagos!: Array<CursoPagos>;
-  public cursosFiltradosModal!: Array<Curso>;
-  private pagosExistentesEventoModal!: Array<Pago>;
-  private todasLasActividades!: Array<Actividad>;
-  private tablaRelacion!: Array<ActividadesEvento>;
-  private preciosActividad!: Array<PrecioActividad>;
-
-  // ─── ESTADO ───
+  public cursosFiltrados!: Array<Curso>;
+  public pagosExistentesEvento!: Array<Pago>;
+  public todasLasActividades!: Array<Actividad>;
+  public tablaEventoActividades!: Array<ActividadesEvento>;
+  public preciosActividad!: Array<PrecioActividad>;
   public precioMaximoActual: number = 0;
-  private idEventoActividadFinal: number = 0;
+  public idEventoActividadFinal: number = 0;
+  public idPrecioActividadFinal: number = 0;
   public idEventoSeleccionado: number = 0;
   public permisosUsuario: string | null = null;
   public token: string | null = null;
@@ -66,34 +63,35 @@ export class Pagos implements OnInit {
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
     this.permisosUsuario = localStorage.getItem('permisosUsuario');
-    this.cargarDatosMaestros();
+    this.cargarDatosPrincipales();
   }
 
-  /**
-   * Carga todos los datos necesarios para los filtros de creación
-   */
-  cargarDatosMaestros(): void {
+  cargarDatosPrincipales(): void {
     forkJoin({
       eventos: this._serviceResultados.getEventos(),
       actividades: this._serviceResultados.getActividades(),
       relaciones: this._serviceResultados.getEventoActividades(),
       precios: this._servicePagos.getPreciosActividad(),
       cursos: this._serviceCursos.getCursos(),
-    }).subscribe((res) => {
-      this.eventos = res.eventos;
-      this.todasLasActividades = res.actividades;
-      this.tablaRelacion = res.relaciones;
-      this.preciosActividad = res.precios;
-      this.cursos = res.cursos;
+    }).subscribe((respuesta: any) => {
+      this.eventos = respuesta.eventos;
+      this.todasLasActividades = respuesta.actividades;
+      this.tablaEventoActividades = respuesta.relaciones;
+      this.preciosActividad = respuesta.precios;
+      this.cursos = respuesta.cursos;
 
-      // Filtrar eventos que tienen al menos una relación con precio
-      const idsEventoConPrecio = this.tablaRelacion
-        .filter((rel) =>
-          this.preciosActividad.some((p) => p.idEventoActividad === rel.idEventoActividad),
+      // FILTRO LOS EVENTO CON AL MENOS UNA ACTIVIDAD CON PRECIO
+      const idsEventoConPrecio: number[] = this.tablaEventoActividades
+        .filter((relacion: ActividadesEvento) =>
+          this.preciosActividad.some(
+            (precio: PrecioActividad) => precio.idEventoActividad === relacion.idEventoActividad,
+          ),
         )
-        .map((rel) => rel.idEvento);
+        .map((relacion: ActividadesEvento) => relacion.idEvento);
 
-      this.eventosConPagos = this.eventos.filter((e) => idsEventoConPrecio.includes(e.idEvento));
+      this.eventosConPagos = this.eventos.filter((evento: Evento) =>
+        idsEventoConPrecio.includes(evento.idEvento),
+      );
 
       if (this.eventos.length > 0) {
         this.idEventoSeleccionado = this.eventos[0].idEvento;
@@ -104,18 +102,24 @@ export class Pagos implements OnInit {
 
   cargarPagosDelEvento(): void {
     if (this.idEventoSeleccionado === 0) return;
-    this._servicePagos.getPagosPorEvento(this.idEventoSeleccionado).subscribe((datos) => {
-      this.agruparPagosPorCurso(datos);
-    });
+    this._servicePagos
+      .getPagosPorEvento(this.idEventoSeleccionado)
+      .subscribe((listaPagos: Array<Pago>) => {
+        this.agruparPagosPorCurso(listaPagos);
+      });
   }
 
-  agruparPagosPorCurso(datos: Array<Pago>): void {
-    const mapaGrupos = new Map<number, CursoPagos>();
-    datos.forEach((pago) => {
-      if (!mapaGrupos.has(pago.idCurso)) {
-        mapaGrupos.set(pago.idCurso, { nombreCurso: pago.curso, idCurso: pago.idCurso, pagos: [] });
+  agruparPagosPorCurso(listaPagos: Array<Pago>): void {
+    const mapaGrupos: Map<number, CursoPagos> = new Map<number, CursoPagos>();
+    listaPagos.forEach((pagoIndividual: Pago) => {
+      if (!mapaGrupos.has(pagoIndividual.idCurso)) {
+        mapaGrupos.set(pagoIndividual.idCurso, {
+          nombreCurso: pagoIndividual.curso,
+          idCurso: pagoIndividual.idCurso,
+          pagos: [],
+        });
       }
-      mapaGrupos.get(pago.idCurso)!.pagos.push(pago);
+      mapaGrupos.get(pagoIndividual.idCurso)!.pagos.push(pagoIndividual);
     });
     this.cursosConPagos = Array.from(mapaGrupos.values());
   }
@@ -138,13 +142,13 @@ export class Pagos implements OnInit {
       preConfirm: () => {
         return { nuevoEstado: this.estadoSelect.nativeElement.value };
       },
-    }).then((result) => {
-      if (result.isConfirmed && this.token) {
+    }).then((resultadoPopup: any) => {
+      if (resultadoPopup.isConfirmed && this.token) {
         this._servicePagos
-          .putPago(this.token, pago.idPago, pago.cantidadPagada, result.value.nuevoEstado)
+          .putPago(this.token, pago.idPago, pago.cantidadPagada, resultadoPopup.value.nuevoEstado)
           .subscribe({
             next: () => {
-              pago.estado = result.value.nuevoEstado;
+              pago.estado = resultadoPopup.value.nuevoEstado;
               Swal.fire({
                 title: 'Guardado',
                 text: 'Estado Actualizado',
@@ -164,71 +168,74 @@ export class Pagos implements OnInit {
     });
   }
 
-  // ─── ACCIÓN: CREAR PAGO (LÓGICA CASCADA) ───
+  // PARA CREAR PAGO
+  cargarActividadesDeEvento(): void {
+    const idEventoActual: number = Number(this.crearEventoSelect.nativeElement.value);
 
-  actualizarActividadesModal() {
-    const idEv = Number(this.crearEventoSelect.nativeElement.value);
+    this._servicePagos.getPagosPorEvento(idEventoActual).subscribe((listaPagos: Array<Pago>) => {
+      this.pagosExistentesEvento = listaPagos;
 
-    // 1. Cargamos los pagos realizados en este evento para validar duplicados y precios
-    this._servicePagos.getPagosPorEvento(idEv).subscribe((pagos) => {
-      this.pagosExistentesEventoModal = pagos;
-
-      // 2. Filtramos las actividades que tienen precio definido
-      const relacionesValidas = this.tablaRelacion.filter(
-        (rel) =>
-          rel.idEvento === idEv &&
-          this.preciosActividad.some((p) => p.idEventoActividad === rel.idEventoActividad),
-      );
-      const ids = relacionesValidas.map((r) => r.idActividad);
-      this.actividadesValidasModal = this.todasLasActividades.filter((a) =>
-        ids.includes(a.idActividad),
+      // FILTRO ACTIVIDADES QUE TIENEN PRECIO
+      const relacionesValidas: Array<ActividadesEvento> = this.tablaEventoActividades.filter(
+        (relacion: ActividadesEvento) =>
+          relacion.idEvento === idEventoActual &&
+          this.preciosActividad.some(
+            (precio: PrecioActividad) => precio.idEventoActividad === relacion.idEventoActividad,
+          ),
       );
 
-      // Reset de campos dependientes
+      const idsActividadesValidas: Array<number> = relacionesValidas.map(
+        (relacion: ActividadesEvento) => relacion.idActividad,
+      );
+
+      this.actividadesValidasModal = this.todasLasActividades.filter((actividad: Actividad) =>
+        idsActividadesValidas.includes(actividad.idActividad),
+      );
+
       this.crearActividadSelect.nativeElement.value = '';
       this.precioMaximoActual = 0;
-      this.cursosFiltradosModal = [];
+      this.cursosFiltrados = [];
     });
   }
 
-  /**
-   * Se ejecuta al cambiar la Actividad en el Modal.
-   * Calcula el precio restante y oculta cursos con pagos previos.
-   */
-  actualizarPrecioMaximo() {
-    const idEv = Number(this.crearEventoSelect.nativeElement.value);
-    const idAct = Number(this.crearActividadSelect.nativeElement.value);
-    const rel = this.tablaRelacion.find((r) => r.idEvento === idEv && r.idActividad === idAct);
+  actualizarPrecioMaximo(): void {
+    const idEventoActual: number = Number(this.crearEventoSelect.nativeElement.value);
+    const idActividadActual: number = Number(this.crearActividadSelect.nativeElement.value);
 
-    if (rel) {
-      this.idEventoActividadFinal = rel.idEventoActividad;
-      const precioObj = this.preciosActividad.find(
-        (p) => p.idEventoActividad === rel.idEventoActividad,
-      );
-      const precioTotalActividad = precioObj ? precioObj.precioTotal : 0;
+    const relacionEncontrada: ActividadesEvento | undefined = this.tablaEventoActividades.find(
+      (relacion: ActividadesEvento) =>
+        relacion.idEvento === idEventoActual && relacion.idActividad === idActividadActual,
+    );
 
-      // 1. FILTRADO DE CURSOS: Ocultamos los que ya han pagado en esta Actividad/Evento
-      const idsCursosQueYaPagaron = this.pagosExistentesEventoModal
-        .filter((p) => p.idEventoActividad === rel.idEventoActividad)
-        .map((p) => p.idCurso);
-
-      this.cursosFiltradosModal = this.cursos.filter(
-        (c) => !idsCursosQueYaPagaron.includes(c.idCurso),
+    if (relacionEncontrada) {
+      const precioDefinido: PrecioActividad | undefined = this.preciosActividad.find(
+        (precio: PrecioActividad) =>
+          precio.idEventoActividad === relacionEncontrada.idEventoActividad,
       );
 
-      // 2. CÁLCULO DE PRECIO MÁXIMO: Restamos lo que ya han pagado otros cursos
-      const sumaPagosRealizados = this.pagosExistentesEventoModal
-        .filter((p) => p.idEventoActividad === rel.idEventoActividad)
-        .reduce((acc, curr) => acc + curr.cantidadPagada, 0);
+      if (precioDefinido) {
+        this.idPrecioActividadFinal = precioDefinido.idPrecioActividad;
 
-      this.precioMaximoActual = Math.max(0, precioTotalActividad - sumaPagosRealizados);
+        const sumaPagosRealizados: number = this.pagosExistentesEvento
+          .filter((pago: Pago) => pago.idEventoActividad === relacionEncontrada.idEventoActividad)
+          .reduce((acumulado: number, actual: Pago) => acumulado + actual.cantidadPagada, 0);
 
-      // Reset del select de curso
+        this.precioMaximoActual = Math.max(0, precioDefinido.precioTotal - sumaPagosRealizados);
+      }
+
+      const idsCursosConPagoExistente: Array<number> = this.pagosExistentesEvento
+        .filter((pago: Pago) => pago.idEventoActividad === relacionEncontrada.idEventoActividad)
+        .map((pago: Pago) => pago.idCurso);
+
+      this.cursosFiltrados = this.cursos.filter(
+        (curso: Curso) => !idsCursosConPagoExistente.includes(curso.idCurso),
+      );
+
       this.crearCursoSelect.nativeElement.value = '';
     }
   }
 
-  formularioNuevoPago() {
+  formularioNuevoPago(): void {
     this.precioMaximoActual = 0;
     this.actividadesValidasModal = [];
     this.crearEventoSelect.nativeElement.value = '';
@@ -244,44 +251,47 @@ export class Pagos implements OnInit {
         this.wrapperNuevoPago.nativeElement.appendChild(this.formNuevoPago.nativeElement);
       },
       preConfirm: () => {
-        const cantidad = Number(this.crearCantidadInput.nativeElement.value);
-        const curso = this.crearCursoSelect.nativeElement.value;
-        if (!curso || !this.idEventoActividadFinal) {
+        const cantidadIngresada: number = Number(this.crearCantidadInput.nativeElement.value);
+        const idCursoSeleccionado: number = Number(this.crearCursoSelect.nativeElement.value);
+
+        if (!idCursoSeleccionado || !this.idPrecioActividadFinal) {
           Swal.showValidationMessage('Rellena todos los campos');
           return false;
         }
-        if (cantidad > this.precioMaximoActual) {
+        if (cantidadIngresada > this.precioMaximoActual) {
           Swal.showValidationMessage('Máximo permitido: ' + this.precioMaximoActual + '€');
           return false;
         }
-        return { idEventoActividad: this.idEventoActividadFinal, idCurso: Number(curso), cantidad };
+        return {
+          idPago: 0,
+          idCurso: idCursoSeleccionado,
+          idPrecioActividad: this.idPrecioActividadFinal,
+          cantidad: cantidadIngresada,
+          estado: cantidadIngresada === 0 ? 'Exento' : 'Pendiente',
+        };
       },
-    }).then((result) => {
-      if (result.isConfirmed) this.ejecutarFlujoCreacion(result.value);
-    });
-  }
-
-  ejecutarFlujoCreacion(datos: any) {
-    if (!this.token) return;
-    this._servicePagos
-      .postPago(this.token, datos.idEventoActividad, datos.idCurso, datos.cantidad)
-      .subscribe({
-        next: (pagoCreado: any) => {
-          const nuevoEstado = datos.cantidad === 0 ? 'Exento' : 'No Pagado';
-          this._servicePagos
-            .putPago(this.token!, pagoCreado.idPago, datos.cantidad, nuevoEstado)
-            .subscribe({
-              next: () => {
-                Swal.fire({
-                  title: '¡Éxito!',
-                  text: 'Pago creado como ' + nuevoEstado,
-                  icon: 'success',
-                  confirmButtonColor: '#f2212f',
-                });
-                this.cargarPagosDelEvento();
-              },
+    }).then((resultadoPopup: any) => {
+      if (resultadoPopup.isConfirmed && this.token) {
+        this._servicePagos.postPago(this.token, resultadoPopup.value).subscribe({
+          next: () => {
+            Swal.fire({
+              title: '¡Éxito!',
+              text: 'Pago creado',
+              icon: 'success',
+              confirmButtonColor: '#f2212f',
             });
-        },
-      });
+            this.cargarPagosDelEvento();
+          },
+          error: () => {
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo crear el pago en la base de datos',
+              icon: 'error',
+              confirmButtonColor: '#f2212f',
+            });
+          },
+        });
+      }
+    });
   }
 }
