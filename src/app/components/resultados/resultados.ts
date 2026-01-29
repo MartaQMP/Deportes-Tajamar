@@ -261,8 +261,7 @@ export class Resultados implements OnInit {
           });
           this.cargarDatosIniciales();
         },
-        error: (err) => {
-          console.log(err);
+        error: () => {
           Swal.fire({
             title: 'Error',
             text: 'Ha ocurrido un error',

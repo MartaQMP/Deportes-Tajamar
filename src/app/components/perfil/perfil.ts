@@ -32,12 +32,10 @@ export class Perfil implements OnInit {
         this.usuarioLogeado = true;
 
         this._service.getDatosUsuario(token).subscribe((response) => {
-          console.log(response)
           this.usuario = response
         })
 
         this._service.getActividadesUsuario(token).subscribe((response) => {
-          console.log(response);
           this.actividadesUsuario = response as unknown as Array<UsuarioActividad>;
         })
       }

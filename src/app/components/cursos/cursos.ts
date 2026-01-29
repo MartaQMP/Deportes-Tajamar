@@ -50,7 +50,6 @@ export class Cursos implements OnInit {
         this.cargandoAlumnos = false;
       },
       error: (err) => {
-        console.error('Error al cargar alumnos:', err);
         this.cargandoAlumnos = false;
         Swal.fire({
           icon: 'error',

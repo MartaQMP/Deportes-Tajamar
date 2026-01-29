@@ -91,7 +91,6 @@ export class SolicitarMaterial implements OnInit {
     this.actividadesEvento.forEach(actividad => {
       this._service.getidEventoActividad(this.idEvento, actividad.idActividad).subscribe((idEventoActividadResponse) => {
         const idEventoActividad = idEventoActividadResponse.idEventoActividad;
-        console.log(idEventoActividad)
 
         this._service.getMaterialesActividad(idEventoActividad).subscribe((materiales) => {
           this.materialesActividad = [...this.materialesActividad, ...materiales];
@@ -218,7 +217,6 @@ export class SolicitarMaterial implements OnInit {
               );
 
               this._service.crearMaterial(nuevoMaterial).subscribe((result) => {
-                console.log("Material Añadido!")
                 this.cargarMaterialesDeActividades();
               });
             });

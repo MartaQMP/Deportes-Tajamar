@@ -24,7 +24,6 @@ export class EventosService {
   crearEvento(fecha:Date) : Observable<any>{
     var request = "api/Eventos/create/"+fecha;
     let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
-    console.log({headers:header})
     return this._http.post<Evento>(this.url+request, null, {headers: header})
   }
 

@@ -45,7 +45,6 @@ export class ActividadesService {
         "precioTotal": precio,
       }
       let json=JSON.stringify(precioTotal);
-      console.log(json);
       let header=new HttpHeaders().set("Content-type", "application/json")
       .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
       return this._http.post<boolean>(this.url+request, json, {headers: header})
@@ -58,7 +57,6 @@ export class ActividadesService {
         "precioTotal": precio,
       }
       let json=JSON.stringify(precioTotal);
-      console.log(json);
       let header=new HttpHeaders().set("Content-type", "application/json")
       .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
       return this._http.put<boolean>(this.url+request, json, {headers: header})
@@ -87,7 +85,6 @@ export class ActividadesService {
           "minimoJugadores": minimo,
         }
         let json=JSON.stringify(actividad);
-        console.log(json);
         let header=new HttpHeaders().set("Content-type", "application/json")
         .set('Authorization', 'Bearer ' + localStorage.getItem("token"));
         return this._http.post<boolean>(this.url+request, json, {headers: header})

@@ -40,7 +40,6 @@ export class InscripcionService {
       fechaInscripcion: new Date(),
     };
     let json = JSON.stringify(inscripcion);
-    console.log(json);
     let header = new HttpHeaders()
       .set('Content-type', 'application/json')
       .set('Authorization', 'Bearer ' + localStorage.getItem('token'));

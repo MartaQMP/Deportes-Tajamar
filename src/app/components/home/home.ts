@@ -90,7 +90,6 @@ export class Home implements OnInit {
     this._perfil.getDatosUsuario(token).subscribe((response) => {
       this.usuarioLogeado = true;
       this.usuario = response;
-      console.log(this.usuario);
     });
 
     //Llamada al api eventos para recoger los eventos abiertos e incluirlos en el calendario
@@ -115,19 +114,17 @@ export class Home implements OnInit {
 
         this._eventos.getProfesor().subscribe({
           next: (response) => {
-            console.log(response);
             response.forEach((r) => {
               this.profesores.set(r.idUsuario, r.usuario);
             });
-            console.log(this.profesores);
           },
-          error: (error) => {
-            console.log('No entra profesores');
+          error: () => {
+            Swal.fire('Error', 'Error al coger profesores', 'error');
           },
         });
       },
-      error: (err) => {
-        console.error('Error cargando eventos', err);
+      error: () => {
+        Swal.fire('Error', 'Error cargando eventos', 'error');
       },
     });
   }
@@ -179,7 +176,6 @@ export class Home implements OnInit {
 
   //Llamada al api Actividades por evento para recoger las actividades disponibles por cada evento
   MostrarActividades(e: number) {
-    console.log(e);
     this.eventoSeleccionado = true;
     this.idEventoSeleccionado = e;
     this._actividades.buscarActividadesPorEventos(e.toString()).subscribe((response) => {
@@ -200,7 +196,6 @@ export class Home implements OnInit {
   verInscripciones() {
     this._actividades.verUsuarioApuntado().subscribe((response) => {
       this.usuarioActividades = response;
-      console.log(this.usuarioActividades);
     });
   }
 
@@ -257,7 +252,6 @@ export class Home implements OnInit {
           },
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log('Datos seleccionados:', result.value);
             this._eventos
               .crearActividad(this.idEventoSeleccionado, result.value.idActividad)
               .subscribe(
@@ -322,12 +316,8 @@ export class Home implements OnInit {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log('Datos seleccionados:', result.value);
         this._actividades.crearActividad(result.value.deporte, result.value.minimo).subscribe({
-          next: (response) => {
-            console.log(response);
-          },
-          error: (error) => {
+          error: () => {
             Swal.fire('Error', 'Error al insertar la actividad', 'error');
           },
         });
@@ -359,8 +349,6 @@ export class Home implements OnInit {
           next: (response) => {
             const fechaSeleccionada = result.value;
             if (fechaSeleccionada) {
-              console.log('Fecha seleccionada:', fechaSeleccionada);
-              console.log(response);
               this.asociarProfesorEvento(response.idEvento);
               Swal.fire('¡Listo!', `Evento creado para el ${fechaSeleccionada}`, 'success');
             }
@@ -379,7 +367,6 @@ export class Home implements OnInit {
         this._eventos
           .postProfesorEvento(idEvento, response[randomIndex].idUsuario)
           .subscribe((response) => {
-            console.log(response);
             this._eventos.buscarEventosAbiertos().subscribe((response) => {
               this.eventos = response;
               this.ordenarEventos();
@@ -392,7 +379,6 @@ export class Home implements OnInit {
           const randomIndex = Math.floor(Math.random() * keys.length);
           const randomKey = keys[randomIndex];
           this._eventos.postProfesorEvento(idEvento, randomKey).subscribe((response) => {
-            console.log(response);
             this._eventos.buscarEventosAbiertos().subscribe((response) => {
               this.eventos = response;
               this.ordenarEventos();
@@ -407,7 +393,6 @@ export class Home implements OnInit {
     this._inscripciones
       .inscribirActividadEventoUsuario(this.usuario.idUsuario, e.idEventoActividad, this.capitan)
       .subscribe((response) => {
-        console.log(response);
         this.verInscripciones();
         Swal.fire({
           title: 'Confirmada tu seleccion!',
@@ -469,9 +454,8 @@ export class Home implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         const precioFinal = result.value;
-        console.log('Precio guardado:', precioFinal);
         const precioExistente = this.precioActividad?.find(
-          (p) => p.idEventoActividad === a.idEventoActividad
+          (p) => p.idEventoActividad === a.idEventoActividad,
         );
 
         if (precioExistente) {
@@ -553,7 +537,6 @@ export class Home implements OnInit {
       if (result.isConfirmed) {
         this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe({
           next: (response) => {
-            console.log(response);
             this.MostrarActividades(a.idEvento);
             Swal.fire({
               title: 'Borrado!',
@@ -583,7 +566,6 @@ export class Home implements OnInit {
       if (result.isConfirmed) {
         this._eventos.eliminarEvento(this.idEventoSeleccionado).subscribe({
           next: (response) => {
-            console.log(response);
             this._eventos.buscarEventosAbiertos().subscribe((response) => {
               this.eventos = response;
               this.ordenarEventos();
@@ -767,7 +749,6 @@ export class Home implements OnInit {
         },
       }).then((result) => {
         if (result.isConfirmed) {
-          console.log('Datos seleccionados:', result.value);
           this._organizador.insertarOrganizador(result.value.idOrganizador).subscribe({
             next: (response) => {
               Swal.fire('Insertado', 'Se ha asignado rol Organizador', 'success');
@@ -871,7 +852,6 @@ export class Home implements OnInit {
         },
       }).then((result) => {
         if (result.isConfirmed) {
-          console.log('Datos seleccionados:', result.value);
           this._organizador.deleteOrganizador(result.value.idOrganizador).subscribe({
             next: (response) => {
               Swal.fire('Eliminado', 'Se ha designado rol Organizador', 'success');

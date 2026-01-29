@@ -16,14 +16,12 @@ export class OrganizadorService {
   insertarOrganizador(idUsuario:number):Observable<any>{
     var request="api/organizadores/create/"+idUsuario;
     let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
-    console.log({headers:header})
     return this._http.post<Evento>(this.url+request, null, {headers: header})
   }
 
   getOrganizador():Observable<any[]>{
         var request = "api/organizadores/organizadoresEvento";
         let header = new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem("token"));
-        console.log({headers:header})
         return this._http.get<Alumno[]>(this.url+request, {headers: header})
   }
   deleteOrganizador(idUsuario:number):Observable<any>{
