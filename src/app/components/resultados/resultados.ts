@@ -153,6 +153,8 @@ export class Resultados implements OnInit {
     this.idActividadSeleccionada = parseInt(event.target.value);
     this.idEventoSeleccionado = 0;
     this.aplicarFiltros('actividad');
+    this.esCapitanEnEvento = false;
+    this.idEventoActividadResultado = 0;
   }
 
   aplicarFiltros(tipo: 'evento' | 'actividad') {
@@ -179,6 +181,8 @@ export class Resultados implements OnInit {
     this.idEventoSeleccionado = 0;
     this.idActividadSeleccionada = 0;
     this.resultadosAMostrar = [...this.todosLosResultados];
+    this.esCapitanEnEvento = false;
+    this.idEventoActividadResultado = 0;
   }
 
   formularioCrearResultado() {

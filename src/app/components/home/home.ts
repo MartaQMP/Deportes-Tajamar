@@ -1,10 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import {
-  CalendarEvent,
-  CalendarView,
-  CalendarModule
-} from 'angular-calendar';
+import { CalendarEvent, CalendarView, CalendarModule } from 'angular-calendar';
 import { startOfDay, endOfDay } from 'date-fns';
 import PerfilService from '../../services/perfil.service';
 import { Router, RouterModule } from '@angular/router';
@@ -29,17 +25,11 @@ import Capitan from '../../models/capitan';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    CalendarModule,
-    RouterModule
-  ],
+  imports: [CommonModule, FormsModule, CalendarModule, RouterModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
-
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
@@ -58,7 +48,7 @@ export class Home implements OnInit {
   public idEventoSeleccionado!: number;
   public eventoSeleccionado: boolean = false;
   public usuarioActividades: UsuarioActividad[] = [];
-  public actividadesGet: Actividad[] = []
+  public actividadesGet: Actividad[] = [];
   public precioActividad: PrecioActividad[] = [];
   public precioTotalActividad!: PrecioActividad | undefined;
   public cargandoDatos!: boolean;
@@ -70,8 +60,8 @@ export class Home implements OnInit {
     private _eventos: EventosService,
     private _actividades: ActividadesService,
     private _router: Router,
-    private _inscripciones: InscripcionService
-  ) { }
+    private _inscripciones: InscripcionService,
+  ) {}
 
   setView(view: CalendarView) {
     this.view = view;
@@ -82,10 +72,9 @@ export class Home implements OnInit {
   }
 
   ngOnInit(): void {
-
     //Login con el token para recoger el nombre de usuario
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
 
     if (!token) {
       this._router.navigate(['/login']);
@@ -95,7 +84,7 @@ export class Home implements OnInit {
     this._perfil.getDatosUsuario(token).subscribe((response) => {
       this.usuarioLogeado = true;
       this.usuario = response;
-      console.log(this.usuario)
+      console.log(this.usuario);
     });
 
     //Llamada al api eventos para recoger los eventos abiertos e incluirlos en el calendario
@@ -105,13 +94,12 @@ export class Home implements OnInit {
         this.eventos = response;
         this.ordenarEventos();
 
-
-        const nuevosEventos: CalendarEvent[] = this.eventos.map(eventoApi => {
+        const nuevosEventos: CalendarEvent[] = this.eventos.map((eventoApi) => {
           return {
             start: new Date(eventoApi.fechaEvento),
             title: 'Evento #' + eventoApi.idEvento,
             color: { primary: '#ad2121', secondary: '#FAE3E3' },
-            meta: eventoApi
+            meta: eventoApi,
           };
         });
 
@@ -120,35 +108,31 @@ export class Home implements OnInit {
         this.refresh.next();
 
         this._eventos.getProfesor().subscribe({
-          next: response => {
+          next: (response) => {
             console.log(response);
-            response.forEach(r => {
+            response.forEach((r) => {
               this.profesores.set(r.idUsuario, r.usuario);
-            })
-            console.log(this.profesores)
-          }, error: (error) => {
-            console.log("No entra profesores")
-          }
-        })
-
+            });
+            console.log(this.profesores);
+          },
+          error: (error) => {
+            console.log('No entra profesores');
+          },
+        });
       },
       error: (err) => {
-        console.error("Error cargando eventos", err);
-      }
-
+        console.error('Error cargando eventos', err);
+      },
     });
-
-
   }
 
-
-ordenarEventos() {
+  ordenarEventos() {
     const fechaReferencia = new Date();
     fechaReferencia.setHours(0, 0, 0, 0);
     const hoy = fechaReferencia.getTime();
 
     const futuros = this.eventos
-      .filter(e => {
+      .filter((e) => {
         const fechaE = new Date(e.fechaEvento);
         fechaE.setHours(0, 0, 0, 0);
         return fechaE.getTime() >= hoy;
@@ -156,7 +140,7 @@ ordenarEventos() {
       .sort((a, b) => new Date(a.fechaEvento).getTime() - new Date(b.fechaEvento).getTime());
 
     const pasados = this.eventos
-      .filter(e => {
+      .filter((e) => {
         const fechaE = new Date(e.fechaEvento);
         fechaE.setHours(0, 0, 0, 0);
         return fechaE.getTime() < hoy;
@@ -164,24 +148,23 @@ ordenarEventos() {
       .sort((a, b) => new Date(b.fechaEvento).getTime() - new Date(a.fechaEvento).getTime());
 
     this.eventos = [...futuros, ...pasados];
-}
-
-esPasado(idEvento: number): boolean {
-  const evento = this.eventos.find(e => e.idEvento === idEvento);
-
-  if (!evento) {
-    return false;
   }
 
-  const fechaEvento = new Date(evento.fechaEvento);
-  fechaEvento.setHours(0, 0, 0, 0);
+  esPasado(idEvento: number): boolean {
+    const evento = this.eventos.find((e) => e.idEvento === idEvento);
 
-  const hoy = new Date();
-  hoy.setHours(0, 0, 0, 0);
+    if (!evento) {
+      return false;
+    }
 
-  return fechaEvento.getTime() < hoy.getTime();
-}
+    const fechaEvento = new Date(evento.fechaEvento);
+    fechaEvento.setHours(0, 0, 0, 0);
 
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
+    return fechaEvento.getTime() < hoy.getTime();
+  }
 
   verProfesorEvento(id: number): string {
     var p = this.profesores.get(id);
@@ -197,55 +180,53 @@ esPasado(idEvento: number): boolean {
       this.actividades = response;
       //Ver las inscripciones a esa actividad en ese evento
       this.actividades.forEach((a, index) => {
-        this._inscripciones.verInscripciones(e, a.idActividad).subscribe(response => {
+        this._inscripciones.verInscripciones(e, a.idActividad).subscribe((response) => {
           this.personasInscritas[index] = response.length;
-        })
-        this.personasInscritas.reverse()
-      })
+        });
+        this.personasInscritas.reverse();
+      });
 
       //ver si el usuario esta inscrito ya en alguna actividad de ese evento
-      this.verInscripciones()
-      this.verPrecioActividad()
-
-    })
+      this.verInscripciones();
+      this.verPrecioActividad();
+    });
   }
   verInscripciones() {
-    this._actividades.verUsuarioApuntado().subscribe(response => {
+    this._actividades.verUsuarioApuntado().subscribe((response) => {
       this.usuarioActividades = response;
-      console.log(this.usuarioActividades)
-    })
+      console.log(this.usuarioActividades);
+    });
   }
 
   yaEstaInscrito(idEvento: number): boolean {
-
-    return this.usuarioActividades.some(actividad => actividad.idEvento === idEvento);
+    return this.usuarioActividades.some((actividad) => actividad.idEvento === idEvento);
   }
 
-
   abrirModalActividad() {
-
     //Llamada al api para recoger los deportes disponibles
 
-    this._actividades.getActividades().subscribe(response => {
-
-      const disponibles = response.filter((apiAct: any) => {
-          const yaExiste = this.actividades.some(local => local.idActividad === apiAct.idActividad);
+    this._actividades.getActividades().subscribe(
+      (response) => {
+        const disponibles = response.filter((apiAct: any) => {
+          const yaExiste = this.actividades.some(
+            (local) => local.idActividad === apiAct.idActividad,
+          );
           return !yaExiste;
         });
 
         let actividadesHTML = '';
-        
+
         if (disponibles.length > 0) {
-          actividadesHTML = disponibles.map((a: any) =>
-            `<option value="${a.idActividad}">${a.nombre}</option>`
-          ).join('');
+          actividadesHTML = disponibles
+            .map((a: any) => `<option value="${a.idActividad}">${a.nombre}</option>`)
+            .join('');
         } else {
           actividadesHTML = `<option disabled>No quedan actividades disponibles</option>`;
         }
 
-      Swal.fire({
-        title: 'Añadir a Evento #' + this.idEventoSeleccionado,
-        html: `
+        Swal.fire({
+          title: 'Añadir a Evento #' + this.idEventoSeleccionado,
+          html: `
         <div style="text-align: left; margin-bottom: 5px; color: #555;">Deporte:</div>
         <select id="swal-deporte" class="input-date-discreto" style="margin: 0 !important;">
           <option value="" disabled selected>Selecciona una actividad...</option>
@@ -253,57 +234,61 @@ esPasado(idEvento: number): boolean {
         </select>
         
       `,
-        showCancelButton: true,
-        confirmButtonText: 'Crear',
-        cancelButtonText: 'Cancelar',
-        buttonsStyling: false,
-        customClass: {
-          popup: 'swal-popup-discreto',
-          confirmButton: 'btn-confirm-discreto',
-          cancelButton: 'btn-cancel-discreto',
-          title: 'swal-title-discreto'
-        },
-        preConfirm: () => {
-          return {
-            idActividad: (document.getElementById('swal-deporte') as HTMLSelectElement).value
-          };
-        }
-      }).then((result) => {
-        if (result.isConfirmed) {
-          console.log('Datos seleccionados:', result.value);
-          this._eventos.crearActividad(this.idEventoSeleccionado, result.value.idActividad).subscribe(response => {
-            this._actividades.buscarActividadesPorEventos(this.idEventoSeleccionado.toString()).subscribe((response) => {
-              this.actividades = response;
-              //Ver las inscripciones a esa actividad en ese evento
-              this.actividades.forEach((a, index) => {
-                this._inscripciones.verInscripciones(this.idEventoSeleccionado, a.idActividad).subscribe(response => {
-                  this.personasInscritas[index] = response.length;
-                })
-                this.personasInscritas.reverse()
-              })
+          showCancelButton: true,
+          confirmButtonText: 'Crear',
+          cancelButtonText: 'Cancelar',
+          buttonsStyling: false,
+          customClass: {
+            popup: 'swal-popup-discreto',
+            confirmButton: 'btn-confirm-discreto',
+            cancelButton: 'btn-cancel-discreto',
+            title: 'swal-title-discreto',
+          },
+          preConfirm: () => {
+            return {
+              idActividad: (document.getElementById('swal-deporte') as HTMLSelectElement).value,
+            };
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log('Datos seleccionados:', result.value);
+            this._eventos
+              .crearActividad(this.idEventoSeleccionado, result.value.idActividad)
+              .subscribe(
+                (response) => {
+                  this._actividades
+                    .buscarActividadesPorEventos(this.idEventoSeleccionado.toString())
+                    .subscribe((response) => {
+                      this.actividades = response;
+                      //Ver las inscripciones a esa actividad en ese evento
+                      this.actividades.forEach((a, index) => {
+                        this._inscripciones
+                          .verInscripciones(this.idEventoSeleccionado, a.idActividad)
+                          .subscribe((response) => {
+                            this.personasInscritas[index] = response.length;
+                          });
+                        this.personasInscritas.reverse();
+                      });
 
-              //ver si el usuario esta inscrito ya en alguna actividad de ese evento
-              this.verInscripciones()
-
-            })
-
-          }, error => {
-            Swal.fire('Error', 'No se inserto la actividad', 'error');
-          });
-        }
-      });
-
-    }, error => {
-      console.error('Error al cargar actividades', error);
-      Swal.fire('Error', 'No se pudieron cargar las actividades', 'error');
-    });
-
+                      //ver si el usuario esta inscrito ya en alguna actividad de ese evento
+                      this.verInscripciones();
+                    });
+                },
+                (error) => {
+                  Swal.fire('Error', 'No se inserto la actividad', 'error');
+                },
+              );
+          }
+        });
+      },
+      (error) => {
+        console.error('Error al cargar actividades', error);
+        Swal.fire('Error', 'No se pudieron cargar las actividades', 'error');
+      },
+    );
   }
 
-
-
   abrirModalActividadCrear() {
-
     Swal.fire({
       title: 'Crear Actividad',
       html: `
@@ -321,32 +306,28 @@ esPasado(idEvento: number): boolean {
         popup: 'swal-popup-discreto',
         confirmButton: 'btn-confirm-discreto',
         cancelButton: 'btn-cancel-discreto',
-        title: 'swal-title-discreto'
+        title: 'swal-title-discreto',
       },
       preConfirm: () => {
         return {
           deporte: (document.getElementById('swal-deporte') as HTMLSelectElement).value,
-          minimo: (document.getElementById('swal-deporte-minimo') as HTMLSelectElement).value
+          minimo: (document.getElementById('swal-deporte-minimo') as HTMLSelectElement).value,
         };
-      }
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         console.log('Datos seleccionados:', result.value);
         this._actividades.crearActividad(result.value.deporte, result.value.minimo).subscribe({
-          next: response => {
+          next: (response) => {
             console.log(response);
           },
           error: (error) => {
             Swal.fire('Error', 'Error al insertar la actividad', 'error');
-          }
-        })
+          },
+        });
       }
-    })
-
+    });
   }
-
-
-
 
   abrirModalFecha() {
     Swal.fire({
@@ -354,7 +335,7 @@ esPasado(idEvento: number): boolean {
       text: 'Selecciona la fecha del evento:',
       input: 'date',
       inputAttributes: {
-        autocapitalize: 'off'
+        autocapitalize: 'off',
       },
       showCancelButton: true,
       confirmButtonText: 'Crear',
@@ -364,13 +345,12 @@ esPasado(idEvento: number): boolean {
         confirmButton: 'btn-confirm-discreto',
         cancelButton: 'btn-cancel-discreto',
         input: 'input-date-discreto',
-        title: 'swal-title-discreto'
-      }
+        title: 'swal-title-discreto',
+      },
     }).then((result) => {
-
       if (result.isConfirmed)
         this._eventos.crearEvento(result.value).subscribe({
-          next: response => {
+          next: (response) => {
             const fechaSeleccionada = result.value;
             if (fechaSeleccionada) {
               console.log('Fecha seleccionada:', fechaSeleccionada);
@@ -381,9 +361,8 @@ esPasado(idEvento: number): boolean {
           },
           error: (error) => {
             Swal.fire('Error', 'Debes seleccionar una fecha', 'error');
-          }
-        })
-
+          },
+        });
     });
   }
 
@@ -391,52 +370,47 @@ esPasado(idEvento: number): boolean {
     this._eventos.getProfesorSinEvento().subscribe((response) => {
       if (response.length > 0) {
         const randomIndex = Math.floor(Math.random() * response.length);
-        this._eventos.postProfesorEvento(idEvento, response[randomIndex].idUsuario).subscribe(response => {
-          console.log(response);
-          this._eventos.buscarEventosAbiertos().subscribe(
-            (response) => {
+        this._eventos
+          .postProfesorEvento(idEvento, response[randomIndex].idUsuario)
+          .subscribe((response) => {
+            console.log(response);
+            this._eventos.buscarEventosAbiertos().subscribe((response) => {
               this.eventos = response;
-                  this.ordenarEventos();
-
-            })
-        })
+              this.ordenarEventos();
+            });
+          });
       } else {
         const keys = Array.from(this.profesores.keys());
 
         if (keys.length > 0) {
           const randomIndex = Math.floor(Math.random() * keys.length);
           const randomKey = keys[randomIndex];
-          this._eventos.postProfesorEvento(idEvento, randomKey)
-            .subscribe(response => {
-              console.log(response);
-              this._eventos.buscarEventosAbiertos().subscribe(
-                (response) => {
-                  this.eventos = response;
-                  this.ordenarEventos();
-                })
-            })
+          this._eventos.postProfesorEvento(idEvento, randomKey).subscribe((response) => {
+            console.log(response);
+            this._eventos.buscarEventosAbiertos().subscribe((response) => {
+              this.eventos = response;
+              this.ordenarEventos();
+            });
+          });
         }
       }
-
-    })
+    });
   }
 
   Inscribirse(e: ActividadEvento) {
-    this._inscripciones.inscribirActividadEventoUsuario(this.usuario.idUsuario, e.idEventoActividad, this.capitan).subscribe(
-      (response => {
+    this._inscripciones
+      .inscribirActividadEventoUsuario(this.usuario.idUsuario, e.idEventoActividad, this.capitan)
+      .subscribe((response) => {
         console.log(response);
         this.verInscripciones();
         this.actividades.forEach((a, index) => {
-          this._inscripciones.verInscripciones(e.idEvento, a.idActividad).subscribe(response => {
+          this._inscripciones.verInscripciones(e.idEvento, a.idActividad).subscribe((response) => {
             this.personasInscritas[index] = response.length;
-          })
-          this.personasInscritas.reverse()
-        })
-      })
-    )
+          });
+          this.personasInscritas.reverse();
+        });
+      });
   }
-
-
 
   anadirPrecio(a: ActividadEvento) {
     Swal.fire({
@@ -464,7 +438,7 @@ esPasado(idEvento: number): boolean {
         popup: 'swal-popup-discreto',
         confirmButton: 'btn-confirm-discreto',
         cancelButton: 'btn-cancel-discreto',
-        title: 'swal-title-discreto'
+        title: 'swal-title-discreto',
       },
       didOpen: () => {
         // Opcional: Pone el foco en el input automáticamente al abrir
@@ -480,92 +454,98 @@ esPasado(idEvento: number): boolean {
           return false;
         }
         return parseFloat(precioValor);
-      }
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         const precioFinal = result.value;
         console.log('Precio guardado:', precioFinal);
 
-        if(this.precioActividad.length>0){
+        if (this.precioActividad.length > 0) {
+          var precioModificado = this.precioActividad.find(
+            (p) => p.idEventoActividad === a.idEventoActividad,
+          );
+          if (precioModificado)
+            this._actividades
+              .modificarPrecioActividad(
+                precioModificado.idPrecioActividad,
+                precioModificado.idEventoActividad,
+                precioFinal,
+              )
+              .subscribe(
+                (response) => {
+                  console.log('modificado');
+                  this.verPrecioActividad();
+                },
+                (error) => {
+                  Swal.fire('Error', 'No se ha podido modificar el precio', 'error');
+                },
+              );
+        } else
+          this._actividades.insertarPrecioActividad(a.idEventoActividad, precioFinal).subscribe(
+            (response) => {
+              console.log(response);
+              console.log('insertado');
 
-            var precioModificado = this.precioActividad.find(p=>p.idEventoActividad === a.idEventoActividad);
-            if(precioModificado)
-            this._actividades.modificarPrecioActividad(precioModificado.idPrecioActividad, precioModificado.idEventoActividad, precioFinal).subscribe(response => {
-            console.log("modificado");
-            this.verPrecioActividad();
-          }, error => {
-            Swal.fire('Error', 'No se ha podido modificar el precio', 'error');
-          })
-
-        }else
-
-        this._actividades.insertarPrecioActividad(a.idEventoActividad, precioFinal).subscribe(response => {
-          console.log(response);
-            console.log("insertado");
-
-          this.verPrecioActividad();
-        }, error => {
-          Swal.fire('Error', 'No se ha podido insertar el precio', 'error');
-        })
-
+              this.verPrecioActividad();
+            },
+            (error) => {
+              Swal.fire('Error', 'No se ha podido insertar el precio', 'error');
+            },
+          );
       }
     });
   }
 
   verPrecioActividad() {
-    this._actividades.getPrecioActividadPorEvento().subscribe(response => {
+    this._actividades.getPrecioActividadPorEvento().subscribe((response) => {
       this.precioActividad = response
-        .filter((precio: { idEventoActividad: number; }) => {
-          return this.actividades.some(act => act.idEventoActividad === precio.idEventoActividad);
-        }).map((precio: { idEventoActividad: number; }) => {
-          this.actividades.find(
-            act => act.idEventoActividad === precio.idEventoActividad
-          );
+        .filter((precio: { idEventoActividad: number }) => {
+          return this.actividades.some((act) => act.idEventoActividad === precio.idEventoActividad);
+        })
+        .map((precio: { idEventoActividad: number }) => {
+          this.actividades.find((act) => act.idEventoActividad === precio.idEventoActividad);
           return {
             ...precio,
           };
         });
-
     });
   }
 
   obtenerPrecioActividad(idEventoActividad: number): PrecioActividad | undefined {
-
-    const encontrado = this.precioActividad.find(p => p.idEventoActividad === idEventoActividad);
+    const encontrado = this.precioActividad.find((p) => p.idEventoActividad === idEventoActividad);
 
     this.precioTotalActividad = encontrado;
 
     return encontrado;
   }
 
-
   eliminarActividadEvento(a: ActividadEvento) {
     this._actividades.deleteActividadEvento(a.idEventoActividad).subscribe({
-      next:response => {
-      console.log(response);
-      this.MostrarActividades(a.idEvento);
-    },error:(error)=>{
-      Swal.fire('Error', 'No se ha podido eliminar la actividad', 'error');
-    }
-  })
+      next: (response) => {
+        console.log(response);
+        this.MostrarActividades(a.idEvento);
+      },
+      error: (error) => {
+        Swal.fire('Error', 'No se ha podido eliminar la actividad', 'error');
+      },
+    });
   }
 
-  eliminarEvento(){
+  eliminarEvento() {
     this._eventos.eliminarEvento(this.idEventoSeleccionado).subscribe({
-      next:response => {
-      console.log(response);
-      this._eventos.buscarEventosAbiertos().subscribe(
-            (response) => {
-              this.eventos = response;
-                  this.ordenarEventos();
-                  this.eventoSeleccionado=false;
-                  this.actividades=[];
-            
-            })
-          },error:(error)=>{
-          Swal.fire('Error', 'No se ha podido eliminar el evento', 'error');
-      }
-    })
+      next: (response) => {
+        console.log(response);
+        this._eventos.buscarEventosAbiertos().subscribe((response) => {
+          this.eventos = response;
+          this.ordenarEventos();
+          this.eventoSeleccionado = false;
+          this.actividades = [];
+        });
+      },
+      error: (error) => {
+        Swal.fire('Error', 'No se ha podido eliminar el evento', 'error');
+      },
+    });
   }
 
   elegirCapitan(idActividad: number, idEvento: number) {

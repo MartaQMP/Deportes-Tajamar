@@ -1,0 +1,178 @@
+<div class="pagos-container">
+  <div class="filter-panel">
+    <span class="filter-label">FILTRAR POR EVENTO:</span>
+    <select
+      class="custom-select-event"
+      [(ngModel)]="idEventoSeleccionado"
+      (change)="cargarPagosDelEvento()"
+    >
+      <option [value]="0" disabled>Selecciona una fecha...</option>
+      @for (e of eventos; track e.idEvento) {
+        <option [value]="e.idEvento">
+          {{ e.fechaEvento | date: "EEEE, d 'de' MMMM 'de' y" }}
+        </option>
+      }
+    </select>
+    @if (permisosUsuario === 'ORGANIZADOR/ALUMNO' && idEventoSeleccionado > 0) {
+      <button class="btn-crear" (click)="formularioNuevoPago()">
+        <i class="bi bi-plus-circle-fill"></i> Añadir Pago
+      </button>
+    }
+  </div>
+
+  @if (idEventoSeleccionado > 0 && cursosConPagos.length > 0) {
+    <div class="equipos-content">
+      <table class="table table-hover align-middle custom-expandable-table">
+        <thead>
+          <tr>
+            <th style="width: 50px"></th>
+            <th>Nombre del Curso</th>
+            <th class="text-center">Actividades</th>
+            <th class="text-center">Acciones Curso</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (grupo of cursosConPagos; track grupo.idCurso) {
+            <tr
+              class="main-row"
+              data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#details' + grupo.idCurso"
+              style="cursor: pointer"
+            >
+              <td class="text-center">
+                <i class="bi bi-chevron-right toggle-icon"></i>
+              </td>
+              <td class="fw-bold text-uppercase" style="color: var(--primary-red)">
+                {{ grupo.nombreCurso }}
+              </td>
+              <td class="text-center">
+                <span class="badge rounded-pill bg-light text-dark border">
+                  {{ grupo.pagos.length }} Actividades
+                </span>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-secondary border-0" title="Ver detalles">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr class="collapse-row">
+              <td colspan="4" class="p-0 border-0">
+                <div [id]="'details' + grupo.idCurso" class="collapse accordion-collapse">
+                  <div class="p-4 bg-light-subtle inner-table-container">
+                    <table class="table table-sm mb-0 bg-white shadow-sm rounded">
+                      <thead class="table-dark">
+                        <tr>
+                          <th class="text-center">Evento</th>
+                          <th class="text-center">Actividad</th>
+                          <th class="text-center">Precio</th>
+                          <th class="text-center">Estado</th>
+                          <th class="text-center">Gestión</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (pago of grupo.pagos; track pago.idPago) {
+                          <tr>
+                            <td class="text-center fw-bold">
+                              {{ pago.fechaEvento | date: 'dd/MM/yyyy' }}
+                            </td>
+                            <td class="text-center">{{ pago.actividad }}</td>
+                            <td class="text-center">{{ pago.cantidadPagada }}€</td>
+                            <td class="text-center">
+                              <span [class]="'badge-status ' + pago.estado.toLowerCase()">
+                                {{ pago.estado }}
+                              </span>
+                            </td>
+                            <td class="text-center">
+                              @if (permisosUsuario === 'ORGANIZADOR/ALUMNO') {
+                                <button
+                                  class="btn-action-ok btn-sm me-1"
+                                  (click)="cambiarEstado(pago)"
+                                >
+                                  Cambiar estado <i class="bi bi-arrow-left-right"></i>
+                                </button>
+                              } @else {
+                                <button class="btn-action-disabled btn-sm me-1" disabled>
+                                  Cambiar estado <i class="bi bi-arrow-left-right"></i>
+                                </button>
+                              }
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <div style="display: none" #wrapperCambiarEstado>
+    <div class="text-start p-3" #formCambiarEstado>
+      <p class="mb-2"><strong>Curso:</strong> <span #cursoSpan></span></p>
+      <p class="mb-2"><strong>Actividad:</strong> <span #actividadSpan></span></p>
+      <p class="mb-3"><strong>Cantidad:</strong> <span #cantidadSpan></span></p>
+      <label class="form-label"><strong>Estado:</strong></label>
+      <select class="form-select" #estadoSelect>
+        <option value="Pendiente">Pendiente</option>
+        <option value="Pagado">Pagado</option>
+        <option value="Exento">Exento</option>
+      </select>
+    </div>
+  </div>
+
+  <div style="display: none" #wrapperNuevoPago>
+    <div #formNuevoPago class="text-start p-3">
+      <div class="mb-3">
+        <label class="form-label fw-bold">1. Selecciona el Evento:</label>
+        <select #crearEventoSelect class="form-select" (change)="cargarActividadesDeEvento()">
+          <option value="" disabled selected>Selecciona un evento...</option>
+          @for (e of eventosConPagos; track e.idEvento) {
+            <option [value]="e.idEvento">{{ e.fechaEvento | date: 'dd/MM/yy' }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-bold">2. Actividad:</label>
+        <select
+          #crearActividadSelect
+          class="form-select"
+          [disabled]="!crearEventoSelect.value"
+          (change)="actualizarPrecioMaximo()"
+        >
+          <option value="" disabled selected>Selecciona actividad...</option>
+          @for (a of actividadesValidasModal; track a.idActividad) {
+            <option [value]="a.idActividad">{{ a.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-bold">3. Curso:</label>
+        <select #crearCursoSelect class="form-select" [disabled]="!crearActividadSelect.value">
+          <option value="" disabled selected>Selecciona el curso...</option>
+          @for (c of cursosFiltrados; track c.idCurso) {
+            <option [value]="c.idCurso">{{ c.nombre }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-bold">4. Cantidad a pagar:</label>
+        <div class="input-group">
+          <input #crearCantidadInput type="number" class="form-control" placeholder="0.00" />
+          <span class="input-group-text">€</span>
+        </div>
+        @if (precioMaximoActual > 0) {
+          <small class="text-danger fw-bold">Máximo permitido: {{ precioMaximoActual }}€</small>
+        }
+      </div>
+    </div>
+  </div>
+</div>
