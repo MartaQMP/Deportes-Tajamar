@@ -548,59 +548,77 @@ export class Home implements OnInit {
     });
   }
 
-  elegirCapitan(idActividad: number, idEvento: number) {
-    this._inscripciones
-      .buscarActividadEvento(idEvento, idActividad)
-      .subscribe((eventoActividad) => {
-        if (eventoActividad) {
-          this._inscripciones
-            .getUsuariosCapitanEventoActividad(idEvento, idActividad)
-            .subscribe((voluntarios) => {
-              if (voluntarios.length > 0) {
-                const index = Math.floor(Math.random() * voluntarios.length);
-                this.usuarioCapitan = voluntarios[index];
-              } else {
-                this._inscripciones.verInscripciones(idEvento, idActividad).subscribe((todos) => {
-                  if (todos.length > 0) {
-                    const index = Math.floor(Math.random() * todos.length);
-                    this.usuarioCapitan = todos[index];
+  hacerSorteoCapitanesManual() {
+    Swal.fire({
+      title: '¿Realizar sorteo?',
+      text: 'Se elegirá un capitán por cada curso en cada actividad de este evento.',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Empezar',
+      confirmButtonColor: '#f2212f',
+    }).then((resPopup) => {
+      if (resPopup.isConfirmed) {
+        // 1. Primero cogemos la lista de inscripciones para saber quién quiere ser capitán
+        this._inscripciones.getInscripciones().subscribe((todasLasInscripciones: any[]) => {
+          // 2. Recorremos las actividades que hay ahora mismo en el evento
+          this.actividades.forEach((actividad: any) => {
+            // 3. Buscamos quiénes están apuntados a esa actividad
+            this._inscripciones
+              .verInscripciones(this.idEventoSeleccionado, actividad.idActividad)
+              .subscribe((usuarios: any[]) => {
+                // 4. Sacamos qué cursos distintos hay apuntados (ej: 1º DAW, 2º DAW...)
+                const listaIdsCursos = [...new Set(usuarios.map((u: any) => u.idCurso))];
 
-                    let capitan: Capitan = {
-                      idCapitanActividad: 0,
-                      idEventoActividad: eventoActividad.idEventoActividad,
-                      idUsuario: this.usuarioCapitan.idUsuario,
-                    };
-                    this._inscripciones.crearCapitan(capitan).subscribe();
-                  }
+                // 5. Creamos los "montones" separando a los usuarios por su curso
+                listaIdsCursos.forEach((idCurso: number) => {
+                  const personasDelMonton = usuarios.filter((u: any) => u.idCurso === idCurso);
+
+                  // Enviamos el montón al Método 2 para elegir al ganador
+                  this.elegirCapitanYGuardar(
+                    personasDelMonton,
+                    todasLasInscripciones,
+                    actividad.idEventoActividad,
+                  );
                 });
-                return;
-              }
-
-              if (this.usuarioCapitan) {
-                let capitan: Capitan = {
-                  idCapitanActividad: 0,
-                  idEventoActividad: eventoActividad.idEventoActividad,
-                  idUsuario: this.usuarioCapitan.idUsuario,
-                };
-                console.log('Usuario: ' + this.usuarioCapitan.usuario);
-                console.log('EventoActividad: ' + eventoActividad.idEventoActividad);
-                this._inscripciones.crearCapitan(capitan).subscribe();
-              }
-            });
-        }
-      });
-  }
-
-  comprobarSiHacerSorteoYHacerlo(idEvento: number, idCurso: number) {
-    forkJoin({
-      inscritos: this._inscripciones.getUsuariosInscritosEventoCurso(idEvento, idCurso),
-      totales: this._inscripciones.getUsuariosCurso(idCurso),
-    }).subscribe(({ inscritos, totales }) => {
-      if (inscritos.length === totales.length && totales.length > 0) {
-        this.actividades.forEach((act) => {
-          this.elegirCapitan(act.idActividad, idEvento);
+              });
+          });
+          Swal.fire('¡Sorteo terminado!', 'Se han asignado los capitanes.', 'success');
         });
       }
     });
+  }
+  elegirCapitanYGuardar(montonUsuarios: any[], listaReferencia: any[], idEvAct: number) {
+    if (montonUsuarios.length === 0) return;
+
+    // 1. Buscamos voluntarios: cruzamos el montón con la lista de referencia usando idUsuario e idEventoActividad
+    const voluntarios = montonUsuarios.filter((usuario) => {
+      const inscripcionReal = listaReferencia.find(
+        (ins) => ins.idUsuario === usuario.idUsuario && ins.idEventoActividad === idEvAct,
+      );
+      return inscripcionReal ? inscripcionReal.quiereSerCapitan : false;
+    });
+
+    let elegido;
+
+    // 2. Si hay voluntarios, sorteo entre ellos. Si no, sorteo entre todos.
+    if (voluntarios.length > 0) {
+      const indexAleatorio = Math.floor(Math.random() * voluntarios.length);
+      elegido = voluntarios[indexAleatorio];
+    } else {
+      const indexAleatorio = Math.floor(Math.random() * montonUsuarios.length);
+      elegido = montonUsuarios[indexAleatorio];
+    }
+
+    // 3. Preparamos el objeto para el POST (Estructura de Capitan)
+    const nuevoCapitan = {
+      idCapitanActividad: 0,
+      idEventoActividad: idEvAct,
+      idUsuario: elegido.idUsuario,
+    };
+
+    console.log('Capitan: ' + this.capitan);
+
+    // 4. Llamada final al servicio con el token de la clase
+    this._inscripciones.crearCapitan(this.token, nuevoCapitan).subscribe();
   }
 }

@@ -48,14 +48,19 @@
           </button>
 
           @if (eventoSeleccionado) {
+            <button (click)="hacerSorteoCapitanesManual()" class="btn-create-discreto">
+              <i class="fas fa-dice"></i> Realizar Sorteo
+            </button>
+
             <button (click)="eliminarEvento()" class="btn-create-discreto">
-              <i class="fas fa-plus"></i>
-              Eliminar evento
+              <i class="fas fa-trash"></i> Eliminar evento
             </button>
           } @else {
             <button class="btn-create-discreto disabled" disabled>
-              <i class="fas fa-plus"></i>
-              Eliminar evento
+              <i class="fas fa-dice"></i> Realizar Sorteo
+            </button>
+            <button class="btn-create-discreto disabled" disabled>
+              <i class="fas fa-trash"></i> Eliminar evento
             </button>
           }
         </div>
