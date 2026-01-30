@@ -67,7 +67,7 @@ export class Home implements OnInit {
     private _inscripciones: InscripcionService,
     private _organizador: OrganizadorService,
     private _cursos: CursosService,
-  ) {}
+  ) { }
 
   setView(view: CalendarView) {
     this.view = view;
@@ -591,22 +591,16 @@ export class Home implements OnInit {
       confirmButtonColor: '#f2212f',
     }).then((resPopup) => {
       if (resPopup.isConfirmed) {
-        // 1. Primero cogemos la lista de inscripciones para saber quién quiere ser capitán
         this._inscripciones.getInscripciones().subscribe((todasLasInscripciones: any[]) => {
-          // 2. Recorremos las actividades que hay ahora mismo en el evento
           this.actividades.forEach((actividad: any) => {
-            // 3. Buscamos quiénes están apuntados a esa actividad
             this._inscripciones
               .verInscripciones(this.idEventoSeleccionado, actividad.idActividad)
               .subscribe((usuarios: any[]) => {
-                // 4. Sacamos qué cursos distintos hay apuntados (ej: 1º DAW, 2º DAW...)
                 const listaIdsCursos = [...new Set(usuarios.map((u: any) => u.idCurso))];
 
-                // 5. Creamos los "montones" separando a los usuarios por su curso
                 listaIdsCursos.forEach((idCurso: number) => {
                   const personasDelMonton = usuarios.filter((u: any) => u.idCurso === idCurso);
 
-                  // Enviamos el montón al Método 2 para elegir al ganador
                   this.elegirCapitanYGuardar(
                     personasDelMonton,
                     todasLasInscripciones,
@@ -622,7 +616,6 @@ export class Home implements OnInit {
   elegirCapitanYGuardar(montonUsuarios: any[], listaReferencia: any[], idEvAct: number) {
     if (montonUsuarios.length === 0) return;
 
-    // 1. Buscamos voluntarios: cruzamos el montón con la lista de referencia usando idUsuario e idEventoActividad
     const voluntarios = montonUsuarios.filter((usuario) => {
       const inscripcionReal = listaReferencia.find(
         (ins) => ins.idUsuario === usuario.idUsuario && ins.idEventoActividad === idEvAct,
@@ -632,7 +625,6 @@ export class Home implements OnInit {
 
     let elegido;
 
-    // 2. Si hay voluntarios, sorteo entre ellos. Si no, sorteo entre todos.
     if (voluntarios.length > 0) {
       const indexAleatorio = Math.floor(Math.random() * voluntarios.length);
       elegido = voluntarios[indexAleatorio];
@@ -641,13 +633,13 @@ export class Home implements OnInit {
       elegido = montonUsuarios[indexAleatorio];
     }
 
-    this._perfil.findUsuario(elegido.idUsuario).subscribe(response=>{
-      var nombre=response;
+    this._perfil.findUsuario(elegido.idUsuario).subscribe(response => {
+      var nombre = response;
       this._inscripciones.crearCapitan(this.token, idEvAct, elegido.idUsuario).subscribe({
         next: () => {
           Swal.fire({
             title: 'Capitan escogido',
-            text: 'Capitan escogido para el evento: '+nombre.usuario,
+            text: 'Capitan escogido para el evento: ' + nombre.usuario,
             icon: 'success',
             confirmButtonColor: '#f2212f',
           });
